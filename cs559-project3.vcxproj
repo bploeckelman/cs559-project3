@@ -39,9 +39,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)Build\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Build\Intermediate\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)Build\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Build\Intermediate\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -50,10 +54,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..;$(FLTKHOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(FLTKHOME)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fltkd.lib;fltkgld.lib;comctl32.lib;wsock32.lib;opengl32.lib;glu32.lib;fltkjpegd.lib;fltkpngd.lib;fltkimagesd.lib;fltkzlibd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -65,15 +72,70 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..;$(FLTKHOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(FLTKHOME)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fltk.lib;fltkgl.lib;comctl32.lib;wsock32.lib;opengl32.lib;glu32.lib;fltkjpeg.lib;fltkpng.lib;fltkimages.lib;fltkzlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Framework\Behavior.H" />
+    <ClInclude Include="Framework\DrawingState.H" />
+    <ClInclude Include="Framework\DrawUtils.H" />
+    <ClInclude Include="Framework\Examples\Cars.H" />
+    <ClInclude Include="Framework\Examples\Objects.H" />
+    <ClInclude Include="Framework\Examples\SimpleBehaviors.H" />
+    <ClInclude Include="Framework\Examples\Suburbs.H" />
+    <ClInclude Include="Framework\FlyCamera.H" />
+    <ClInclude Include="Framework\GraphicsTownUI.H" />
+    <ClInclude Include="Framework\GrObject.H" />
+    <ClInclude Include="Framework\GrTown_PCH.H" />
+    <ClInclude Include="Framework\GrWorld.H" />
+    <ClInclude Include="Framework\MMatrix.H" />
+    <ClInclude Include="Framework\Roads\Drive.H" />
+    <ClInclude Include="Framework\Roads\Roads.H" />
+    <ClInclude Include="Framework\TownViewWidget.H" />
+    <ClInclude Include="Framework\Utilities\3DUtils.h" />
+    <ClInclude Include="Framework\Utilities\ArcBallCam.H" />
+    <ClInclude Include="Framework\Utilities\GLee.h" />
+    <ClInclude Include="Framework\Utilities\libtarga.h" />
+    <ClInclude Include="Framework\Utilities\Pnt3f.H" />
+    <ClInclude Include="Framework\Utilities\ShaderTools.H" />
+    <ClInclude Include="Framework\Utilities\Texture.H" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Framework\Behavior.cpp" />
+    <ClCompile Include="Framework\DrawingState.cpp" />
+    <ClCompile Include="Framework\DrawUtils.cpp" />
+    <ClCompile Include="Framework\Examples\Cars.cpp" />
+    <ClCompile Include="Framework\Examples\Objects.cpp" />
+    <ClCompile Include="Framework\Examples\SimpleBehaviors.cpp" />
+    <ClCompile Include="Framework\Examples\Suburbs.cpp" />
+    <ClCompile Include="Framework\FlyCamera.cpp" />
+    <ClCompile Include="Framework\GraphicsTownUI.cxx" />
+    <ClCompile Include="Framework\GrObject.cpp" />
+    <ClCompile Include="Framework\GrTown_PCH.cpp" />
+    <ClCompile Include="Framework\GrWorld.cpp" />
+    <ClCompile Include="Framework\Main.cpp" />
+    <ClCompile Include="Framework\MMatrix.cpp" />
+    <ClCompile Include="Framework\Roads\Drive.cpp" />
+    <ClCompile Include="Framework\Roads\Roads.cpp" />
+    <ClCompile Include="Framework\TownViewWidget.cpp" />
+    <ClCompile Include="Framework\Utilities\3DUtils.cpp" />
+    <ClCompile Include="Framework\Utilities\ArcBallCam.cpp" />
+    <ClCompile Include="Framework\Utilities\GLee.c" />
+    <ClCompile Include="Framework\Utilities\libtarga.c" />
+    <ClCompile Include="Framework\Utilities\Pnt3f.cpp" />
+    <ClCompile Include="Framework\Utilities\ShaderTools.cpp" />
+    <ClCompile Include="Framework\Utilities\Texture.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Framework\GraphicsTownUI.fl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,8 +2,6 @@
 ############################
 Build/*
 Build
-Intermediates/*
-Intermediates
 
 
 # the rest of this ignore file is from: #

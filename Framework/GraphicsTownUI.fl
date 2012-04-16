@@ -1,0 +1,102 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0107 
+do_not_include_H_from_C 
+header_name {.H} 
+code_name {.cxx}
+decl {// $Header: /p/course/cs559-gleicher/private/CVS/GrTown/GraphicsTownUI.fl,v 1.4 2008/11/14 19:53:30 gleicher Exp $} {} 
+
+comment {Note: this user interface (.cxx and .h) was created
+automatically by running fluid on the ".fl" file
+you should not edit the .cxx or .h file!
+
+Use "fluid" to edit the UI interactively} {selected in_source in_header
+} 
+
+decl {// CS559 Graphics Town} {} 
+
+decl {\#include "GrTown_PCH.H"} {} 
+
+decl {\#include "GraphicsTownUI.H"} {} 
+
+decl {\#include "TownViewWidget.H"} {public
+} 
+
+decl {\#include "GrObject.H"} {} 
+
+decl {\#include "GrWorld.H"} {} 
+
+decl {using std::vector;} {} 
+
+class GraphicsTownUI {open
+} {
+  Function {make_window()} {open
+  } {
+    Fl_Window window {
+      label {CS 559 Graphics Town!} open
+      xywh {265 155 931 616} type Double labelsize 12 resizable visible
+    } {
+      Fl_Box townView {
+        xywh {5 5 760 605} align 2 resizable
+        code0 {o->ui = this;}
+        class TownViewWidget
+      }
+      Fl_Group {} {open
+        xywh {770 5 155 600}
+      } {
+        Fl_Browser pickCamera {
+          label view
+          callback {pickInteresting->deselect();}
+          xywh {770 5 155 165} type Hold resizable
+          code0 {for(vector<GrObject*>::iterator g=theObjects.begin(); g != theObjects.end(); ++g)}
+          code1 {if((*g)->ridable) o->add((*g)->name.c_str(),*g);}
+        }
+        Fl_Button cull {
+          label {Backface Cull}
+          xywh {770 580 75 25} type Toggle value 1 selection_color 11 labelsize 12
+        }
+        Fl_Value_Slider time {
+          label {Time of Day (24hr)}
+          callback {townView->damage(1);}
+          xywh {780 470 115 20} type {Horz Knob} maximum 24 step 1 value 9
+        }
+        Fl_Value_Slider fov {
+          label FoV
+          callback {townView->damage(1);}
+          xywh {905 430 15 75} minimum 1 maximum 180 step 1 value 45
+        }
+        Fl_Button lgTex {
+          label {textured ground}
+          xywh {850 580 75 25} type Toggle value 1 selection_color 11 labelsize 10
+        }
+        Fl_Button follower {
+          label Follow
+          xywh {770 190 70 25} type Toggle color 47 selection_color 11
+        }
+        Fl_Value_Output rate {
+          label {frame rate}
+          xywh {875 520 50 25} maximum 100 step 0.1
+        }
+        Fl_Value_Slider speedup {
+          label speedup
+          xywh {840 550 85 25} type Horizontal align 4 maximum 3 step 0.2 value 1
+        }
+        Fl_Browser pickInteresting {
+          label sights
+          callback {pickCamera->deselect();
+follower->value(0);}
+          xywh {770 225 155 165} type Hold
+          code0 {for(vector<GrObject*>::iterator g=theObjects.begin(); g != theObjects.end(); ++g)}
+          code1 {if((*g)->interesting) o->add((*g)->name.c_str(),*g);}
+        }
+        Fl_Button {} {
+          label Fly
+          callback {follower->value(0);
+pickCamera->deselect();
+pickInteresting->deselect();
+townView->damage(1);}
+          xywh {850 190 70 25}
+        }
+      }
+    }
+  }
+} 
