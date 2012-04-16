@@ -116,6 +116,7 @@
     <ClInclude Include="Framework\Utilities\ShaderTools.H" />
     <ClInclude Include="Framework\Utilities\Texture.H" />
     <ClInclude Include="Utility\Logger.h" />
+    <ClInclude Include="Utility\Plane.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\main.cpp" />

@@ -132,6 +132,9 @@
     <ClInclude Include="Utility\Logger.h">
       <Filter>Utility</Filter>
     </ClInclude>
+    <ClInclude Include="Utility\Plane.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Behavior.cpp">
