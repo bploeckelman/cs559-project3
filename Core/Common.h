@@ -4,6 +4,14 @@
 /************************************************************************/
 #include "../Utility/Logger.h"
 
+#include <vector>
+
+class Camera;
+
+typedef std::vector<Camera>          CameraVector;
+typedef CameraVector::iterator       CameraVectorIter;
+typedef CameraVector::const_iterator CameraVectorConstIter;
+
 
 namespace constants
 {

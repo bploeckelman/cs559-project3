@@ -22,9 +22,9 @@ using namespace sf;
 
 Camera::Camera()
 	: debug(false)
-	, _position(0.f, 10.f, 0.f)
+	, _position(0.f, 0.f, 0.f)
 	, _rotation(0.f, 0.f, 0.f)
-	, _rotationSpeed(0.7f, 0.9f, 1.f)
+	, _rotationSpeed(0.7f, 1.f, 1.f)
 { }
 
 void Camera::apply() const

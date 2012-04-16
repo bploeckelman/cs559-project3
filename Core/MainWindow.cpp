@@ -5,6 +5,7 @@
 /************************************************************************/
 #include "MainWindow.h"
 #include "Common.h"
+#include "../Scene/Scene.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -30,6 +31,7 @@ const unsigned int MainWindow::windowStyle = sf::Style::Close | sf::Style::Resiz
 
 MainWindow::MainWindow()
 	: sf::Window(videoMode, title, windowStyle, windowSettings)
+	, scene()
 	, timer()
 {
 	init();
@@ -47,6 +49,8 @@ void MainWindow::init()
 
 	setupOpenGLState();
 	setupPerspective();
+
+	scene.setup();
 
 	mainLoop();
 }
@@ -73,13 +77,14 @@ void MainWindow::mainLoop()
 void MainWindow::update(const sf::Clock& clock)
 {
 	handleEvents();
+	scene.update(clock, GetInput());
 }
 
 void MainWindow::render(const sf::Clock& clock)
 {
 	SetActive();
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	scene.render(clock);
 
 	Display();
 }

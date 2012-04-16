@@ -4,6 +4,8 @@
 /* ----------
 /* The main sfml window for an application
 /************************************************************************/
+#include "../Scene/Scene.h"
+
 #include <SFML/Window.hpp>
 
 #include <string>
@@ -21,6 +23,7 @@ private:
 	static const unsigned int		windowStyle;
 	static const sf::WindowSettings	windowSettings;
 
+	Scene scene;
 	sf::Clock timer;
 
 	void init();

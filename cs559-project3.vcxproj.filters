@@ -7,9 +7,6 @@
     <Filter Include="Core">
       <UniqueIdentifier>{66d913d6-41da-467c-95f9-edc557d4f782}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Render">
-      <UniqueIdentifier>{0fc48342-474c-49e5-a5af-d59f4bbac3b5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utility">
       <UniqueIdentifier>{1ff2e478-9310-4e4a-a288-20dcad061cff}</UniqueIdentifier>
     </Filter>
@@ -51,6 +48,9 @@
     </Filter>
     <Filter Include="Framework\Roads\Source Files">
       <UniqueIdentifier>{e71ae29c-61db-4814-9396-6b732060e97e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{0fc48342-474c-49e5-a5af-d59f4bbac3b5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -132,8 +132,11 @@
     <ClInclude Include="Utility\Logger.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Render\Camera.h">
-      <Filter>Render</Filter>
+    <ClInclude Include="Scene\Camera.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Scene.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -218,8 +221,11 @@
     <ClCompile Include="Utility\Logger.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Render\Camera.cpp">
-      <Filter>Render</Filter>
+    <ClCompile Include="Scene\Camera.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Scene.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
