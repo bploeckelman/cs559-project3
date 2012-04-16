@@ -120,6 +120,7 @@
     <ClInclude Include="Scene\Skybox.h" />
     <ClInclude Include="Utility\dirent.h" />
     <ClInclude Include="Utility\Logger.h" />
+    <ClInclude Include="Utility\Matrix2d.h" />
     <ClInclude Include="Utility\Plane.h" />
   </ItemGroup>
   <ItemGroup>

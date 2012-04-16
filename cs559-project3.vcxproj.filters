@@ -147,6 +147,9 @@
     <ClInclude Include="Scene\Skybox.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Utility\Matrix2d.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Behavior.cpp">
