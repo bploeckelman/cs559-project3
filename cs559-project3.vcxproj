@@ -115,6 +115,8 @@
     <ClInclude Include="Framework\Utilities\Pnt3f.H" />
     <ClInclude Include="Framework\Utilities\ShaderTools.H" />
     <ClInclude Include="Framework\Utilities\Texture.H" />
+    <ClInclude Include="Scene\Camera.h" />
+    <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Utility\Logger.h" />
     <ClInclude Include="Utility\Plane.h" />
   </ItemGroup>
@@ -145,6 +147,8 @@
     <ClCompile Include="Framework\Utilities\Pnt3f.cpp" />
     <ClCompile Include="Framework\Utilities\ShaderTools.cpp" />
     <ClCompile Include="Framework\Utilities\Texture.cpp" />
+    <ClCompile Include="Scene\Camera.cpp" />
+    <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Utility\Logger.cpp" />
   </ItemGroup>
   <ItemGroup>
