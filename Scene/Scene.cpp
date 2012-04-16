@@ -135,27 +135,28 @@ void Scene::renderTestPlane(const Plane& plane, const float radius)
 	// Calculate/get plane details
 	const glm::vec3& p(plane.point());
 	const glm::vec3& n(plane.normal());
-	const glm::vec3  s(n.y - n.z, n.z - n.x, n.x - n.y); // orthogonal to n
+	const glm::vec3  o(n.y - n.z, n.z - n.x, n.x - n.y); //orthogonal to normal
+	const glm::vec3  s(glm::normalize(o));
 	const glm::vec3  t(glm::normalize(glm::cross(s,n)));
 	const float d = plane.distance();
 
 	// Calculate vertices
 	const glm::vec3 v0(radius *
 		glm::vec3(( s.x + t.x) + n.x * d
-		, ( s.y + t.y) + n.y * d
-		, ( s.z + t.z) + n.z * d));
+				, ( s.y + t.y) + n.y * d
+				, ( s.z + t.z) + n.z * d));
 	const glm::vec3 v1(radius *
 		glm::vec3(( s.x - t.x) + n.x * d
-		, ( s.y - t.y) + n.y * d
-		, ( s.z - t.z) + n.z * d));
+				, ( s.y - t.y) + n.y * d
+				, ( s.z - t.z) + n.z * d));
 	const glm::vec3 v2(radius *
 		glm::vec3((-s.x + t.x) + n.x * d
-		, (-s.y + t.y) + n.y * d
-		, (-s.z + t.z) + n.z * d));
+				, (-s.y + t.y) + n.y * d
+				, (-s.z + t.z) + n.z * d));
 	const glm::vec3 v3(radius *
 		glm::vec3((-s.x - t.x) + n.x * d
-		, (-s.y - t.y) + n.y * d
-		, (-s.z - t.z) + n.z * d));
+				, (-s.y - t.y) + n.y * d
+				, (-s.z - t.z) + n.z * d));
 
 	// Draw the plane
 	glDisable(GL_CULL_FACE);
