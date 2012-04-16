@@ -132,14 +132,14 @@
     <ClInclude Include="Utility\Logger.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Utility\Plane.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\Camera.h">
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Scene\Scene.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Plane.h">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

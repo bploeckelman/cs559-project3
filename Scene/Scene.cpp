@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include "Camera.h"
 #include "../Core/Common.h"
+#include "../Utility/Plane.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -59,7 +60,12 @@ void Scene::render( const Clock& clock )
 //				 , glm::vec3(0,1,0));   // up vector
 
 	glColor3f(1.f, 0.f, 1.f);
-	renderTestCube(glm::vec3(0.f, 0.f, 10.f));
+	renderTestCube(glm::vec3(0.f, -0.6f, 0.f));
+
+	// XZ plane
+	static Plane plane(glm::vec3(0,0,0), glm::vec3(0,1,0));
+	glColor3f(0.f, 0.3f, 0.f);
+	renderTestPlane(plane);
 }
 
 void Scene::init()
@@ -122,4 +128,43 @@ void Scene::renderTestCube(const glm::vec3& position, const float scale)
 	glEnd();
 
 	glPopMatrix(); 
+}
+
+void Scene::renderTestPlane(const Plane& plane, const float radius)
+{
+	// Calculate/get plane details
+	const glm::vec3& p(plane.point());
+	const glm::vec3& n(plane.normal());
+	const glm::vec3  s(n.y - n.z, n.z - n.x, n.x - n.y); // orthogonal to n
+	const glm::vec3  t(glm::normalize(glm::cross(s,n)));
+	const float d = plane.distance();
+
+	// Calculate vertices
+	const glm::vec3 v0(radius *
+		glm::vec3(( s.x + t.x) + n.x * d
+		, ( s.y + t.y) + n.y * d
+		, ( s.z + t.z) + n.z * d));
+	const glm::vec3 v1(radius *
+		glm::vec3(( s.x - t.x) + n.x * d
+		, ( s.y - t.y) + n.y * d
+		, ( s.z - t.z) + n.z * d));
+	const glm::vec3 v2(radius *
+		glm::vec3((-s.x + t.x) + n.x * d
+		, (-s.y + t.y) + n.y * d
+		, (-s.z + t.z) + n.z * d));
+	const glm::vec3 v3(radius *
+		glm::vec3((-s.x - t.x) + n.x * d
+		, (-s.y - t.y) + n.y * d
+		, (-s.z - t.z) + n.z * d));
+
+	// Draw the plane
+	glDisable(GL_CULL_FACE);
+	glBegin(GL_TRIANGLE_STRIP);
+		glNormal3fv(glm::value_ptr(n));
+		glVertex3fv(glm::value_ptr(v0));
+		glVertex3fv(glm::value_ptr(v1));
+		glVertex3fv(glm::value_ptr(v2));
+		glVertex3fv(glm::value_ptr(v3));
+	glEnd();
+	glEnable(GL_CULL_FACE);
 }

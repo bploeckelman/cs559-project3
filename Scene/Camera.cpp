@@ -22,8 +22,8 @@ using namespace sf;
 
 Camera::Camera()
 	: debug(false)
-	, _position(0.f, 0.f, 0.f)
-	, _rotation(0.f, 0.f, 0.f)
+	, _position(0.f, 2.f, 2.f)
+	, _rotation(30.f, 0.f, 0.f)
 	, _rotationSpeed(0.7f, 1.f, 1.f)
 { }
 
@@ -61,16 +61,16 @@ void Camera::processInput(const Input& input, const Clock& clock)
 	if( input.IsKeyDown(Key::X) )		turn(rroll, clock);
 
 	float moveSpeed   = 0.f;
-	if( input.IsKeyDown(Key::W) )		moveSpeed = -1.f;
-	if( input.IsKeyDown(Key::S) )		moveSpeed =  1.f;
+	if( input.IsKeyDown(Key::W) )		moveSpeed = -0.1f;
+	if( input.IsKeyDown(Key::S) )		moveSpeed =  0.1f;
 
 	float strafeSpeed = 0.f;
-	if( input.IsKeyDown(Key::A) )		strafeSpeed =  1.f;
-	if( input.IsKeyDown(Key::D) )		strafeSpeed = -1.f;
+	if( input.IsKeyDown(Key::A) )		strafeSpeed =  0.1f;
+	if( input.IsKeyDown(Key::D) )		strafeSpeed = -0.1f;
 
 	move(moveSpeed,strafeSpeed);
 
-	float y = 1.f;
+	float y = 0.1f;
 	if( input.IsKeyDown(Key::Q) )		moveY(-y);
 	if( input.IsKeyDown(Key::E) )		moveY(y);
 
