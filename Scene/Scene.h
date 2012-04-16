@@ -6,6 +6,7 @@
 /************************************************************************/
 #include "Camera.h"
 #include "Skybox.h"
+#include "HeightMap.h"
 #include "../Core/Common.h"
 #include "../Utility/Plane.h"
 
@@ -24,6 +25,7 @@ protected:
 	Camera		*camera;	// the current camera
 	CameraVector cameras;	// all the cameras in the scene
 	Skybox       skybox;    // the current skybox
+	HeightMap    heightmap; // a test heightmap
 
 public:
 	Scene();

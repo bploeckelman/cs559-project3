@@ -23,6 +23,8 @@ using namespace sf;
 Scene::Scene()
 	: camera(nullptr)
 	, cameras()
+	, skybox()
+	, heightmap()
 {
 	init();
 }
@@ -65,15 +67,9 @@ void Scene::render( const Clock& clock )
 	glPopMatrix();
 
 	glDisable(GL_TEXTURE_2D);
-
-	glColor3f(1.f, 0.f, 1.f);
-	renderTestCube(glm::vec3(0.f, -0.6f, 0.f));
-
-	// XZ plane
-	static Plane plane(glm::vec3(0,0,0), glm::vec3(0,1,0));
-	glColor3f(0.f, 0.3f, 0.f);
-	renderTestPlane(plane);
-
+	glPushMatrix();
+		heightmap.render(camera);
+	glPopMatrix();
 	glEnable(GL_TEXTURE_2D);
 }
 

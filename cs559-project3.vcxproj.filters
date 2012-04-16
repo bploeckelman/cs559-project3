@@ -150,6 +150,9 @@
     <ClInclude Include="Utility\Matrix2d.h">
       <Filter>Utility</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\HeightMap.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Behavior.cpp">
@@ -240,6 +243,9 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Scene\Skybox.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\HeightMap.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
