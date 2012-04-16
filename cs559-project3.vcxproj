@@ -117,6 +117,8 @@
     <ClInclude Include="Framework\Utilities\Texture.H" />
     <ClInclude Include="Scene\Camera.h" />
     <ClInclude Include="Scene\Scene.h" />
+    <ClInclude Include="Scene\Skybox.h" />
+    <ClInclude Include="Utility\dirent.h" />
     <ClInclude Include="Utility\Logger.h" />
     <ClInclude Include="Utility\Plane.h" />
   </ItemGroup>
@@ -149,6 +151,7 @@
     <ClCompile Include="Framework\Utilities\Texture.cpp" />
     <ClCompile Include="Scene\Camera.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
+    <ClCompile Include="Scene\Skybox.cpp" />
     <ClCompile Include="Utility\Logger.cpp" />
   </ItemGroup>
   <ItemGroup>

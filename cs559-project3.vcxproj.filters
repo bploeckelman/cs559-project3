@@ -141,6 +141,12 @@
     <ClInclude Include="Utility\Plane.h">
       <Filter>Utility</Filter>
     </ClInclude>
+    <ClInclude Include="Utility\dirent.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Skybox.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Behavior.cpp">
@@ -228,6 +234,9 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Scene\Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Skybox.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
