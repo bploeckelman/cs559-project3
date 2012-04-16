@@ -2,6 +2,7 @@
 ############################
 Build/*
 Build
+log.txt
 
 
 # the rest of this ignore file is from: #

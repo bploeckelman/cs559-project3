@@ -4,6 +4,7 @@
 /* The main sfml window for an application
 /************************************************************************/
 #include "MainWindow.h"
+#include "Common.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -13,7 +14,7 @@
 #include <SFML/System/Randomizer.hpp>
 
 // Application window settings, video mode, window style
-const std::string MainWindow::title("Game Testbed");
+const std::string MainWindow::title("CS559 - Project 3 - Graphics Town");
 
 const unsigned int width  = 1280;
 const unsigned int height = 1024;
@@ -42,6 +43,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::init()
 {
+	Log(title + " initializing...");
+
 	setupOpenGLState();
 	setupPerspective();
 
@@ -50,11 +53,13 @@ void MainWindow::init()
 
 void MainWindow::cleanup()
 {
-
+	Log(title + " cleaning up...");
 }
 
 void MainWindow::mainLoop()
 {
+	Log("Entering main loop...");
+
 	sf::Clock clock;
 	timer.Reset();
 	while( IsOpened() )

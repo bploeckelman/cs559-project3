@@ -2,6 +2,7 @@
 /************************************************************************/
 /* Common includes, constants, and helper functions
 /************************************************************************/
+#include "../Utility/Logger.h"
 
 
 namespace constants
