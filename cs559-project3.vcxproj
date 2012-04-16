@@ -53,14 +53,17 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..;$(FLTKHOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..;$(GLM);$(SFML_1_6)\include;$(FLTKHOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(FLTKHOME)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>fltkd.lib;fltkgld.lib;comctl32.lib;wsock32.lib;opengl32.lib;glu32.lib;fltkjpegd.lib;fltkpngd.lib;fltkimagesd.lib;fltkzlibd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SFML_1_6_LIBS);$(FLTKHOME)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-window-s-d.lib;sfml-system-s-d.lib;sfml-graphics-s-d.lib;sfml-audio-s-d.lib;fltkd.lib;fltkgld.lib;comctl32.lib;wsock32.lib;opengl32.lib;glu32.lib;fltkjpegd.lib;fltkpngd.lib;fltkimagesd.lib;fltkzlibd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <AdditionalOptions>/ignore:4042 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -71,19 +74,24 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..;$(FLTKHOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..;$(GLM);$(SFML_1_6)\include;$(FLTKHOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(FLTKHOME)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>fltk.lib;fltkgl.lib;comctl32.lib;wsock32.lib;opengl32.lib;glu32.lib;fltkjpeg.lib;fltkpng.lib;fltkimages.lib;fltkzlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SFML_1_6_LIBS);$(FLTKHOME)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-window-s.lib;sfml-system-s.lib;sfml-graphics-s.lib;sfml-audio-s.lib;fltk.lib;fltkgl.lib;comctl32.lib;wsock32.lib;opengl32.lib;glu32.lib;fltkjpeg.lib;fltkimages.lib;fltkzlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <AdditionalOptions>/ignore:4042 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Common.h" />
+    <ClInclude Include="Core\MainWindow.h" />
     <ClInclude Include="Framework\Behavior.H" />
     <ClInclude Include="Framework\DrawingState.H" />
     <ClInclude Include="Framework\DrawUtils.H" />
@@ -109,6 +117,8 @@
     <ClInclude Include="Framework\Utilities\Texture.H" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\main.cpp" />
+    <ClCompile Include="Core\MainWindow.cpp" />
     <ClCompile Include="Framework\Behavior.cpp" />
     <ClCompile Include="Framework\DrawingState.cpp" />
     <ClCompile Include="Framework\DrawUtils.cpp" />

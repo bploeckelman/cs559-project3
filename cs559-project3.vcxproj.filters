@@ -123,6 +123,12 @@
     <ClInclude Include="Framework\Roads\Roads.H">
       <Filter>Framework\Roads\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Common.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\MainWindow.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Behavior.cpp">
@@ -196,6 +202,12 @@
     </ClCompile>
     <ClCompile Include="Framework\TownViewWidget.cpp">
       <Filter>Framework\Engine Core\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\main.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\MainWindow.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -36,6 +36,12 @@
 // List of all fltk include file for example #include <Fl/Fl_Window.h>
 #include <Fl/Fl.h>
 #include <Fl/Fl_Widget.h>
+/* **************************************
+   Note : the fltk png lib conflicts with SFML,
+   since the framework texture stuff is not being
+   used, I'm commenting everything out for now that
+   is related.. 
+/**************************************** */
 #include <FL/Fl_Image.h>
 #include <FL/Fl_JPEG_Image.h>
 #include <FL/Fl_PNG_Image.h>
@@ -160,6 +166,7 @@ unsigned char* Reverse_Rows(unsigned char * data, int width, int height)
 void* read_JPG(char *filename, int *width, int *height)
 //=============================================================================
 {
+/*
 	if (!filename) {
     printf("No filename given.\n");
     return 0;
@@ -198,6 +205,8 @@ void* read_JPG(char *filename, int *width, int *height)
 	unsigned char *result = Reverse_Rows(temp_data, *width, *height);
 	delete [] temp_data;
 	return result;
+*/
+	return nullptr;
 }// read_JPG
 
 //*****************************************************************************
@@ -208,6 +217,7 @@ void* read_JPG(char *filename, int *width, int *height)
 void* read_BMP(char *filename, int *width, int *height)
 //=============================================================================
 {
+/*
   if (!filename) {
 		printf("No filename given.\n");
     return 0;
@@ -246,6 +256,8 @@ void* read_BMP(char *filename, int *width, int *height)
 	unsigned char *result = Reverse_Rows(temp_data, *width, *height);
 	delete [] temp_data;
 	return result;
+*/
+	return nullptr;
 }// read_BMP
 
 //*****************************************************************************
@@ -256,6 +268,7 @@ void* read_BMP(char *filename, int *width, int *height)
 void* read_GIF(char *filename, int *width, int *height)
 //=============================================================================
 {
+/*
   if (!filename) {
     printf("No filename given.\n");
     return 0;
@@ -294,6 +307,8 @@ void* read_GIF(char *filename, int *width, int *height)
 	unsigned char *result = Reverse_Rows(temp_data, *width, *height);
 	delete [] temp_data;
 	return result;
+*/
+	return nullptr;
 }// read_GIP
 
 //*****************************************************************************
@@ -304,6 +319,7 @@ void* read_GIF(char *filename, int *width, int *height)
 void* read_PNG(char *filename, int *width, int *height)
 //=============================================================================
 {
+/*
   if (!filename) {
     printf("No filename given.\n");
     return 0;
@@ -342,6 +358,8 @@ void* read_PNG(char *filename, int *width, int *height)
 	unsigned char *result = Reverse_Rows(temp_data, *width, *height);
 	delete [] temp_data;
 	return result;
+*/
+	return nullptr;
 }// read_BMP
 
 //*************************************************************************************

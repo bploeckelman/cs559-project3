@@ -64,7 +64,12 @@
 
 	$Header: /p/course/cs559-gleicher/private/CVS/Utilities/Texture.H,v 1.3 2009/11/11 13:38:33 gleicher Exp $
 *************************************************************************/
-
+/* **************************************
+   Note : the fltk png lib conflicts with SFML,
+   since the framework texture stuff is not being
+   used, I'm commenting everything out for now that
+   is related in the Texture.cpp file.. 
+/**************************************** */
 #include <Fl/Fl.h>
 #include <Fl/Gl.h>
 #include <Gl/Glu.h>

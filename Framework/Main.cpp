@@ -30,8 +30,8 @@
 
 const int numCars = 100;
 const int nGrids = 5;
-
-int main(int /*argc*/, char** /*argv*/)
+/*
+int main(int argc, char** argv)
 { 
 
   // put in some texture paths - look all over the place
@@ -189,5 +189,5 @@ int main(int /*argc*/, char** /*argv*/)
   Fl::run();
   return 1;
 }
-
+*/
 // $Header: /p/course/cs559-gleicher/private/CVS/GrTown/Main.cpp,v 1.8 2009/11/10 22:40:03 gleicher Exp $
