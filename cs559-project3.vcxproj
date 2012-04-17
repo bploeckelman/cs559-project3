@@ -91,6 +91,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core\Common.h" />
+    <ClInclude Include="Core\ImageManager.h" />
     <ClInclude Include="Core\MainWindow.h" />
     <ClInclude Include="Framework\Behavior.H" />
     <ClInclude Include="Framework\DrawingState.H" />
@@ -125,6 +126,7 @@
     <ClInclude Include="Utility\Plane.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\ImageManager.cpp" />
     <ClCompile Include="Core\main.cpp" />
     <ClCompile Include="Core\MainWindow.cpp" />
     <ClCompile Include="Framework\Behavior.cpp" />

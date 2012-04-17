@@ -153,6 +153,9 @@
     <ClInclude Include="Scene\HeightMap.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Core\ImageManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Behavior.cpp">
@@ -247,6 +250,9 @@
     </ClCompile>
     <ClCompile Include="Scene\HeightMap.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\ImageManager.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

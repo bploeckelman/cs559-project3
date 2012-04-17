@@ -6,8 +6,9 @@
 #include "Scene.h"
 #include "Camera.h"
 #include "Skybox.h"
-#include "../Core/Common.h"
 #include "../Utility/Plane.h"
+#include "../Core/Common.h"
+#include "../Core/ImageManager.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -18,6 +19,7 @@
 #include <SFML/System/Randomizer.hpp>
 
 using namespace sf;
+using glm::vec3;
 
 
 Scene::Scene()
@@ -36,7 +38,11 @@ Scene::~Scene()
 
 void Scene::setup()
 {
-	// load textures
+	// setup textures
+	ImageManager::get().addResourceDir("Resources/images/");
+	ImageManager::get().addResourceDir("./");
+	ImageManager::get().addResourceDir("../");
+	ImageManager::get().addResourceDir("../../Resources/images/");
 
 	// setup meshes
 
@@ -58,12 +64,17 @@ void Scene::render( const Clock& clock )
 	glLoadIdentity();
 
 	camera->apply();
-//	camera->lookAt(glm::vec3(5,10,5)    // camera position
-//				 , glm::vec3(0,10,0)    // look at point
-//				 , glm::vec3(0,1,0));   // up vector
+//	camera->lookAt(vec3(5,10,5)    // camera position
+//				 , vec3(0,10,0)    // look at point
+//				 , vec3(0,1,0));   // up vector
 
 	glPushMatrix();
 		skybox.render(*camera);
+	glPopMatrix();
+
+	glPushMatrix();
+		static const Plane plane(vec3(0,0,10), vec3(0,0,-1));
+		renderTestPlane(plane);
 	glPopMatrix();
 
 	glDisable(GL_TEXTURE_2D);
@@ -83,7 +94,7 @@ void Scene::cleanup()
 	Log("Cleaning up scene...");
 }
 
-void Scene::renderTestCube(const glm::vec3& position, const float scale)
+void Scene::renderTestCube(const vec3& position, const float scale)
 {
 	glPushMatrix();
 
@@ -138,39 +149,50 @@ void Scene::renderTestCube(const glm::vec3& position, const float scale)
 void Scene::renderTestPlane(const Plane& plane, const float radius)
 {
 	// Calculate/get plane details
-	const glm::vec3& p(plane.point());
-	const glm::vec3& n(plane.normal());
-	const glm::vec3  o(n.y - n.z, n.z - n.x, n.x - n.y); //orthogonal to normal
-	const glm::vec3  s(glm::normalize(o));
-	const glm::vec3  t(glm::normalize(glm::cross(s,n)));
+	const vec3& p(plane.point());
+	const vec3& n(plane.normal());
+	const vec3  o(n.y - n.z, n.z - n.x, n.x - n.y); //orthogonal to normal
+	const vec3  s(glm::normalize(o));
+	const vec3  t(glm::normalize(glm::cross(s,n)));
 	const float d = plane.distance();
 
 	// Calculate vertices
-	const glm::vec3 v0(radius *
-		glm::vec3(( s.x + t.x) + n.x * d
+	const vec3 v0(radius *
+			 vec3(( s.x + t.x) + n.x * d
 				, ( s.y + t.y) + n.y * d
 				, ( s.z + t.z) + n.z * d));
-	const glm::vec3 v1(radius *
-		glm::vec3(( s.x - t.x) + n.x * d
+	const vec3 v1(radius *
+			 vec3(( s.x - t.x) + n.x * d
 				, ( s.y - t.y) + n.y * d
 				, ( s.z - t.z) + n.z * d));
-	const glm::vec3 v2(radius *
-		glm::vec3((-s.x + t.x) + n.x * d
+	const vec3 v2(radius *
+			 vec3((-s.x + t.x) + n.x * d
 				, (-s.y + t.y) + n.y * d
 				, (-s.z + t.z) + n.z * d));
-	const glm::vec3 v3(radius *
-		glm::vec3((-s.x - t.x) + n.x * d
+	const vec3 v3(radius *
+			 vec3((-s.x - t.x) + n.x * d
 				, (-s.y - t.y) + n.y * d
 				, (-s.z - t.z) + n.z * d));
 
 	// Draw the plane
 	glDisable(GL_CULL_FACE);
+
+	const sf::Image& image(ImageManager::get().getImage("grid.png"));
+	image.Bind();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
 	glBegin(GL_TRIANGLE_STRIP);
 		glNormal3fv(glm::value_ptr(n));
-		glVertex3fv(glm::value_ptr(v0));
-		glVertex3fv(glm::value_ptr(v1));
-		glVertex3fv(glm::value_ptr(v2));
-		glVertex3fv(glm::value_ptr(v3));
+		glTexCoord2f(0.f,    0.f);    glVertex3fv(glm::value_ptr(v0));
+		glTexCoord2f(radius, 0.f);    glVertex3fv(glm::value_ptr(v1));
+		glTexCoord2f(0.f,    radius); glVertex3fv(glm::value_ptr(v2));
+		glTexCoord2f(radius, radius); glVertex3fv(glm::value_ptr(v3));
 	glEnd();
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
 	glEnable(GL_CULL_FACE);
 }
