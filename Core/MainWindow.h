@@ -2,7 +2,7 @@
 /************************************************************************/
 /* MainWindow
 /* ----------
-/* The main sfml window for an application
+/* The main SFML window for an application
 /************************************************************************/
 #include "../Scene/Scene.h"
 

@@ -10,18 +10,25 @@
 #include <SFML/Graphics/Color.hpp>
 
 #include <sstream>
+#include <stdio.h>
 #include <string>
 #include <set>
 #include <map>
+#include <iostream>
 
 using namespace sf;
 using namespace std;
 
 
 const Image& ImageManager::getImage( const string& filename )
-{
+{	
+	//error stream to toss
+	stringstream toss;
+	streambuf* old = cerr.rdbuf(toss.rdbuf());
+
 	// See if it is already loaded
 	StringImageMapConstIter it = images.find(filename);
+
 	if( it != images.end() )
 	{
 		return (*it).second;
@@ -34,10 +41,13 @@ const Image& ImageManager::getImage( const string& filename )
 		Image image;
 		if( image.LoadFromFile(filename) )
 		{
+
 			ss << "Loaded image: " << filename;
 			Log(ss);
 
 			images[filename] = image;
+			//return cerr to original stream
+			cerr.rdbuf(old);
 			return images[filename];
 		}
 		else // Try other resource directories
@@ -46,14 +56,16 @@ const Image& ImageManager::getImage( const string& filename )
 			{
 				if( image.LoadFromFile(dir + filename) )
 				{
+
 					ss << "Loaded image: " << (dir + filename);
 					Log(ss);
 
 					images[filename] = image;
+					//return cerr to original stream
+					cerr.rdbuf(old);
 					return images[filename];
 				}
 			}
-
 			// Couldn't find it anywhere
 			ss  << "Warning: unable to find image " << filename
 				<< " returning blank image.";
@@ -61,6 +73,8 @@ const Image& ImageManager::getImage( const string& filename )
 
 			image.Create(32, 32, Color(255, 0, 255, 255));
 			images[filename] = image;
+			//return cerr to original stream
+			cerr.rdbuf(old);
 			return images[filename];
 		}
 	}

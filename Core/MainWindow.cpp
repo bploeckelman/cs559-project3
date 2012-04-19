@@ -1,7 +1,7 @@
 /************************************************************************/
 /* MainWindow
 /* ----------
-/* The main sfml window for an application
+/* The main SFML window for an application
 /************************************************************************/
 #include "MainWindow.h"
 #include "Common.h"
@@ -49,6 +49,10 @@ void MainWindow::init()
 
 	setupOpenGLState();
 	setupPerspective();
+
+
+	SetCursorPosition(640, 480);
+	ShowMouseCursor(false);
 
 	scene.setup();
 

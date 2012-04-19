@@ -21,11 +21,14 @@ public:
 private:
 	bool debug;
 
+	int mousePrevX;
+	int mousePrevY;
+
 	glm::vec3 _position;
 	glm::vec3 _rotation;
 	glm::vec3 _rotationSpeed;
 
-	void turn(const Direction& direction, const sf::Clock& clock);
+	void turn(const Direction& direction, float speed, const sf::Clock& clock);
 	void move(const float forwardSpeed, const float strafeSpeed=0.f);
 	void moveY(const float speed=1.f);
 
