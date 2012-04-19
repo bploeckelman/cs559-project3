@@ -156,6 +156,9 @@
     <ClInclude Include="Core\ImageManager.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="Utility\RenderUtils.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Behavior.cpp">
@@ -253,6 +256,9 @@
     </ClCompile>
     <ClCompile Include="Core\ImageManager.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\RenderUtils.cpp">
+      <Filter>Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
