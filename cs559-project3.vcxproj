@@ -124,6 +124,7 @@
     <ClInclude Include="Utility\Logger.h" />
     <ClInclude Include="Utility\Matrix2d.h" />
     <ClInclude Include="Utility\Plane.h" />
+    <ClInclude Include="Utility\RenderUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\ImageManager.cpp" />
@@ -158,6 +159,7 @@
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\Skybox.cpp" />
     <ClCompile Include="Utility\Logger.cpp" />
+    <ClCompile Include="Utility\RenderUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Framework\GraphicsTownUI.fl" />
