@@ -6,6 +6,7 @@
 /************************************************************************/
 #include <glm/glm.hpp>
 
+
 namespace sf
 {
 	class Clock;
@@ -21,8 +22,9 @@ public:
 private:
 	bool debug;
 
-	int mousePrevX;
-	int mousePrevY;
+	bool mouseView;
+
+	static const float MOUSE_SENSITIVITY;
 
 	glm::vec3 _position;
 	glm::vec3 _rotation;
@@ -34,6 +36,8 @@ private:
 
 public:
 	Camera();
+
+	void setMouseView(bool val);
 
 	void apply() const;
 	void lookAt(const glm::vec3& eye, const glm::vec3& center, const glm::vec3& up);
@@ -53,6 +57,8 @@ public:
 	void rotationSpeed(const float x, const float y, const float z);
 	const glm::vec3& rotationSpeed() const;
 };
+
+inline void Camera::setMouseView(bool val) { mouseView = val; }
 
 inline void Camera::toggleDebug() { debug = !debug; }
 

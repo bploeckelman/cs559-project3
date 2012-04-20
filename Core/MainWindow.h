@@ -26,6 +26,8 @@ private:
 	Scene scene;
 	sf::Clock timer;
 
+	bool mouseView;
+
 	void init();
 	void cleanup();
 	void mainLoop();

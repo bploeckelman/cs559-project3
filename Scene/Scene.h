@@ -26,6 +26,7 @@ protected:
 	CameraVector cameras;	// all the cameras in the scene
 	Skybox       skybox;    // the current skybox
 	HeightMap    heightmap; // a test heightmap
+	bool		 mouseView;
 
 public:
 	Scene();
@@ -38,14 +39,18 @@ public:
 	// Render this scene's objects from the current camera perspective
 	void render(const sf::Clock& clock);
 
+	void setMouseView(bool val);
+
 	// Peek at the camera position
 	const glm::vec3& cameraPosition() const;
-	
+
 private:
 	// Allocate any needed memory, called on creation
 	void init();
 	// Free any allocated memory, called on destruction
 	void cleanup();
 };
+
+inline void Scene::setMouseView(bool val) { camera->setMouseView(val); }
 
 inline const glm::vec3& Scene::cameraPosition() const { return camera->position(); }

@@ -10,9 +10,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <SFML2/Graphics.hpp>
-#include <SFML2/System/Clock.hpp>
-#include <SFML2/Window/Input.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/System/Clock.hpp>
+#include <SFML/Window/Input.hpp>
 
 #include <iostream>
 
@@ -20,13 +20,14 @@ using namespace std;
 using namespace sf;
 
 
+const float Camera::MOUSE_SENSITIVITY = 15.0;
+
 Camera::Camera()
 	: debug(false)
 	, _position(0.f, 2.f, 2.f)
 	, _rotation(30.f, 0.f, 0.f)
 	, _rotationSpeed(0.7f, 1.f, 1.f)
-	, mousePrevX(640)
-	, mousePrevY(480)
+	, mouseView(true)
 { }
 
 void Camera::apply() const
@@ -60,18 +61,18 @@ void Camera::processInput(const Input& input, const Clock& clock)
 	if( input.IsKeyDown(Key::Right))	turn(right, 1.0, clock);
 	if( input.IsKeyDown(Key::Up))		turn(up, 1.0, clock);
 	if( input.IsKeyDown(Key::Down))		turn(down, 1.0, clock);
-	if( input.GetMouseX() < mousePrevX)	turn(left, mousePrevX - input.GetMouseX(), clock);
-	if( input.GetMouseX() > mousePrevX)	turn(right, input.GetMouseX() - mousePrevX, clock);
-	if( input.GetMouseY() < mousePrevY)	turn(up, input.GetMouseY() - mousePrevY, clock);
-	if( input.GetMouseY() > mousePrevY)	turn(down, mousePrevY - input.GetMouseY(), clock);
 	if( input.IsKeyDown(Key::Z) )		turn(lroll, 1.0, clock);
 	if( input.IsKeyDown(Key::X) )		turn(rroll, 1.0, clock);
 
-	cout << mousePrevX << endl;
-	cout << mousePrevY << endl;
+	//mouse view, only do if mouseView is true
+	if( mouseView)
+	{
+		if( input.GetMouseX() < 640 )	turn(left, (640 - input.GetMouseX())/MOUSE_SENSITIVITY, clock);
+		if( input.GetMouseX() > 640 )	turn(right, (input.GetMouseX() - 640)/MOUSE_SENSITIVITY, clock);
+		if( input.GetMouseY() < 480 )	turn(up, (480 - input.GetMouseY())/MOUSE_SENSITIVITY, clock);
+		if( input.GetMouseY() > 480 )	turn(down, (input.GetMouseY() - 480)/MOUSE_SENSITIVITY, clock);
+	}
 
-	mousePrevX = input.GetMouseX();
-	mousePrevY = input.GetMouseY();
 
 	float moveSpeed   = 0.f;
 	if( input.IsKeyDown(Key::W) )		moveSpeed = -0.1f;
@@ -101,12 +102,12 @@ void Camera::turn(const Direction& direction, float speed, const sf::Clock& cloc
 {
 	switch(direction)
 	{
-	case left:	_rotation.y += _rotationSpeed.y; break;
-	case right: _rotation.y -= _rotationSpeed.y; break;
-	case up:	_rotation.x -= _rotationSpeed.x; break;
-	case down:	_rotation.x += _rotationSpeed.x; break;
-	case lroll: _rotation.z += _rotationSpeed.z; break;
-	case rroll: _rotation.z -= _rotationSpeed.z; break;
+	case left:	_rotation.y += _rotationSpeed.y * speed; break;
+	case right: _rotation.y -= _rotationSpeed.y * speed; break;
+	case up:	_rotation.x -= _rotationSpeed.x * speed; break;
+	case down:	_rotation.x += _rotationSpeed.x * speed; break;
+	case lroll: _rotation.z += _rotationSpeed.z * speed; break;
+	case rroll: _rotation.z -= _rotationSpeed.z * speed; break;
 	};
 }
 

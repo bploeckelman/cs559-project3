@@ -33,6 +33,7 @@ MainWindow::MainWindow()
 	: sf::Window(videoMode, title, windowStyle, windowSettings)
 	, scene()
 	, timer()
+	, mouseView(true)
 {
 	init();
 	sf::Randomizer::SetSeed(0);
@@ -82,6 +83,11 @@ void MainWindow::update(const sf::Clock& clock)
 {
 	handleEvents();
 	scene.update(clock, GetInput());
+	if( mouseView)
+	{
+		SetCursorPosition(640, 480);
+		ShowMouseCursor(false);
+	}
 }
 
 void MainWindow::render(const sf::Clock& clock)
@@ -91,6 +97,7 @@ void MainWindow::render(const sf::Clock& clock)
 	scene.render(clock);
 
 	Display();
+
 }
 
 void MainWindow::setupOpenGLState()
@@ -139,6 +146,23 @@ void MainWindow::handleEvents()
 		|| (ev.Type == sf::Event::KeyPressed && ev.Key.Code == sf::Key::Escape) )
 		{
 			Close();
+		}
+		if( ev.Type == sf::Event::KeyPressed && ev.Key.Code == sf::Key::RControl)
+		{
+			if(mouseView)
+			{
+				SetCursorPosition(640, 480);
+				ShowMouseCursor(true);
+				mouseView = false;
+				scene.setMouseView(false);
+			}
+			else if(!mouseView)
+			{
+				SetCursorPosition(640, 480);
+				ShowMouseCursor(false);
+				mouseView = true;
+				scene.setMouseView(true);
+			}
 		}
 
 		// Toggle rendering states
