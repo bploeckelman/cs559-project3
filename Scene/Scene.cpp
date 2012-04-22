@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include "Camera.h"
 #include "Skybox.h"
+#include "Fluid.h"          // *TESTING*
 #include "../Utility/Plane.h"
 #include "../Utility/RenderUtils.h"
 #include "../Core/Common.h"
@@ -27,6 +28,7 @@ Scene::Scene()
 	, cameras()
 	, skybox()
 	, heightmap()
+	, fluid(nullptr)
 {
 	init();
 }
@@ -40,11 +42,11 @@ void Scene::setup()
 {
 	// setup textures
 	ImageManager::get().addResourceDir("Resources/images/");
-	ImageManager::get().addResourceDir("./");
 	ImageManager::get().addResourceDir("../");
 	ImageManager::get().addResourceDir("../../Resources/images/");
 
 	// setup meshes
+	fluid = new Fluid(40, 40, 0.2f, 0.03f, 1.0f, 0.3f);
 
 	// create and position cameras
 	cameras.push_back(Camera());
@@ -54,6 +56,11 @@ void Scene::setup()
 void Scene::update( const Clock& clock, const Input& input )
 {
 	camera->processInput(input, clock);
+
+	if( input.IsKeyDown(Key::Space) )
+		fluid->displace();
+
+	fluid->evaluate();
 }
 
 void Scene::render( const Clock& clock )
@@ -76,11 +83,9 @@ void Scene::render( const Clock& clock )
 		Render::plane(Plane(vec3(0,0,10), vec3(0,0,-1)));
 	glPopMatrix();
 
-	glDisable(GL_TEXTURE_2D);
 	glPushMatrix();
-		heightmap.render(camera);
+		fluid->render();
 	glPopMatrix();
-	glEnable(GL_TEXTURE_2D);
 }
 
 void Scene::init()
@@ -91,4 +96,5 @@ void Scene::init()
 void Scene::cleanup()
 {
 	Log("Cleaning up scene...");
+	delete fluid;
 }

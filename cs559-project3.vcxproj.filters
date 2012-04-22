@@ -159,6 +159,9 @@
     <ClInclude Include="Utility\RenderUtils.h">
       <Filter>Utility</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\Fluid.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Behavior.cpp">
@@ -259,6 +262,9 @@
     </ClCompile>
     <ClCompile Include="Utility\RenderUtils.cpp">
       <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Fluid.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

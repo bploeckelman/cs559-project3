@@ -12,6 +12,8 @@
 
 #include <glm/glm.hpp>
 
+class Fluid;
+
 namespace sf
 {
 	class Clock;
@@ -26,6 +28,7 @@ protected:
 	CameraVector cameras;	// all the cameras in the scene
 	Skybox       skybox;    // the current skybox
 	HeightMap    heightmap; // a test heightmap
+	Fluid*       fluid;     // a test fluid surface
 	bool		 mouseView;
 
 public:
