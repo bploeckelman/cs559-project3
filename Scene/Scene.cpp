@@ -45,6 +45,7 @@ void Scene::setup()
 	ImageManager::get().addResourceDir("../../Resources/images/");
 
 	// setup meshes
+	heightmap.loadFromImage("heightmap-of-disapproval.png");
 
 	// create and position cameras
 	cameras.push_back(Camera());

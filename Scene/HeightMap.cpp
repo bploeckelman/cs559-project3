@@ -6,15 +6,15 @@
 #include "HeightMap.h"
 #include "Camera.h"
 #include "../Core/Common.h"
+#include "../Core/ImageManager.h"
 #include "../Utility/Matrix2d.h"
 
 #include <SFML/Graphics.hpp>
 
-//#include <glm/gtc/noise.hpp>
-#include <glm/gtx/noise.hpp>
 #include <glm/gtc/random.hpp>
 
 #include <vector>
+#include <string>
 #include <cmath>
 
 using std::vector;
@@ -29,7 +29,7 @@ HeightMap::HeightMap(const unsigned int width, const unsigned int height)
 void HeightMap::render(Camera *camera)
 {
 	const float groundScale = 1.f;
-	const float heightScale = 2.f;
+	const float heightScale = 5.f;
 
 	// Force the camera to stay above the heightmap
 	if( camera != nullptr )
@@ -80,5 +80,26 @@ void HeightMap::randomize()
 	for(unsigned int col = 0; col < heights.cols(); ++col)
 	{
 		heights(row,col) = glm::gaussRand(1.0, 0.4);
+	}
+}
+
+void HeightMap::loadFromImage( const std::string& filename )
+{
+	const sf::Image& image = ImageManager::get().getImage(filename);
+	const unsigned int width  = image.GetWidth();
+	const unsigned int height = image.GetHeight();
+	heights = HeightMatrix(height, width);
+
+	for(unsigned int y = 0; y < height; ++y)
+	for(unsigned int x = 0; x < width;  ++x)
+	{
+		const sf::Color pixel  = image.GetPixel(x,y);
+		const double grey = static_cast<double>(pixel.r) / 255.0;
+		heights(y,x) = grey;
+/*
+		const double lum = 0.299f * pixel.r
+						 + 0.587f * pixel.g
+						 + 0.114f * pixel.b;
+*/
 	}
 }
