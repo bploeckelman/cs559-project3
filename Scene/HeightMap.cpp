@@ -34,6 +34,7 @@ void HeightMap::render(Camera *camera)
 	// Force the camera to stay above the heightmap
 	if( camera != nullptr )
 	{
+		try {
 		glm::vec3 campos(camera->position());
 		glm::vec2 mapcoords(-campos.x / groundScale, -campos.z / groundScale);
 		if( mapcoords.x >= 0 && mapcoords.y >= 0 
@@ -45,6 +46,9 @@ void HeightMap::render(Camera *camera)
 			const double height = heightAt(x, y);
 			if( campos.y < height+0.5f ) 
 				camera->position(glm::vec3(campos.x, height+0.5f, campos.z));
+		}
+		} catch(HeightMatrix::BoundsViolation& e) {
+			int i = 1;
 		}
 	}
 

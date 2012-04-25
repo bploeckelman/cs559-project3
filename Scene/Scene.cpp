@@ -40,7 +40,6 @@ void Scene::setup()
 {
 	// setup textures
 	ImageManager::get().addResourceDir("Resources/images/");
-	ImageManager::get().addResourceDir("./");
 	ImageManager::get().addResourceDir("../");
 	ImageManager::get().addResourceDir("../../Resources/images/");
 
@@ -74,13 +73,18 @@ void Scene::render( const Clock& clock )
 	glPopMatrix();
 
 	glPushMatrix();
-		Render::plane(Plane(vec3(0,0,10), vec3(0,0,-1)));
+		Render::plane(Plane(vec3(0,0,0), vec3(0,1,0)), 50.f);
 	glPopMatrix();
 
 	glDisable(GL_TEXTURE_2D);
 	glPushMatrix();
 		heightmap.render(camera);
 	glPopMatrix();
+
+	Render::vector(vec3(1,0,0), vec3(0,0,0), vec3(1,0,0));
+	Render::vector(vec3(0,1,0), vec3(0,0,0), vec3(0,1,0));
+	Render::vector(vec3(0,0,1), vec3(0,0,0), vec3(0,0,1));
+
 	glEnable(GL_TEXTURE_2D);
 }
 
