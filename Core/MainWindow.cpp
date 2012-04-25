@@ -121,15 +121,16 @@ void MainWindow::setupOpenGLState()
 
 void MainWindow::setupPerspective()
 {
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	const float aspect = static_cast<float>(GetWidth() / GetHeight());
+	const float aspect = static_cast<float>(GetWidth())
+					   / static_cast<float>(GetHeight());
 	const float fov    = 70.f;
 	const float _near  = 1.f;
-	const float _far   = 10000.f;
+	const float _far   = 1000.f;
 
 	glm::mat4 m(glm::perspective(fov, aspect, _near, _far));
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
 	glLoadMatrixf(glm::value_ptr(m));
 
 	glMatrixMode(GL_MODELVIEW);
