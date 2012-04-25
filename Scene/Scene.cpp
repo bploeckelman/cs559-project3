@@ -76,10 +76,11 @@ void Scene::render( const Clock& clock )
 //		Render::plane(Plane(vec3(0,0,0), vec3(0,1,0)), 50.f);
 	glPopMatrix();
 
-	glDisable(GL_TEXTURE_2D);
 	glPushMatrix();
 		heightmap.render(camera);
 	glPopMatrix();
+
+	glDisable(GL_TEXTURE_2D);
 
 	Render::vector(vec3(1,0,0), vec3(0,0,0), vec3(1,0,0));
 	Render::vector(vec3(0,1,0), vec3(0,0,0), vec3(0,1,0));

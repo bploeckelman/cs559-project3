@@ -25,6 +25,7 @@ using std::vector;
 
 HeightMap::HeightMap(const unsigned int width, const unsigned int height)
 	: heights(height, width)
+	, imageName("")
 {
 	randomize();
 }
@@ -61,29 +62,43 @@ void HeightMap::render(Camera *camera)
 	glPushMatrix();
 	glMultMatrixf(glm::value_ptr(m));
 
+	const sf::Image& image = ImageManager::get().getImage(imageName);
+	image.Bind();
+
+	const float dt = 1.f / static_cast<float>(heights.rows() - 1);
+	const float ds = 1.f / static_cast<float>(heights.cols() - 1);
+
 	// TODO: vertex arrays or vertex buffer objects
 	for(unsigned int row = 0; row < (heights.rows() - 1); ++row)
 	{
+		float t = row * dt;
+
 		glBegin(GL_TRIANGLE_STRIP);
 		for(unsigned int col = 0; col < (heights.cols() - 1); ++col)
 		{
+			float s = col * ds; 
+
 			const float r = static_cast<float>(row) / static_cast<float>(heights.rows());
 			const float g = static_cast<float>(col) / static_cast<float>(heights.cols());
 			const float b = static_cast<float>(row) / static_cast<float>(col);
 			glColor3f(r,g,b);
 			// row, col
+			glTexCoord2f(s, t);
 			glVertex3d(groundScale * col
-				, heightScale * heights(row,col)
-				, groundScale * row);
+					 , heightScale * heights(row,col)
+					 , groundScale * row);
 			// row+1,col
+			glTexCoord2f(s, t);
 			glVertex3d(groundScale * col
 					 , heightScale * heights(row+1,col)
 					 , groundScale * (row + 1));
 			// row, col+1
+			glTexCoord2f(s, t);
 			glVertex3d(groundScale * (col + 1)
-				, heightScale * heights(row,col+1)
-				, groundScale * row);
+					 , heightScale * heights(row,col+1)
+					 , groundScale * row);
 			// row+1, col+1
+			glTexCoord2f(s, t);
 			glVertex3d(groundScale * (col + 1)
 					 , heightScale * heights(row+1,col+1)
 					 , groundScale * (row + 1));
@@ -105,6 +120,8 @@ void HeightMap::randomize()
 
 void HeightMap::loadFromImage( const std::string& filename )
 {
+	imageName = filename;
+
 	const sf::Image& image = ImageManager::get().getImage(filename);
 	const unsigned int width  = image.GetWidth();
 	const unsigned int height = image.GetHeight();

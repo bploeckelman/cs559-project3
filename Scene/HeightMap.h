@@ -17,6 +17,7 @@ class HeightMap
 {
 private:
 	HeightMatrix heights;	
+	std::string  imageName;
 
 	void randomize();
 
