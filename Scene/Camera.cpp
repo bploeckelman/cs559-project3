@@ -120,8 +120,8 @@ void Camera::move(const float forwardSpeed, const float strafeSpeed)
 	y += static_cast<float>(glm::sin(glm::radians(_rotation.x))) * forwardSpeed;
 	z += static_cast<float>(glm::cos(glm::radians(_rotation.y))) * forwardSpeed;
 
-	x += static_cast<float>(glm::cos(glm::radians(_rotation.y))) * strafeSpeed;
-	z += static_cast<float>(glm::sin(glm::radians(_rotation.y))) * strafeSpeed;
+	x -= static_cast<float>(glm::cos(glm::radians(_rotation.y))) * strafeSpeed;
+	z -= static_cast<float>(glm::sin(glm::radians(_rotation.y))) * strafeSpeed;
 }
 
 inline void Camera::moveY(const float speed)

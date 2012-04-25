@@ -11,7 +11,10 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <glm/glm.hpp>
 #include <glm/gtc/random.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <vector>
 #include <string>
@@ -32,6 +35,7 @@ void HeightMap::render(Camera *camera)
 	const float heightScale = 5.f;
 
 	// Force the camera to stay above the heightmap
+	/*
 	if( camera != nullptr )
 	{
 		try {
@@ -51,7 +55,13 @@ void HeightMap::render(Camera *camera)
 			int i = 1;
 		}
 	}
+	*/
+	glm::mat4 m;
+	m = glm::translate(m, glm::vec3(0,-heightScale,0));
+	glPushMatrix();
+	glMultMatrixf(glm::value_ptr(m));
 
+	// TODO: vertex arrays or vertex buffer objects
 	for(unsigned int row = 0; row < (heights.rows() - 1); ++row)
 	{
 		glBegin(GL_TRIANGLE_STRIP);
@@ -61,21 +71,27 @@ void HeightMap::render(Camera *camera)
 			const float g = static_cast<float>(col) / static_cast<float>(heights.cols());
 			const float b = static_cast<float>(row) / static_cast<float>(col);
 			glColor3f(r,g,b);
+			// row, col
+			glVertex3d(groundScale * col
+				, heightScale * heights(row,col)
+				, groundScale * row);
+			// row+1,col
 			glVertex3d(groundScale * col
 					 , heightScale * heights(row+1,col)
 					 , groundScale * (row + 1));
-			glVertex3d(groundScale * col
-					 , heightScale * heights(row,col)
-					 , groundScale * row);
+			// row, col+1
+			glVertex3d(groundScale * (col + 1)
+				, heightScale * heights(row,col+1)
+				, groundScale * row);
+			// row+1, col+1
 			glVertex3d(groundScale * (col + 1)
 					 , heightScale * heights(row+1,col+1)
 					 , groundScale * (row + 1));
-			glVertex3d(groundScale * (col + 1)
-					 , heightScale * heights(row,col+1)
-					 , groundScale * row);
 		}
 		glEnd();
 	}
+
+	glPopMatrix();
 }
 
 void HeightMap::randomize()

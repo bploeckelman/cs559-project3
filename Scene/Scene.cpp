@@ -73,7 +73,7 @@ void Scene::render( const Clock& clock )
 	glPopMatrix();
 
 	glPushMatrix();
-		Render::plane(Plane(vec3(0,0,0), vec3(0,1,0)), 50.f);
+//		Render::plane(Plane(vec3(0,0,0), vec3(0,1,0)), 50.f);
 	glPopMatrix();
 
 	glDisable(GL_TEXTURE_2D);
