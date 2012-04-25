@@ -5,6 +5,7 @@
 /************************************************************************/
 #include "MainWindow.h"
 
+#include <exception>
 #include <iostream>
 #include <conio.h>
 
@@ -14,8 +15,8 @@ int main()
 {
 	try {
 		MainWindow app;
-	} catch(std::exception& e) {
-		cerr << e.what() << endl
+	} catch(std::runtime_error& e) {
+		cout << e.what() << endl
 			<< "press a key to exit..." << endl;
 		_getch();
 

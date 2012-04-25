@@ -17,7 +17,14 @@
 
 using glm::vec3;
 
-
+/**
+* Fluid surface ctor
+* n,m - width, height of vertex array
+*   d - distance between adjacent vertices
+*   t - time interval between evaluations
+*   c - wave velocity (0 < c < [(d/2t)*sqrt(mu*t + 2)])
+*  mu - fluid viscosity
+**/
 Fluid::Fluid( long n, long m, float d, float t, float c, float mu )
 {
 	width  = n;
@@ -85,7 +92,7 @@ void Fluid::render()
 			glVertexPointer(3, GL_FLOAT, 0, vertexArray);
 			glNormalPointer(GL_FLOAT, 0, normalArray);
 			// TODO: generate index buffer so fluid
-			// can be drawn as triangle strips
+			// can be drawn as triangles
 			glDrawArrays(GL_POINTS, 0, width * height);
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_NORMAL_ARRAY);
@@ -146,7 +153,7 @@ void Fluid::displace()
 	const int i = static_cast<int>(glm::linearRand(0.f, (float)width));
 	const int j = static_cast<int>(glm::linearRand(0.f, (float)height));
 	vec3& v = *(buffer[renderBuffer] + j * width + i);
-	v.z -= d * scale;
+	v.z += d * scale;
 }
 
 float* Fluid::getVertexBufferPtr()
