@@ -109,3 +109,19 @@ void Render::plane( const Plane& plane, const float radius )
 
 	glEnable(GL_CULL_FACE);
 }
+
+void Render::vector( const vec3& vec, const vec3& point, const vec3& color )
+{
+	glBegin(GL_LINES);
+		glColor4fv(glm::value_ptr(color));
+		glVertex3fv(glm::value_ptr(point));
+		glVertex3fv(glm::value_ptr(vec));
+	glEnd();
+
+	// Draw the arrow head
+//	glPushMatrix();
+//	glTranslatef(vec.x(), vec.y(), vec.z());
+//	applyBasisFromTangent(normalize(pos - vec));
+//	glutSolidCone(0.5f, 1.5f, 8, 4);
+//	glPopMatrix();
+}
