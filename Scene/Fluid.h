@@ -21,6 +21,8 @@ private:
 	glm::vec3 *buffer[2];
 	long renderBuffer;
 
+	unsigned int *indices;
+
 	glm::vec3 *normal;
 	glm::vec3 *tangent;
 	float k1, k2, k3;

@@ -46,7 +46,7 @@ Fluid::Fluid( long n, long m, float d, float t, float c, float mu )
 	k2 = (mu * t - 2) * f2;
 	k3 = 2.f * f1 * f2;
 
-	// Initialize buffers
+	// Initialize vertex, normal, tangent buffers
 	long a = 0;
 	for(long j = 0; j < m; ++j)
 	{
@@ -62,6 +62,9 @@ Fluid::Fluid( long n, long m, float d, float t, float c, float mu )
 			++a;
 		}
 	}
+
+	// Initialize index buffer
+	
 
 	evalTimer.Reset();
 	t_step = t;

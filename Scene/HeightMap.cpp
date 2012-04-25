@@ -36,27 +36,27 @@ void HeightMap::render(Camera *camera)
 	const float heightScale = 5.f;
 
 	// Force the camera to stay above the heightmap
-	/*
 	if( camera != nullptr )
 	{
-		try {
 		glm::vec3 campos(camera->position());
-		glm::vec2 mapcoords(-campos.x / groundScale, -campos.z / groundScale);
-		if( mapcoords.x >= 0 && mapcoords.y >= 0 
-		 && mapcoords.x < heights.cols() && mapcoords.y < heights.rows() )
+		glm::vec2 mapcoords(campos.z / groundScale, campos.x / groundScale);
+		if( mapcoords.x >= 0 && mapcoords.y >= 0
+		 && mapcoords.x < (heights.rows() - 1) && mapcoords.y < (heights.cols() - 1) )
 		{
-			// TODO: lerp between surrounding height values
 			const unsigned int x = static_cast<unsigned int>(mapcoords.x);
+			double influenceX = mapcoords.x - x;
 			const unsigned int y = static_cast<unsigned int>(mapcoords.y);
-			const double height = heightAt(x, y);
-			if( campos.y < height+0.5f ) 
-				camera->position(glm::vec3(campos.x, height+0.5f, campos.z));
-		}
-		} catch(HeightMatrix::BoundsViolation& e) {
-			int i = 1;
+			double influenceY = mapcoords.y - y;
+
+			double yHeight = (heightAt(x, y) * (1 - influenceY) + heightAt(x, y + 1) * influenceY);
+			double xHeight = (heightAt(x + 1, y) * (1 - influenceY) + heightAt(x + 1, y + 1) * influenceY);
+			const double height = (yHeight * (1 - influenceX) + xHeight * influenceX) * heightScale;
+
+			if( campos.y < height ) 
+				camera->position(glm::vec3(campos.x, height, campos.z));
 		}
 	}
-	*/
+
 	glm::mat4 m;
 	m = glm::translate(m, glm::vec3(0,-heightScale,0));
 	glPushMatrix();
@@ -131,12 +131,11 @@ void HeightMap::loadFromImage( const std::string& filename )
 	for(unsigned int x = 0; x < width;  ++x)
 	{
 		const sf::Color pixel  = image.GetPixel(x,y);
-		const double grey = static_cast<double>(pixel.r) / 255.0;
-		heights(y,x) = grey;
-/*
-		const double lum = 0.299f * pixel.r
-						 + 0.587f * pixel.g
-						 + 0.114f * pixel.b;
-*/
+//		const double grey = static_cast<double>(pixel.r) / 255.0;
+//		heights(y,x) = grey;
+		const double lum = 0.299 * (pixel.r / 255.0)
+						 + 0.587 * (pixel.g / 255.0)
+						 + 0.114 * (pixel.b / 255.0);
+		heights(y,x) = lum;
 	}
 }
