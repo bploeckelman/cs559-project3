@@ -119,6 +119,7 @@ void MainWindow::setupOpenGLState()
 	glClearColor(0.1f, 0.1f, 0.1f, 1.f);
 }
 
+// TODO: this should be the Camera's job
 void MainWindow::setupPerspective()
 {
 	const float aspect = static_cast<float>(GetWidth())

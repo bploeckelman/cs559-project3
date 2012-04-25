@@ -37,11 +37,10 @@ void Camera::apply() const
 	static const glm::vec3 zAxis(0.f, 0.f, 1.f);
 
 	glm::mat4 m;
-	m = glm::rotate(m, 180.f, xAxis);
 	m = glm::rotate(m, _rotation.x, xAxis);
 	m = glm::rotate(m, _rotation.y, yAxis);
 	m = glm::rotate(m, _rotation.z, zAxis);
-	m = glm::translate(m, _position);
+	m = glm::translate(m, -_position);
 
 	glLoadMatrixf(glm::value_ptr(m));
 }
@@ -57,10 +56,10 @@ void Camera::lookAt(const glm::vec3& eye
 void Camera::processInput(const Input& input, const Clock& clock)
 {
 
-	if( input.IsKeyDown(Key::Left))		turn(left, 1.0, clock);
+	if( input.IsKeyDown(Key::Left))		turn(left,  1.0, clock);
 	if( input.IsKeyDown(Key::Right))	turn(right, 1.0, clock);
-	if( input.IsKeyDown(Key::Up))		turn(up, 1.0, clock);
-	if( input.IsKeyDown(Key::Down))		turn(down, 1.0, clock);
+	if( input.IsKeyDown(Key::Up))		turn(up,    1.0, clock);
+	if( input.IsKeyDown(Key::Down))		turn(down,  1.0, clock);
 	if( input.IsKeyDown(Key::Z) )		turn(lroll, 1.0, clock);
 	if( input.IsKeyDown(Key::X) )		turn(rroll, 1.0, clock);
 
@@ -84,7 +83,7 @@ void Camera::processInput(const Input& input, const Clock& clock)
 
 	move(moveSpeed,strafeSpeed);
 
-	float y = 0.1f;
+	const float y = 0.1f;
 	if( input.IsKeyDown(Key::Q) )		moveY(-y);
 	if( input.IsKeyDown(Key::E) )		moveY(y);
 
@@ -102,8 +101,8 @@ void Camera::turn(const Direction& direction, float speed, const sf::Clock& cloc
 {
 	switch(direction)
 	{
-	case left:	_rotation.y += _rotationSpeed.y * speed; break;
-	case right: _rotation.y -= _rotationSpeed.y * speed; break;
+	case left:	_rotation.y -= _rotationSpeed.y * speed; break;
+	case right: _rotation.y += _rotationSpeed.y * speed; break;
 	case up:	_rotation.x -= _rotationSpeed.x * speed; break;
 	case down:	_rotation.x += _rotationSpeed.x * speed; break;
 	case lroll: _rotation.z += _rotationSpeed.z * speed; break;

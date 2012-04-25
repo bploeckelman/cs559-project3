@@ -11,6 +11,10 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <exception>
 #include <iostream>
 #include <sstream>
@@ -30,7 +34,7 @@ const string face_names[] = {
 	"top", "bottom" 
 };
 const string Skybox::directory("./Resources/images/skybox/");
-const float faceSize = 500.f;
+const float faceSize = 5.f;
 const float Skybox::vertices[] = {
 	-faceSize, -faceSize, 0.f,		// vertex 0
 	 faceSize, -faceSize, 0.f,		// vertex 3
@@ -114,11 +118,12 @@ void Skybox::render(const Camera& camera)
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 
-	// Undo camera translation
-	float m[16];
-	glGetFloatv(GL_MODELVIEW_MATRIX, m);
-	m[14] = m[13] = m[12] = 0.f;
-	glLoadMatrixf(m);
+	// Undo camera translation, and 
+	// roll the coordinate system 180 degrees
+	glm::mat4 m;
+	m = glm::translate(m, camera.position());
+	m = glm::rotate(m, 180.f, glm::vec3(0,0,1));
+	glMultMatrixf(glm::value_ptr(m));
 
 	glDepthMask(GL_FALSE);
 
