@@ -59,6 +59,34 @@ void Render::cube( const vec3& position, const float scale )
 	glPopMatrix(); 
 }
 
+void Render::pyramid( const vec3& pos, const float radius, const float height)
+{
+	glPushMatrix();
+	glTranslated(pos.x, pos.y, pos.z);
+
+	glPushMatrix();
+		glRotatef(180, 1, 0, 0);
+		glBegin(GL_QUADS);
+			glVertex3d(-radius, 0, -radius);
+			glVertex3d(-radius, 0, radius);
+			glVertex3d(radius, 0, radius);
+			glVertex3d(radius, 0, -radius);
+		glEnd();
+	glPopMatrix();
+
+	glBegin(GL_TRIANGLE_FAN);
+		glVertex3d(0, height, 0);
+		glVertex3d(-radius, 0, -radius);
+		glVertex3d(-radius, 0, radius);
+		glVertex3d(radius, 0, radius);
+		glVertex3d(radius, 0, -radius);
+		glVertex3d(-radius, 0, -radius);
+	glEnd();
+
+	glPopMatrix();
+}
+
+
 void Render::plane( const Plane& plane, const float radius )
 {
 	// Calculate/get plane details

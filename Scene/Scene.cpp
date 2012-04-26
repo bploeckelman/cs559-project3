@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "Skybox.h"
 #include "Fluid.h"          // *TESTING*
+#include "Buildings.h"
 #include "../Utility/Plane.h"
 #include "../Utility/RenderUtils.h"
 #include "../Core/Common.h"
@@ -55,6 +56,8 @@ void Scene::setup()
 	//                 w   h    d      t     c    mu
 	fluid = new Fluid(128, 128, 0.5f, 0.03f, 5.0f, 0.4f);
 
+	objects.push_back(new House(10, 10, 10, sf::Color(0, 255, 0)));
+
 	// create and position cameras
 	cameras.push_back(Camera());
 	camera = &(cameras.back());
@@ -94,6 +97,12 @@ void Scene::render( const Clock& clock )
 	glTranslatef(0.f, 0.75f, 0.f);
 		fluid->render();
 	glPopMatrix();
+
+
+	for(unsigned int i = 0; i < objects.size(); ++i){
+		objects[i]->update(clock);
+		objects[i]->draw();
+	}
 
 	glDisable(GL_TEXTURE_2D);
 	Render::vector(vec3(1,0,0), vec3(0,0,0), vec3(1,0,0));

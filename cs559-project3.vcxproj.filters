@@ -162,6 +162,12 @@
     <ClInclude Include="Scene\Fluid.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\SceneObject.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Buildings.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Behavior.cpp">
@@ -264,6 +270,12 @@
       <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="Scene\Fluid.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Buildings.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneObject.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>

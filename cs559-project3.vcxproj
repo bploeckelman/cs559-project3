@@ -90,6 +90,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Scene\Buildings.h" />
     <ClInclude Include="Core\Common.h" />
     <ClInclude Include="Core\ImageManager.h" />
     <ClInclude Include="Core\MainWindow.h" />
@@ -116,6 +117,7 @@
     <ClInclude Include="Framework\Utilities\Pnt3f.H" />
     <ClInclude Include="Framework\Utilities\ShaderTools.H" />
     <ClInclude Include="Framework\Utilities\Texture.H" />
+    <ClInclude Include="Scene\SceneObject.h" />
     <ClInclude Include="Scene\Camera.h" />
     <ClInclude Include="Scene\Fluid.h" />
     <ClInclude Include="Scene\HeightMap.h" />
@@ -128,6 +130,7 @@
     <ClInclude Include="Utility\RenderUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scene\Buildings.cpp" />
     <ClCompile Include="Core\ImageManager.cpp" />
     <ClCompile Include="Core\main.cpp" />
     <ClCompile Include="Core\MainWindow.cpp" />
@@ -155,6 +158,7 @@
     <ClCompile Include="Framework\Utilities\Pnt3f.cpp" />
     <ClCompile Include="Framework\Utilities\ShaderTools.cpp" />
     <ClCompile Include="Framework\Utilities\Texture.cpp" />
+    <ClCompile Include="Scene\SceneObject.cpp" />
     <ClCompile Include="Scene\Camera.cpp" />
     <ClCompile Include="Scene\Fluid.cpp" />
     <ClCompile Include="Scene\HeightMap.cpp" />
