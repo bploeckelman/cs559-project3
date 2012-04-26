@@ -52,6 +52,8 @@ public:
 private:
 	// Load resources, arrange scene and cameras
 	void setup();
+	// Setup the OpenGL lighting for the scene
+	void setupLights();
 	// Free any allocated memory, called on destruction
 	void cleanup();
 };

@@ -117,6 +117,7 @@ void Fluid::render()
 
 	glColor3d(0.0, 0.8, 1.0);
 	glPushMatrix();
+		glTranslatef(0.f, 0.75f, 0.f); // TODO: remove this
 		glRotatef(90.f, 1.f, 0.f, 0.f);
 		glDrawElements(GL_TRIANGLES
 					 , numIndices
@@ -192,7 +193,6 @@ void Fluid::evaluate()
 			nrml[i].z = next[i + 1].z - next[i - 1].z;
 		}
 	}
-
 }
 
 void Fluid::displace()

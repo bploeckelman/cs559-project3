@@ -20,15 +20,17 @@ public:
 	enum Direction { left, right, up, down, lroll, rroll };
 
 private:
-	bool debug;
-
-	bool mouseView;
-
 	static const float MOUSE_SENSITIVITY;
+
+	bool debug;
+	bool mouseView;
 
 	glm::vec3 _position;
 	glm::vec3 _rotation;
 	glm::vec3 _rotationSpeed;
+
+	glm::mat4 _view;
+	glm::mat4 _projection;
 
 	void turn(const Direction& direction, float speed, const sf::Clock& clock);
 	void move(const float forwardSpeed, const float strafeSpeed=0.f);
@@ -37,13 +39,12 @@ private:
 public:
 	Camera();
 
-	void setMouseView(bool val);
-
-	void apply() const;
+	void apply();
 	void lookAt(const glm::vec3& eye, const glm::vec3& center, const glm::vec3& up);
 	void processInput(const sf::Input& input, const sf::Clock& clock);
 
 	void toggleDebug();
+	void setMouseView(bool val);
 
 	void position(const glm::vec3& p);
 	void position(const float x, const float y, const float z);
@@ -56,11 +57,17 @@ public:
 	void rotationSpeed(const glm::vec3& r);
 	void rotationSpeed(const float x, const float y, const float z);
 	const glm::vec3& rotationSpeed() const;
+
+	void view(const glm::mat4& v);
+	const glm::mat4& view() const;
+
+	void projection(const glm::mat4& v);
+	const glm::mat4& projection() const;
 };
 
-inline void Camera::setMouseView(bool val) { mouseView = val; }
 
 inline void Camera::toggleDebug() { debug = !debug; }
+inline void Camera::setMouseView(bool val) { mouseView = val; }
 
 inline void Camera::position(const glm::vec3& p) { _position = p; }
 inline void Camera::position(const float x, const float y, const float z) { _position = glm::vec3(x,y,z); }
@@ -73,3 +80,9 @@ inline const glm::vec3& Camera::rotation() const { return _rotation; }
 inline void Camera::rotationSpeed(const glm::vec3& r) { _rotationSpeed = r; }
 inline void Camera::rotationSpeed(const float x, const float y, const float z) { _rotationSpeed = glm::vec3(x,y,z); }
 inline const glm::vec3& Camera::rotationSpeed() const { return _rotationSpeed; }
+
+inline void Camera::view(const glm::mat4& v) { _view = v; }
+inline const glm::mat4& Camera::view() const { return _view; }
+
+inline void Camera::projection(const glm::mat4& p) { _projection = p; }
+inline const glm::mat4& Camera::projection() const { return _projection; }

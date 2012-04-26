@@ -39,6 +39,25 @@ Scene::~Scene()
 
 void Scene::setup()
 {
+	// setup opengl state
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_POINTS);
+	glEnable(GL_POINT_SMOOTH);
+	glPointSize(10.f);
+
+	glShadeModel(GL_SMOOTH);
+	glEnable(GL_COLOR_MATERIAL);
+	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+	glClearDepth(1.f);
+
+	glClearColor(0.1f, 0.1f, 0.1f, 1.f);
+
+	setupLights();
+
 	// setup textures
 	ImageManager::get().addResourceDir("Resources/images/");
 	ImageManager::get().addResourceDir("../");
@@ -54,13 +73,46 @@ void Scene::setup()
 	// wave velocity
 	// viscosity
 	//                 w   h    d      t     c    mu
-	fluid = new Fluid(128, 128, 0.5f, 0.03f, 5.0f, 0.4f);
+	fluid = new Fluid(128, 128, 0.5f, 0.03f, 4.0f, 0.4f);
 
 	objects.push_back(new House(10, 10, 10, sf::Color(0, 255, 0)));
 
 	// create and position cameras
 	cameras.push_back(Camera());
 	camera = &(cameras.back());
+}
+
+void Scene::setupLights()
+{
+	glEnable(GL_LIGHTING);
+
+	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
+	glEnable(GL_LIGHT2);
+
+	GLfloat gAmbient[] = { 0.1f, 0.1f, 0.1f, 1.f };
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, gAmbient);
+
+	GLfloat ambient[] = { 0.3f, 0.3f, 0.3f, 1.f };
+//	GLfloat diffuse[] = {.3f, .3f, .3f, 1.f }; //diffuse is gray
+	GLfloat specular[] = { 1.f, 1.f, 1.f, 1.f };
+	GLfloat position1[] = { 0.f, 10.f, 0.f, 1.f };
+
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
+//	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
+	glLightfv(GL_LIGHT0, GL_POSITION, position1);
+
+	GLfloat lightPosition2[] = {10.f, 10.f, 10.f, 1.f};
+	GLfloat lightPosition3[] = {-10.f, 10.f, -10.f, 1.f};
+	GLfloat orangeLight[] = {1.0f, 0.54f, 0.0f, 1.f};
+	GLfloat whiteLight[] = {1.0f, 1.0f, 1.0f, 1.f};
+
+	glLightfv(GL_LIGHT1, GL_POSITION, lightPosition2);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, orangeLight);
+
+	glLightfv(GL_LIGHT2, GL_POSITION, lightPosition3);
+	glLightfv(GL_LIGHT2, GL_SPECULAR, whiteLight);
 }
 
 void Scene::update( const Clock& clock, const Input& input )
@@ -77,26 +129,11 @@ void Scene::render( const Clock& clock )
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
 	camera->apply();
-//	camera->lookAt(vec3(5,10,5)    // camera position
-//				 , vec3(0,10,0)    // look at point
-//				 , vec3(0,1,0));   // up vector
 
-	glPushMatrix();
-		skybox.render(*camera);
-	glPopMatrix();
-
-	glPushMatrix();
-		heightmap.render(camera);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(0.f, 0.75f, 0.f);
-		fluid->render();
-	glPopMatrix();
+	skybox.render(*camera);
+	heightmap.render(camera);
+	fluid->render();
 
 
 	for(unsigned int i = 0; i < objects.size(); ++i){
