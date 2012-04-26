@@ -24,8 +24,8 @@ const float Camera::MOUSE_SENSITIVITY = 15.0;
 
 Camera::Camera()
 	: debug(false)
-	, _position(0.f, 2.f, 2.f)
-	, _rotation(30.f, 0.f, 0.f)
+	, _position(0.f, 2.f, 4.f)
+	, _rotation(40.f, 10.f, 0.f)
 	, _rotationSpeed(0.7f, 1.f, 1.f)
 	, mouseView(true)
 { }
@@ -63,7 +63,7 @@ void Camera::processInput(const Input& input, const Clock& clock)
 	if( input.IsKeyDown(Key::Z) )		turn(lroll, 1.0, clock);
 	if( input.IsKeyDown(Key::X) )		turn(rroll, 1.0, clock);
 
-	//mouse view, only do if mouseView is true
+	// TODO: mouse view, only do if mouseView is true, window size is hard coded and should be fixed
 	if( mouseView)
 	{
 		if( input.GetMouseX() < 640 )	turn(left, (640 - input.GetMouseX())/MOUSE_SENSITIVITY, clock);
@@ -71,7 +71,6 @@ void Camera::processInput(const Input& input, const Clock& clock)
 		if( input.GetMouseY() < 480 )	turn(up, (480 - input.GetMouseY())/MOUSE_SENSITIVITY, clock);
 		if( input.GetMouseY() > 480 )	turn(down, (input.GetMouseY() - 480)/MOUSE_SENSITIVITY, clock);
 	}
-
 
 	float moveSpeed   = 0.f;
 	if( input.IsKeyDown(Key::W) )		moveSpeed = -0.1f;

@@ -31,6 +31,8 @@ const Image& ImageManager::getImage( const string& filename )
 
 	if( it != images.end() )
 	{
+		//return cerr to original stream
+		cerr.rdbuf(old);
 		return (*it).second;
 	}
 	else // Not loaded yet

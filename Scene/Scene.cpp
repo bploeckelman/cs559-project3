@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include "Camera.h"
 #include "Skybox.h"
+#include "Fluid.h"          // *TESTING*
 #include "../Utility/Plane.h"
 #include "../Utility/RenderUtils.h"
 #include "../Core/Common.h"
@@ -27,6 +28,7 @@ Scene::Scene()
 	, cameras()
 	, skybox()
 	, heightmap()
+	, fluid(nullptr)
 {
 	init();
 }
@@ -46,6 +48,15 @@ void Scene::setup()
 	// setup meshes
 	heightmap.loadFromImage("heightmap-of-disapproval.png");
 
+	// Generate a new fluid surface
+	// width,height
+	// distance between verts
+	// time step for evaluation
+	// wave velocity
+	// viscosity
+	//                 w   h    d      t     c    mu
+	fluid = new Fluid(150, 100, 0.5f, 0.03f, 5.0f, 0.4f);
+
 	// create and position cameras
 	cameras.push_back(Camera());
 	camera = &(cameras.back());
@@ -54,6 +65,11 @@ void Scene::setup()
 void Scene::update( const Clock& clock, const Input& input )
 {
 	camera->processInput(input, clock);
+
+	if( input.IsKeyDown(Key::Space) )
+		fluid->displace();
+
+	fluid->evaluate();
 }
 
 void Scene::render( const Clock& clock )
@@ -73,19 +89,18 @@ void Scene::render( const Clock& clock )
 	glPopMatrix();
 
 	glPushMatrix();
-//		Render::plane(Plane(vec3(0,0,0), vec3(0,1,0)), 50.f);
-	glPopMatrix();
-
-	glPushMatrix();
 		heightmap.render(camera);
 	glPopMatrix();
 
-	glDisable(GL_TEXTURE_2D);
+	glPushMatrix();
+	glTranslatef(0.f, -0.5f, 0.f);
+		fluid->render();
+	glPopMatrix();
 
+	glDisable(GL_TEXTURE_2D);
 	Render::vector(vec3(1,0,0), vec3(0,0,0), vec3(1,0,0));
 	Render::vector(vec3(0,1,0), vec3(0,0,0), vec3(0,1,0));
 	Render::vector(vec3(0,0,1), vec3(0,0,0), vec3(0,0,1));
-
 	glEnable(GL_TEXTURE_2D);
 }
 
@@ -97,4 +112,5 @@ void Scene::init()
 void Scene::cleanup()
 {
 	Log("Cleaning up scene...");
+	delete fluid;
 }
