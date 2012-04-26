@@ -35,6 +35,7 @@ private:
 	void render(const sf::Clock& clock);
 
 	void setupOpenGLState();
+	void setupTempLights();
 	void setupPerspective();
 
 	void handleEvents();

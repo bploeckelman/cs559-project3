@@ -103,8 +103,9 @@ Fluid::~Fluid()
 
 void Fluid::render()
 {
+	glEnable(GL_LIGHTING);
 	glDisable(GL_TEXTURE_2D);
-	glPolygonMode(GL_FRONT, GL_LINE);
+//	glPolygonMode(GL_FRONT, GL_LINE);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
@@ -126,8 +127,9 @@ void Fluid::render()
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 
-	glPolygonMode(GL_FRONT, GL_FILL);
+//	glPolygonMode(GL_FRONT, GL_FILL);
 	glEnable(GL_TEXTURE_2D);
+	glDisable(GL_LIGHTING);
 }
 
 void Fluid::evaluate()
