@@ -5,6 +5,7 @@
 /************************************************************************/
 #include "Camera.h"
 #include "../Core/Common.h"
+#include "../Core/MainWindow.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -22,34 +23,49 @@ using namespace sf;
 
 const float Camera::MOUSE_SENSITIVITY = 15.0;
 
+const glm::vec3 xAxis(1.f, 0.f, 0.f);
+const glm::vec3 yAxis(0.f, 1.f, 0.f);
+const glm::vec3 zAxis(0.f, 0.f, 1.f);
+
+
 Camera::Camera()
 	: debug(false)
+	, mouseView(true)
 	, _position(-2.5f, 25.f, -2.5f)
 	, _rotation(40.f, 135.f, 0.f)
 	, _rotationSpeed(0.7f, 1.f, 1.f)
-	, mouseView(true)
-{ }
-
-void Camera::apply() const
+	, _view(1.0)
+	, _projection(1.0)
 {
-	static const glm::vec3 xAxis(1.f, 0.f, 0.f);
-	static const glm::vec3 yAxis(0.f, 1.f, 0.f);
-	static const glm::vec3 zAxis(0.f, 0.f, 1.f);
+	const sf::VideoMode& videoMode(MainWindow::videoMode);
+	const float aspect = static_cast<float>(videoMode.Width)
+					   / static_cast<float>(videoMode.Height);
+	const float fov    = 70.f;
+	const float _near  = 1.f;
+	const float _far   = 1000.f;
 
-	glm::mat4 m;
-	m = glm::rotate(m, _rotation.x, xAxis);
-	m = glm::rotate(m, _rotation.y, yAxis);
-	m = glm::rotate(m, _rotation.z, zAxis);
-	m = glm::translate(m, -_position);
+	_projection = glm::perspective(fov, aspect, _near, _far);
+}
 
+void Camera::apply()
+{
+	_view = glm::mat4(1.0);
+	_view = glm::rotate(_view, _rotation.x, xAxis);
+	_view = glm::rotate(_view, _rotation.y, yAxis);
+	_view = glm::rotate(_view, _rotation.z, zAxis);
+	_view = glm::translate(_view, -_position);
+
+	glm::mat4 m(_projection * _view);
 	glLoadMatrixf(glm::value_ptr(m));
 }
 
 void Camera::lookAt(const glm::vec3& eye
-	, const glm::vec3& center
-	, const glm::vec3& up)
+				  , const glm::vec3& center
+				  , const glm::vec3& up)
 {
-	glm::mat4 m(glm::lookAt(eye,center,up));
+	_view = glm::lookAt(eye, center, up);
+
+	glm::mat4 m(_projection * _view);
 	glLoadMatrixf(glm::value_ptr(m));
 }
 
@@ -63,13 +79,16 @@ void Camera::processInput(const Input& input, const Clock& clock)
 	if( input.IsKeyDown(Key::Z) )		turn(lroll, 1.0, clock);
 	if( input.IsKeyDown(Key::X) )		turn(rroll, 1.0, clock);
 
-	// TODO: mouse view, only do if mouseView is true, window size is hard coded and should be fixed
 	if( mouseView)
 	{
-		if( input.GetMouseX() < 640 )	turn(left, (640 - input.GetMouseX())/MOUSE_SENSITIVITY, clock);
-		if( input.GetMouseX() > 640 )	turn(right, (input.GetMouseX() - 640)/MOUSE_SENSITIVITY, clock);
-		if( input.GetMouseY() < 480 )	turn(up, (480 - input.GetMouseY())/MOUSE_SENSITIVITY, clock);
-		if( input.GetMouseY() > 480 )	turn(down, (input.GetMouseY() - 480)/MOUSE_SENSITIVITY, clock);
+		const sf::VideoMode& videoMode(MainWindow::videoMode);
+		const int halfWidth  = videoMode.Width  / 2;
+		const int halfHeight = videoMode.Height / 2 - 32;
+
+		if( input.GetMouseX() < halfWidth  ) turn(left,  (halfWidth - input.GetMouseX())  / MOUSE_SENSITIVITY, clock);
+		if( input.GetMouseX() > halfWidth  ) turn(right, (input.GetMouseX() - halfWidth)  / MOUSE_SENSITIVITY, clock);
+		if( input.GetMouseY() < halfHeight ) turn(up,    (halfHeight - input.GetMouseY()) / MOUSE_SENSITIVITY, clock);
+		if( input.GetMouseY() > halfHeight ) turn(down,  (input.GetMouseY() - halfHeight) / MOUSE_SENSITIVITY, clock);
 	}
 
 	float moveSpeed   = 0.f;

@@ -49,7 +49,6 @@ void MainWindow::init()
 	Log(title + " initializing...");
 
 	setupOpenGLState();
-	setupPerspective();
 
 	SetCursorPosition(640, 480);
 	ShowMouseCursor(false);
@@ -148,32 +147,13 @@ void MainWindow::setupTempLights()
 	GLfloat lightPosition2[] = {10.f, 10.f, 10.f, 1.f};
 	GLfloat lightPosition3[] = {-10.f, 10.f, -10.f, 1.f};
 	GLfloat yellowLight[] = {0.5f, 0.5f, 0.1f, 1.f};
-	GLfloat greenLight[] = {0.0f, 1.0f, 0.0f, 1.f};
+	GLfloat whiteLight[] = {1.0f, 1.0f, 1.0f, 1.f};
 
 	glLightfv(GL_LIGHT1, GL_POSITION, lightPosition2);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, greenLight);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, whiteLight);
 
 	glLightfv(GL_LIGHT2, GL_POSITION, lightPosition3);
 	glLightfv(GL_LIGHT2, GL_DIFFUSE, yellowLight);
-}
-
-// TODO: this should be the Camera's job
-void MainWindow::setupPerspective()
-{
-	const float aspect = static_cast<float>(GetWidth())
-					   / static_cast<float>(GetHeight());
-	const float fov    = 70.f;
-	const float _near  = 1.f;
-	const float _far   = 1000.f;
-
-	glm::mat4 m(glm::perspective(fov, aspect, _near, _far));
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glLoadMatrixf(glm::value_ptr(m));
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
 }
 
 void MainWindow::handleEvents()

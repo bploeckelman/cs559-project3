@@ -14,15 +14,15 @@
 class MainWindow : public sf::Window
 {
 public:
-	MainWindow();
-	~MainWindow();
-
-private:
 	static const std::string		title;
 	static const sf::VideoMode		videoMode;
 	static const unsigned int		windowStyle;
 	static const sf::WindowSettings	windowSettings;
 
+	MainWindow();
+	~MainWindow();
+
+private:
 	Scene scene;
 	sf::Clock timer;
 
@@ -36,7 +36,6 @@ private:
 
 	void setupOpenGLState();
 	void setupTempLights();
-	void setupPerspective();
 
 	void handleEvents();
 };
