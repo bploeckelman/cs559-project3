@@ -21,6 +21,7 @@ private:
 	glm::vec3 *buffer[2];
 	long renderBuffer;
 
+	long numIndices;
 	unsigned int *indices;
 
 	glm::vec3 *normal;

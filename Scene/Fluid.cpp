@@ -36,6 +36,10 @@ Fluid::Fluid( long n, long m, float d, float t, float c, float mu )
 	buffer[1] = new vec3[count];
 	renderBuffer = 0;
 
+	long numTris = 2 * (width - 1) * (height - 1);
+	numIndices   = 3 * numTris;
+	indices = new unsigned int[numIndices];
+
 	normal  = new vec3[count];
 	tangent = new vec3[count];
 
@@ -64,7 +68,25 @@ Fluid::Fluid( long n, long m, float d, float t, float c, float mu )
 	}
 
 	// Initialize index buffer
-	
+	a = 0;
+	for(long j = 0; j < (m - 1); ++j)
+	for(long i = 0; i < (n - 1); ++i)
+	{
+		const long a0 = width *  j    +  i;
+		const long a1 = width *  j    + (i+1);
+		const long a2 = width * (j+1) + (i+1);
+		const long a3 = width * (j+1) +  i;
+
+		// First triangle
+		indices[a++] = a0;
+		indices[a++] = a3;
+		indices[a++] = a2;
+
+		// Second triangle
+		indices[a++] = a0;
+		indices[a++] = a2;
+		indices[a++] = a1;
+	}
 
 	evalTimer.Reset();
 	t_step = t;
@@ -74,6 +96,7 @@ Fluid::~Fluid()
 {
 	delete[] tangent;
 	delete[] normal;
+	delete[] indices;
 	delete[] buffer[1];
 	delete[] buffer[0];
 }
@@ -81,27 +104,29 @@ Fluid::~Fluid()
 void Fluid::render()
 {
 	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_CULL_FACE);
-	glPointSize(5.f);
+	glPolygonMode(GL_FRONT, GL_LINE);
 
-	glColor3d(0.0, 0.0, 1.0);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
 
+	float *vertexArray = getVertexBufferPtr();
+	float *normalArray = getNormalBufferPtr();
+	glVertexPointer(3, GL_FLOAT, 0, vertexArray);
+	glNormalPointer(GL_FLOAT, 0, normalArray);
+
+	glColor3d(0.0, 0.8, 1.0);
 	glPushMatrix();
-	glRotatef(90.f, 1.f, 0.f, 0.f);
-		float *vertexArray = getVertexBufferPtr();
-		float *normalArray = getNormalBufferPtr();
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glEnableClientState(GL_NORMAL_ARRAY);
-			glVertexPointer(3, GL_FLOAT, 0, vertexArray);
-			glNormalPointer(GL_FLOAT, 0, normalArray);
-			// TODO: generate index buffer so fluid
-			// can be drawn as triangles
-			glDrawArrays(GL_POINTS, 0, width * height);
-		glDisableClientState(GL_VERTEX_ARRAY);
-		glDisableClientState(GL_NORMAL_ARRAY);
+		glRotatef(90.f, 1.f, 0.f, 0.f);
+		glDrawElements(GL_TRIANGLES
+					 , numIndices
+					 , GL_UNSIGNED_INT
+					 , indices);
 	glPopMatrix();
 
-	glEnable(GL_CULL_FACE);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+
+	glPolygonMode(GL_FRONT, GL_FILL);
 	glEnable(GL_TEXTURE_2D);
 }
 
@@ -129,13 +154,31 @@ void Fluid::evaluate()
 		}
 	}
 
+	// The edge vertices can get out of whack after
+	// some disturbances, this forces them to stay put,
+	// but it is pretty hacky, and could probably be
+	// worked into the loops above as special cases,
+	// if they went from 0 to < width or height,
+	// instead of 1 to < (width or height - 1)
+	for(long j = 0; j < height; j += (height - 1))
+	for(long i = 0; i < width; ++i)
+	{
+		vec3& v = *(buffer[renderBuffer] + j * width + i);
+		v.z = 0.f;
+	}
+	for(long j = 0; j < height; ++j)
+	for(long i = 0; i < width; i += (width - 1))
+	{
+		vec3& v = *(buffer[renderBuffer] + j * width + i);
+		v.z = 0.f;
+	}
+
 	// Swap buffers
 	renderBuffer = 1 - renderBuffer;
 
 	// Calculate normals and tangents
 	for(long j = 1; j < height - 1; ++j)
 	{
-
 		const vec3 *next = buffer[renderBuffer] + j * width;
 		vec3 *nrml = normal  + j * width;
 		vec3 *tang = tangent + j * width;
@@ -147,6 +190,7 @@ void Fluid::evaluate()
 			nrml[i].z = next[i + 1].z - next[i - 1].z;
 		}
 	}
+
 }
 
 void Fluid::displace()
@@ -155,8 +199,8 @@ void Fluid::displace()
 	const float d = glm::linearRand(0.f, 1.f);
 	const int i = static_cast<int>(glm::linearRand(0.f, (float)width));
 	const int j = static_cast<int>(glm::linearRand(0.f, (float)height));
-	vec3& v = *(buffer[renderBuffer] + j * width + i);
-	v.z += d * scale;
+	vec3& v = *(buffer[1 - renderBuffer] + j * width + i);
+	v.z -= d * scale;
 }
 
 float* Fluid::getVertexBufferPtr()

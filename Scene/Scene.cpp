@@ -50,12 +50,12 @@ void Scene::setup()
 
 	// Generate a new fluid surface
 	// width,height
-	// distance betw. verts
+	// distance between verts
 	// time step for evaluation
 	// wave velocity
 	// viscosity
 	//                 w   h    d      t     c    mu
-	fluid = new Fluid(80, 80, 0.75f, 0.03f, 5.0f, 0.5f);
+	fluid = new Fluid(150, 100, 0.5f, 0.03f, 5.0f, 0.4f);
 
 	// create and position cameras
 	cameras.push_back(Camera());
@@ -89,15 +89,11 @@ void Scene::render( const Clock& clock )
 	glPopMatrix();
 
 	glPushMatrix();
-//		Render::plane(Plane(vec3(0,0,0), vec3(0,1,0)), 50.f);
-	glPopMatrix();
-
-	glPushMatrix();
 		heightmap.render(camera);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(0.f, 1.f, 0.f);
+	glTranslatef(0.f, -0.5f, 0.f);
 		fluid->render();
 	glPopMatrix();
 
