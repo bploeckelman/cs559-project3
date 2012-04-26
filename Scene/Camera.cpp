@@ -83,7 +83,7 @@ void Camera::processInput(const Input& input, const Clock& clock)
 	{
 		const sf::VideoMode& videoMode(MainWindow::videoMode);
 		const int halfWidth  = videoMode.Width  / 2;
-		const int halfHeight = videoMode.Height / 2 - 32;
+		const int halfHeight = videoMode.Height / 2;
 
 		if( input.GetMouseX() < halfWidth  ) turn(left,  (halfWidth - input.GetMouseX())  / MOUSE_SENSITIVITY, clock);
 		if( input.GetMouseX() > halfWidth  ) turn(right, (input.GetMouseX() - halfWidth)  / MOUSE_SENSITIVITY, clock);

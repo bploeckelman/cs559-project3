@@ -48,8 +48,7 @@ void MainWindow::init()
 {
 	Log(title + " initializing...");
 
-	setupOpenGLState();
-
+	SetFramerateLimit(60);
 	SetCursorPosition(640, 480);
 	ShowMouseCursor(false);
 
@@ -83,7 +82,8 @@ void MainWindow::update(const sf::Clock& clock)
 	scene.update(clock, GetInput());
 	if( mouseView)
 	{
-		SetCursorPosition(640, 480);
+		SetCursorPosition(MainWindow::videoMode.Width  / 2
+						, MainWindow::videoMode.Height / 2);
 		ShowMouseCursor(false);
 	}
 }
@@ -95,65 +95,6 @@ void MainWindow::render(const sf::Clock& clock)
 	scene.render(clock);
 
 	Display();
-
-}
-
-void MainWindow::setupOpenGLState()
-{
-	SetFramerateLimit(60);
-
-	glDisable(GL_LIGHTING);
-
-	glEnable(GL_CULL_FACE);
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_POINTS);
-	glEnable(GL_POINT_SMOOTH);
-	glPointSize(10.f);
-
-	glEnable(GL_DEPTH_TEST);
-	glDepthMask(GL_TRUE);
-	glClearDepth(1.f);
-
-	glClearColor(0.1f, 0.1f, 0.1f, 1.f);
-
-	setupTempLights();
-}
-
-void MainWindow::setupTempLights()
-{
-	glEnable(GL_COLOR_MATERIAL);
-	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-
-	glShadeModel(GL_SMOOTH);
-	glEnable(GL_LIGHTING);
-
-	glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHT1);
-	glEnable(GL_LIGHT2);
-
-	GLfloat gAmbient[] = { 0.2f, 0.2f, 0.2f, 1.f };
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, gAmbient);
-
-	GLfloat ambient[] = { 0.5f, 0.5f, 0.5f, 1.f };
-	GLfloat diffuse[] = {.3f, .3f, .3f, 1.f }; //diffuse is gray
-	GLfloat specular[] = { 1.f, 1.f, 1.f, 1.f };
-	GLfloat position1[] = { 0.f, 10.f, 0.f, 1.f };
-
-	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
-	glLightfv(GL_LIGHT0, GL_POSITION, position1);
-
-	GLfloat lightPosition2[] = {10.f, 10.f, 10.f, 1.f};
-	GLfloat lightPosition3[] = {-10.f, 10.f, -10.f, 1.f};
-	GLfloat yellowLight[] = {0.5f, 0.5f, 0.1f, 1.f};
-	GLfloat whiteLight[] = {1.0f, 1.0f, 1.0f, 1.f};
-
-	glLightfv(GL_LIGHT1, GL_POSITION, lightPosition2);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, whiteLight);
-
-	glLightfv(GL_LIGHT2, GL_POSITION, lightPosition3);
-	glLightfv(GL_LIGHT2, GL_DIFFUSE, yellowLight);
 }
 
 void MainWindow::handleEvents()
@@ -171,14 +112,16 @@ void MainWindow::handleEvents()
 		{
 			if(mouseView)
 			{
-				SetCursorPosition(640, 480);
+				SetCursorPosition(MainWindow::videoMode.Width  / 2
+								, MainWindow::videoMode.Height / 2);
 				ShowMouseCursor(true);
 				mouseView = false;
 				scene.setMouseView(false);
 			}
 			else if(!mouseView)
 			{
-				SetCursorPosition(640, 480);
+				SetCursorPosition(MainWindow::videoMode.Width  / 2
+								, MainWindow::videoMode.Height / 2);
 				ShowMouseCursor(false);
 				mouseView = true;
 				scene.setMouseView(true);
