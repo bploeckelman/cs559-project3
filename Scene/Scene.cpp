@@ -14,6 +14,8 @@
 #include "../Core/ImageManager.h"
 
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
@@ -45,6 +47,7 @@ void Scene::setup()
 	glEnable(GL_POINTS);
 	glEnable(GL_POINT_SMOOTH);
 	glPointSize(10.f);
+	glLineWidth(3.f);
 
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_COLOR_MATERIAL);
@@ -78,8 +81,9 @@ void Scene::setup()
 	objects.push_back(new House(10, 10, 10, sf::Color(0, 255, 0)));
 
 	// create and position cameras
-	cameras.push_back(Camera());
-	camera = &(cameras.back());
+	cameras.push_back(Camera(glm::vec3(-2.5, 25.0, -2.5)   // position
+							,glm::vec3(40.0, 135.0, 0.0)));// rotation
+	camera = &cameras[0];
 }
 
 void Scene::setupLights()
@@ -118,6 +122,15 @@ void Scene::setupLights()
 void Scene::update( const Clock& clock, const Input& input )
 {
 	camera->processInput(input, clock);
+	CameraVectorIter it  = cameras.begin();
+	CameraVectorIter end = cameras.end();
+	for(; it != end; ++it)
+	{
+		Camera& cam = *it;
+		cam.update(clock, input);
+	}
+//	for each(auto cam in cameras)
+//		cam.update(clock, input);
 
 	if( input.IsKeyDown(Key::Space) )
 		fluid->displace();
@@ -141,11 +154,7 @@ void Scene::render( const Clock& clock )
 		objects[i]->draw();
 	}
 
-	glDisable(GL_TEXTURE_2D);
-	Render::vector(vec3(1,0,0), vec3(0,0,0), vec3(1,0,0));
-	Render::vector(vec3(0,1,0), vec3(0,0,0), vec3(0,1,0));
-	Render::vector(vec3(0,0,1), vec3(0,0,0), vec3(0,0,1));
-	glEnable(GL_TEXTURE_2D);
+	Render::basis();
 }
 
 void Scene::init()

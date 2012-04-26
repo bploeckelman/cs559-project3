@@ -4,6 +4,7 @@
 /* ------
 /* A static helper class for rendering various things 
 /************************************************************************/
+#include "../Scene/Camera.h"
 
 #include <glm/glm.hpp>
 
@@ -26,4 +27,12 @@ public:
 	// Draw a vector from the specified point
 	static void vector(const glm::vec3& v, const glm::vec3& point
 					 , const glm::vec3& color=glm::vec3(1,1,1));
+
+	// Draw the projection matrix frustum for the specified camera
+	static void frustum(const Camera& camera);
+
+	// Draw the specified coordinate axes
+	static void basis(const glm::vec3& x=glm::vec3(1,0,0)
+					, const glm::vec3& y=glm::vec3(0,1,0)
+					, const glm::vec3& z=glm::vec3(0,0,1));
 };

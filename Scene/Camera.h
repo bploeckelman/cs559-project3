@@ -37,10 +37,15 @@ private:
 	void moveY(const float speed=1.f);
 
 public:
-	Camera();
+	Camera(const glm::vec3& pos=glm::vec3(0,0,0)
+		 , const glm::vec3& rot=glm::vec3(0,0,0)
+		 , const glm::vec3& rotSpeed=glm::vec3(0.7, 1.0, 1.0)
+		 , const glm::mat4& v=glm::mat4(1.0)
+		 , const glm::mat4& proj=glm::mat4(1.0));
 
 	void apply();
 	void lookAt(const glm::vec3& eye, const glm::vec3& center, const glm::vec3& up);
+	void update(const sf::Clock& clock, const sf::Input& input);
 	void processInput(const sf::Input& input, const sf::Clock& clock);
 
 	void toggleDebug();

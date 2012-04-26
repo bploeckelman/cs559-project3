@@ -28,14 +28,18 @@ const glm::vec3 yAxis(0.f, 1.f, 0.f);
 const glm::vec3 zAxis(0.f, 0.f, 1.f);
 
 
-Camera::Camera()
-	: debug(false)
-	, mouseView(true)
-	, _position(-2.5f, 25.f, -2.5f)
-	, _rotation(40.f, 135.f, 0.f)
-	, _rotationSpeed(0.7f, 1.f, 1.f)
-	, _view(1.0)
-	, _projection(1.0)
+Camera::Camera(const glm::vec3& pos
+			 , const glm::vec3& rot
+			 , const glm::vec3& rotSpeed
+			 , const glm::mat4& v
+			 , const glm::mat4& proj)
+	 : debug(false)
+	 , mouseView(true)
+	 , _position(pos)
+	 , _rotation(rot)
+	 , _rotationSpeed(rotSpeed)
+	 , _view(v)
+	 , _projection(proj)
 {
 	const sf::VideoMode& videoMode(MainWindow::videoMode);
 	const float aspect = static_cast<float>(videoMode.Width)
@@ -49,12 +53,6 @@ Camera::Camera()
 
 void Camera::apply()
 {
-	_view = glm::mat4(1.0);
-	_view = glm::rotate(_view, _rotation.x, xAxis);
-	_view = glm::rotate(_view, _rotation.y, yAxis);
-	_view = glm::rotate(_view, _rotation.z, zAxis);
-	_view = glm::translate(_view, -_position);
-
 	glm::mat4 m(_projection * _view);
 	glLoadMatrixf(glm::value_ptr(m));
 }
@@ -67,6 +65,15 @@ void Camera::lookAt(const glm::vec3& eye
 
 	glm::mat4 m(_projection * _view);
 	glLoadMatrixf(glm::value_ptr(m));
+}
+
+void Camera::update(const sf::Clock& clock, const sf::Input& input)
+{
+	_view = glm::mat4(1.0);
+	_view = glm::rotate(_view, _rotation.x, xAxis);
+	_view = glm::rotate(_view, _rotation.y, yAxis);
+	_view = glm::rotate(_view, _rotation.z, zAxis);
+	_view = glm::translate(_view, -_position);
 }
 
 void Camera::processInput(const Input& input, const Clock& clock)
