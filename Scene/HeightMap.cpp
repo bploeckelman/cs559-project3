@@ -32,8 +32,8 @@ HeightMap::HeightMap(const unsigned int width, const unsigned int height)
 
 void HeightMap::render(Camera *camera)
 {
-	const float groundScale = 1.f;
-	const float heightScale = 5.f;
+	const float groundScale = 0.25f;
+	const float heightScale = 2.f;
 
 	// Force the camera to stay above the heightmap
 	if( camera != nullptr )
@@ -52,15 +52,10 @@ void HeightMap::render(Camera *camera)
 			double xHeight = (heightAt(x + 1, y) * (1 - influenceY) + heightAt(x + 1, y + 1) * influenceY);
 			const double height = (yHeight * (1 - influenceX) + xHeight * influenceX) * heightScale;
 
-			if( campos.y < height ) 
-				camera->position(glm::vec3(campos.x, height, campos.z));
+			if( campos.y < height + 5.f ) 
+				camera->position(glm::vec3(campos.x, height + 5.f, campos.z));
 		}
 	}
-
-	glm::mat4 m;
-	m = glm::translate(m, glm::vec3(0,-heightScale,0));
-	glPushMatrix();
-	glMultMatrixf(glm::value_ptr(m));
 
 	const sf::Image& image = ImageManager::get().getImage(imageName);
 	image.Bind();
@@ -105,8 +100,6 @@ void HeightMap::render(Camera *camera)
 		}
 		glEnd();
 	}
-
-	glPopMatrix();
 }
 
 void HeightMap::randomize()

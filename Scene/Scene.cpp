@@ -46,7 +46,7 @@ void Scene::setup()
 	ImageManager::get().addResourceDir("../../Resources/images/");
 
 	// setup meshes
-	heightmap.loadFromImage("heightmap-of-disapproval.png");
+	heightmap.loadFromImage("heightmap-test.png");
 
 	// Generate a new fluid surface
 	// width,height
@@ -55,7 +55,7 @@ void Scene::setup()
 	// wave velocity
 	// viscosity
 	//                 w   h    d      t     c    mu
-	fluid = new Fluid(150, 100, 0.5f, 0.03f, 5.0f, 0.4f);
+	fluid = new Fluid(128, 128, 0.5f, 0.03f, 5.0f, 0.4f);
 
 	// create and position cameras
 	cameras.push_back(Camera());
@@ -93,7 +93,7 @@ void Scene::render( const Clock& clock )
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(0.f, -0.5f, 0.f);
+	glTranslatef(0.f, 0.75f, 0.f);
 		fluid->render();
 	glPopMatrix();
 

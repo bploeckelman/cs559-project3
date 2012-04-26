@@ -24,8 +24,8 @@ const float Camera::MOUSE_SENSITIVITY = 15.0;
 
 Camera::Camera()
 	: debug(false)
-	, _position(0.f, 2.f, 4.f)
-	, _rotation(40.f, 10.f, 0.f)
+	, _position(-2.5f, 25.f, -2.5f)
+	, _rotation(40.f, 135.f, 0.f)
 	, _rotationSpeed(0.7f, 1.f, 1.f)
 	, mouseView(true)
 { }
