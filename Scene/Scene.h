@@ -35,8 +35,8 @@ public:
 	Scene();
 	~Scene();
 
-	// Load resources, arrange scene and cameras
-	void setup();
+	// Allocate any needed memory
+	void init();
 	// Update this scene, process input
 	void update(const sf::Clock& clock, const sf::Input& input);
 	// Render this scene's objects from the current camera perspective
@@ -48,8 +48,8 @@ public:
 	const glm::vec3& cameraPosition() const;
 
 private:
-	// Allocate any needed memory, called on creation
-	void init();
+	// Load resources, arrange scene and cameras
+	void setup();
 	// Free any allocated memory, called on destruction
 	void cleanup();
 };

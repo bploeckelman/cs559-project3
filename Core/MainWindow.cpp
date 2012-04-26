@@ -51,23 +51,22 @@ void MainWindow::init()
 	setupOpenGLState();
 	setupPerspective();
 
-
 	SetCursorPosition(640, 480);
 	ShowMouseCursor(false);
 
-	scene.setup();
+	scene.init();
 
 	mainLoop();
 }
 
 void MainWindow::cleanup()
 {
-	Log(title + " cleaning up...");
+	Log("\n" + title + " cleaning up...");
 }
 
 void MainWindow::mainLoop()
 {
-	Log("Entering main loop...");
+	Log("\n[Entering main loop...]");
 
 	sf::Clock clock;
 	timer.Reset();

@@ -29,9 +29,7 @@ Scene::Scene()
 	, skybox()
 	, heightmap()
 	, fluid(nullptr)
-{
-	init();
-}
+{ }
 
 Scene::~Scene()
 {
@@ -106,11 +104,12 @@ void Scene::render( const Clock& clock )
 
 void Scene::init()
 {
-	Log("Initializing scene...");
+	Log("\nInitializing scene...");
+	setup();
 }
 
 void Scene::cleanup()
 {
-	Log("Cleaning up scene...");
+	Log("\nCleaning up scene...");
 	delete fluid;
 }
