@@ -78,7 +78,7 @@ void Scene::setup()
 	//                 w   h    d      t     c    mu
 	fluid = new Fluid(128, 128, 0.5f, 0.03f, 4.0f, 0.4f);
 
-	objects.push_back(new House(10, 10, 10, sf::Color(0, 255, 0)));
+	objects.push_back(new House(10, 4, 10, sf::Color(0, 255, 0)));
 
 	// create and position cameras
 	cameras.push_back(Camera(glm::vec3(-2.5, 25.0, -2.5)   // position
@@ -136,6 +136,11 @@ void Scene::update( const Clock& clock, const Input& input )
 		fluid->displace();
 
 	fluid->evaluate();
+
+	for(unsigned int i = 0; i < objects.size(); ++i){
+		objects[i]->update(clock);
+		objects[i]->draw();
+	}
 }
 
 void Scene::render( const Clock& clock )
@@ -150,7 +155,6 @@ void Scene::render( const Clock& clock )
 
 
 	for(unsigned int i = 0; i < objects.size(); ++i){
-		objects[i]->update(clock);
 		objects[i]->draw();
 	}
 
