@@ -19,7 +19,7 @@ private:
 	ParticleSystems systems;
 
 public:
-	ParticleManager();
+	ParticleManager() : systems() {}
 	~ParticleManager();
 
 	// Add a new particle system 
@@ -30,7 +30,7 @@ public:
 	// Update all the particle systems
 	void update(const float delta);
 	// Render all the particle systems
-	void render();
+	void render(const Camera& camera);
 	// Cleanup all particle systems
 	void clean();
 };
