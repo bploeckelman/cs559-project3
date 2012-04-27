@@ -34,7 +34,7 @@ Camera::Camera(const glm::vec3& pos
 			 , const glm::mat4& v
 			 , const glm::mat4& proj)
 	 : debug(false)
-	 , mouseView(true)
+	 , mouseLook(true)
 	 , _position(pos)
 	 , _rotation(rot)
 	 , _rotationSpeed(rotSpeed)
@@ -86,7 +86,7 @@ void Camera::processInput(const Input& input, const Clock& clock)
 	if( input.IsKeyDown(Key::Z) )		turn(lroll, 1.0, clock);
 	if( input.IsKeyDown(Key::X) )		turn(rroll, 1.0, clock);
 
-	if( mouseView)
+	if( mouseLook )
 	{
 		const sf::VideoMode& videoMode(MainWindow::videoMode);
 		const int halfWidth  = videoMode.Width  / 2;

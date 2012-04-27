@@ -21,6 +21,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
+#include <SFML/Window/Event.hpp>
 #include <SFML/Window/Input.hpp>
 #include <SFML/System/Randomizer.hpp>
 
@@ -177,6 +178,28 @@ void Scene::render( const Clock& clock )
 	Render::basis();
 }
 
+void Scene::handle(const Event& event)
+{
+	switch(event.Type)
+	{
+	case Event::KeyPressed:
+		if( event.Key.Code == Key::Num1 )
+			fluid->light = !fluid->light;
+		if( event.Key.Code == Key::Num2 )
+			fluid->blend = !fluid->blend;
+		if( event.Key.Code == Key::RControl )
+			camera->toggleMouseLook();
+		break;
+	case Event::KeyReleased:
+		break;
+	case Event::MouseButtonPressed:
+		break;
+	case Event::MouseButtonReleased:
+		break;
+	default: break;
+	};
+}
+
 void Scene::init()
 {
 	Log("\nInitializing scene...");
@@ -187,14 +210,4 @@ void Scene::cleanup()
 {
 	Log("\nCleaning up scene...");
 	delete fluid;
-}
-
-void Scene::toggleFluidLighting()
-{
-	fluid->light = !fluid->light;
-}
-
-void Scene::toggleFluidBlending()
-{
-	fluid->blend = !fluid->blend;
 }
