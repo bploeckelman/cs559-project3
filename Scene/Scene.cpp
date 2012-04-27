@@ -6,14 +6,14 @@
 #include "Scene.h"
 #include "Camera.h"
 #include "Skybox.h"
-#include "Fluid.h"          // *TESTING*
+#include "Fluid.h"
 #include "Buildings.h"
 #include "../Utility/Plane.h"
 #include "../Utility/RenderUtils.h"
 #include "../Core/Common.h"
 #include "../Core/ImageManager.h"
 
-#include <iostream>
+#include <algorithm>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -26,7 +26,7 @@
 #include <SFML/System/Randomizer.hpp>
 
 using namespace sf;
-using glm::vec3;
+using namespace glm; 
 
 
 Scene::Scene()
@@ -72,15 +72,17 @@ void Scene::setup()
 	// setup meshes
 	heightmap.loadFromImage("heightmap-test.png");
 
-	// Generate a new fluid surface
-	// width,height
-	// distance between verts
-	// time step for evaluation
-	// wave velocity
-	// viscosity
-	//                 w   h    d      t     c    mu
-	fluid = new Fluid(128, 128, 0.5f, 0.03f, 4.0f, 0.4f);
+	// generate a new fluid surface
+	fluid = new Fluid(
+		128,   // number of vertices wide
+		128,   // number of vertices high
+		0.5f,  // distance between vertices
+		0.03f, // time step for evaluation
+		4.0f,  // wave velocity
+		0.4f   // fluid viscosity
+	);
 
+	// add Scene objects
 	objects.push_back(new House(10, 4, 10, sf::Color(0, 255, 0)));
 
 	// create and position cameras
@@ -93,57 +95,51 @@ void Scene::setupLights()
 {
 	glEnable(GL_LIGHTING);
 
+	vec4 gAmbient(0.1f, 0.1f, 0.1f, 1.f);
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(gAmbient));
+
+	// Light 0
+	vec4 ambient(0.3f, 0.3f, 0.3f, 1.f);
+	vec4 diffuse(0.3f, 0.3f, 0.3f, 1.f);
+	vec4 specular(1.f, 1.f, 1.f, 1.f);
+	vec4 position0(0.f, 10.f, 0.f, 1.f);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, value_ptr(ambient));
+//	glLightfv(GL_LIGHT0, GL_DIFFUSE, value_ptr(diffuse));
+	glLightfv(GL_LIGHT0, GL_SPECULAR, value_ptr(specular));
+	glLightfv(GL_LIGHT0, GL_POSITION, value_ptr(position0));
 	glEnable(GL_LIGHT0);
+
+	// Light 1
+	vec4 orange(1.f, 0.54f, 0.f, 1.f);
+	vec4 position1(10.f, 10.f, 10.f, 1.f);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, value_ptr(orange));
+	glLightfv(GL_LIGHT1, GL_POSITION, value_ptr(position1));
 	glEnable(GL_LIGHT1);
+
+	// Light 2
+	vec4 white(1.f, 1.f, 1.f, 1.f);
+	vec4 position2(-10.f, 10.f, -10.f, 1.f);
+	glLightfv(GL_LIGHT2, GL_SPECULAR, value_ptr(white));
+	glLightfv(GL_LIGHT2, GL_POSITION, value_ptr(position2));
 	glEnable(GL_LIGHT2);
-
-	GLfloat gAmbient[] = { 0.1f, 0.1f, 0.1f, 1.f };
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, gAmbient);
-
-	GLfloat ambient[] = { 0.3f, 0.3f, 0.3f, 1.f };
-//	GLfloat diffuse[] = {.3f, .3f, .3f, 1.f }; //diffuse is gray
-	GLfloat specular[] = { 1.f, 1.f, 1.f, 1.f };
-	GLfloat position1[] = { 0.f, 10.f, 0.f, 1.f };
-
-	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
-//	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
-	glLightfv(GL_LIGHT0, GL_POSITION, position1);
-
-	GLfloat lightPosition2[] = {10.f, 10.f, 10.f, 1.f};
-	GLfloat lightPosition3[] = {-10.f, 10.f, -10.f, 1.f};
-	GLfloat orangeLight[] = {1.0f, 0.54f, 0.0f, 1.f};
-	GLfloat whiteLight[] = {1.0f, 1.0f, 1.0f, 1.f};
-
-	glLightfv(GL_LIGHT1, GL_POSITION, lightPosition2);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, orangeLight);
-
-	glLightfv(GL_LIGHT2, GL_POSITION, lightPosition3);
-	glLightfv(GL_LIGHT2, GL_SPECULAR, whiteLight);
 }
 
 void Scene::update( const Clock& clock, const Input& input )
 {
+	// process input for the current camera
 	camera->processInput(input, clock);
-	CameraVectorIter it  = cameras.begin();
-	CameraVectorIter end = cameras.end();
-	for(; it != end; ++it)
-	{
-		Camera& cam = *it;
-		cam.update(clock, input);
-	}
-//	for each(auto cam in cameras)
-//		cam.update(clock, input);
 
-	if( input.IsKeyDown(Key::Space) )
-		fluid->displace();
+	// update all cameras
+	std::for_each(cameras.begin(), cameras.end()
+		, [&](Camera& cam){ cam.update(clock, input); }
+	);
 
+	// update scene objects
+	for each(auto object in objects)
+		object->update(clock);
+
+	// update other things
 	fluid->evaluate();
-
-	for(unsigned int i = 0; i < objects.size(); ++i){
-		objects[i]->update(clock);
-		objects[i]->draw();
-	}
 }
 
 void Scene::render( const Clock& clock )
@@ -156,10 +152,8 @@ void Scene::render( const Clock& clock )
 	heightmap.render(camera);
 	fluid->render();
 
-
-	for(unsigned int i = 0; i < objects.size(); ++i){
-		objects[i]->draw();
-	}
+	for each(auto object in objects)
+		object->draw();
 
 	glm::vec3 campos = camera->position();
 
@@ -174,7 +168,6 @@ void Scene::render( const Clock& clock )
 			camera->position(glm::vec3(campos.x, campos.y, objects[i]->getPosEdge().z + 1.5f));
 	}
 
-
 	Render::basis();
 }
 
@@ -187,6 +180,8 @@ void Scene::handle(const Event& event)
 			fluid->light = !fluid->light;
 		if( event.Key.Code == Key::Num2 )
 			fluid->blend = !fluid->blend;
+		if( event.Key.Code == Key::Space ) 
+			fluid->displace();
 		if( event.Key.Code == Key::RControl )
 			camera->toggleMouseLook();
 		break;
