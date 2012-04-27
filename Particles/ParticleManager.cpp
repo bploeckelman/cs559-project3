@@ -15,13 +15,13 @@ ParticleManager::~ParticleManager()
 	clean();
 }
 
-bool ParticleManager::add( ParticleSystem* system )
+void ParticleManager::add( ParticleSystem* system )
 {
 	assert(system != nullptr);
 	systems.push_back(system);
 }
 
-bool ParticleManager::del( ParticleSystem* system )
+void ParticleManager::remove( ParticleSystem* system )
 {
 	assert(system != nullptr);
 	systems.remove(system);
@@ -41,7 +41,8 @@ void ParticleManager::update( const float delta )
 
 	for each(auto dead in deadSystems)
 	{
-		del(dead);
+		remove(dead);
+		delete dead;
 	}
 }
 

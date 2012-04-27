@@ -57,7 +57,9 @@ ParticleEmitter::ParticleEmitter(const unsigned int maxParticles
 	, paused(false)
 	, grayscale(false)
 	, oneTimeEmission(true)
-{ }
+{
+	init();
+}
 
 ParticleEmitter::~ParticleEmitter()
 {
@@ -108,11 +110,11 @@ void ParticleEmitter::update(const float delta)
 	// Run the default update on each particle
 	for each(auto particle in particles)
 	{
-		if( particle.active )
-		{
+//		if( particle.active )
+//		{
 			allInactive = false;
 			particle.update(delta);
-		}
+//		}
 	}
 
 	// If all particles are inactive, 
@@ -140,6 +142,7 @@ void ParticleEmitter::render(const Camera& camera)
 		}
 	}
 
+	glDisable(GL_CULL_FACE);
 	glEnable(GL_TEXTURE_2D);
 	assert(texture != nullptr);
 	texture->Bind();
@@ -157,13 +160,14 @@ void ParticleEmitter::render(const Camera& camera)
 	{
 		glPushMatrix();
 			// Undo camera transformation
-			const mat4 inv = inverse(camera.view());
+			const mat4 inv = inverse(translate(camera.view(),camera.position()));
 			glMultMatrixf(value_ptr(inv));
 
 			// Move particle into position with the correct scale
-			mat4 m = translate(camera.view(), p.position);
-			m = scale(m, vec3(p.scale, p.scale, p.scale));
-			glMultMatrixf(value_ptr(m));
+			glTranslatef(p.position.x, p.position.y, p.position.z);
+			glScalef(p.scale, p.scale, p.scale);
+			// TODO: this projects the quad onto the view plane
+			glMultMatrixf(value_ptr(translate(camera.view(), camera.position())));
 
 			// Set the particle's color
 			if( grayscale )
@@ -183,6 +187,7 @@ void ParticleEmitter::render(const Camera& camera)
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_CULL_FACE);
 
 	if( blendMode != NONE )
 	{

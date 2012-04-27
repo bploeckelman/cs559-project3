@@ -23,9 +23,9 @@ public:
 	~ParticleManager();
 
 	// Add a new particle system 
-	bool add(ParticleSystem* system);
+	void add(ParticleSystem* system);
 	// Remove the specified particle system
-	bool del(ParticleSystem* system);
+	void remove(ParticleSystem* system);
 
 	// Update all the particle systems
 	void update(const float delta);

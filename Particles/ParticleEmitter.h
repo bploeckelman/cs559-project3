@@ -80,8 +80,6 @@ protected:
 	virtual void initParticle(Particle& p) = 0;
 	virtual void emitParticles(const float deltaTime);
 
-	void initGeometry();
-
 private:
 	virtual void subUpdate(const float deltaTime) { }
 };

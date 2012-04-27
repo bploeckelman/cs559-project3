@@ -10,6 +10,7 @@
 #include "SceneObject.h"
 #include "../Core/Common.h"
 #include "../Utility/Plane.h"
+#include "../Particles/Particles.h"
 
 #include <glm/glm.hpp>
 
@@ -32,6 +33,7 @@ protected:
 	HeightMap					heightmap;  // a test heightmap
 	Fluid*						fluid;      // a test fluid surface
 	std::vector<SceneObject*>	objects;    // scene objects
+	ParticleManager				particleMgr;// handler for particle systems
 
 public:
 	Scene();
