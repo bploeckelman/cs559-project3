@@ -48,7 +48,8 @@ void MainWindow::init()
 	Log(title + " initializing...");
 
 	SetFramerateLimit(60);
-	SetCursorPosition(640, 480);
+	SetCursorPosition(MainWindow::videoMode.Width  / 2
+					, MainWindow::videoMode.Height / 2);
 	ShowMouseCursor(false);
 
 	scene.init();
