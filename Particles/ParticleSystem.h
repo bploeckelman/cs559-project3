@@ -27,9 +27,9 @@ public:
 	bool add(ParticleEmitter* emitter);
 
 	// Update all the particle emitters
-	void update(const sf::Clock& clock);
+	void update(const float delta); 
 	// Render all the particle emitters 
-	void render(const sf::Clock& clock);
+	void render();
 	// Cleanup all particle emitters
 	void clean();
 

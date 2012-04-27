@@ -28,9 +28,9 @@ public:
 	bool del(ParticleSystem* system);
 
 	// Update all the particle systems
-	void update(const sf::Clock& clock);
+	void update(const float delta);
 	// Render all the particle systems
-	void render(const sf::Clock& clock);
+	void render();
 	// Cleanup all particle systems
 	void clean();
 };

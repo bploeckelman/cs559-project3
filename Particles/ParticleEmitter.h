@@ -6,7 +6,6 @@
 /************************************************************************/
 #include "Particle.h"
 
-#include <SFML/System/Clock.hpp>
 #include <SFML/Graphics/Image.hpp>
 
 #include <vector>
@@ -28,7 +27,7 @@ private:
 	unsigned int oneTimeNumParticles;
 
 	glm::vec3  position;
-	sf::Image *texture;
+	const sf::Image *texture;
 	BlendMode  blendMode;
 
 	float emissionRate;
@@ -50,9 +49,9 @@ public:
 	// Initialize this emitter
 	virtual void init();
 	// Update all the particles
-	virtual void update(const sf::Clock& clock);
+	virtual void update(const float delta);
 	// Render all the particles
-	virtual void render(const sf::Clock& clock);
+	virtual void render();
 	// Cleanup all particles
 	virtual void clean();
 
@@ -79,5 +78,19 @@ protected:
 	void initGeometry();
 
 private:
-	virtual void subUpdate(const float deltaTime);
+	virtual void subUpdate(const float deltaTime) { }
 };
+
+inline void ParticleEmitter::start() { emitting = true; }
+inline void ParticleEmitter::stop()  { emitting = false; }
+
+inline bool ParticleEmitter::isAlive() const { return alive; }
+inline bool ParticleEmitter::isEmitting() const { return emitting; }
+
+inline void ParticleEmitter::setPosition(const glm::vec3& p) { position = p; }
+inline void ParticleEmitter::setLifetime(const float l) { lifetime = l; }
+inline void ParticleEmitter::setOneTimeEmission(const bool o) { oneTimeEmission = o; }
+inline void ParticleEmitter::setOneTimeNumParticles(const unsigned int n) { oneTimeNumParticles = n; }
+inline void ParticleEmitter::setEmissionRate(const float r) { emissionRate = r; }
+inline void ParticleEmitter::setBlendMode(const BlendMode& m) { blendMode = m; }
+inline void ParticleEmitter::setTexture(const sf::Image* t) { texture = t; }
