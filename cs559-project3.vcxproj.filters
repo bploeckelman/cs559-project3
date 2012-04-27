@@ -183,6 +183,12 @@
     <ClInclude Include="Particles\ParticleSystem.h">
       <Filter>Particles</Filter>
     </ClInclude>
+    <ClInclude Include="Particles\Particles.h">
+      <Filter>Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Particles\ParticleEmitters.h">
+      <Filter>Particles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Behavior.cpp">
@@ -300,6 +306,9 @@
       <Filter>Particles</Filter>
     </ClCompile>
     <ClCompile Include="Particles\ParticleSystem.cpp">
+      <Filter>Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Particles\ParticleEmitters.cpp">
       <Filter>Particles</Filter>
     </ClCompile>
   </ItemGroup>

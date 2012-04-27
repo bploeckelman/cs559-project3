@@ -21,7 +21,7 @@ enum BlendMode { NONE = 0, ALPHA, ADD, MULTIPLY };
 
 class ParticleEmitter
 {
-private:
+protected:
 	static const glm::vec3 vertices[];
 	static const glm::vec2 texcoords[];
 	static const unsigned char indices[];

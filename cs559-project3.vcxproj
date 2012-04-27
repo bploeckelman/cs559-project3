@@ -92,7 +92,9 @@
   <ItemGroup>
     <ClInclude Include="Particles\Particle.h" />
     <ClInclude Include="Particles\ParticleEmitter.h" />
+    <ClInclude Include="Particles\ParticleEmitters.h" />
     <ClInclude Include="Particles\ParticleManager.h" />
+    <ClInclude Include="Particles\Particles.h" />
     <ClInclude Include="Particles\ParticleSystem.h" />
     <ClInclude Include="Scene\Buildings.h" />
     <ClInclude Include="Core\Common.h" />
@@ -135,6 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Particles\ParticleEmitter.cpp" />
+    <ClCompile Include="Particles\ParticleEmitters.cpp" />
     <ClCompile Include="Particles\ParticleManager.cpp" />
     <ClCompile Include="Particles\ParticleSystem.cpp" />
     <ClCompile Include="Scene\Buildings.cpp" />
