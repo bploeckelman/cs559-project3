@@ -5,6 +5,7 @@
 /* Controls a collection of ParticleEmitter objects
 /************************************************************************/
 #include "ParticleEmitter.h"
+#include "../Scene/Camera.h"
 
 #include <vector>
 
@@ -24,18 +25,18 @@ public:
 	~ParticleSystem();
 
 	// Add a new particle emitter 
-	bool add(ParticleEmitter* emitter);
+	void add(ParticleEmitter* emitter);
 
 	// Update all the particle emitters
 	void update(const float delta); 
 	// Render all the particle emitters 
-	void render();
+	void render(const Camera& camera);
 	// Cleanup all particle emitters
 	void clean();
 
-	// Start emitting
+	// Start all particle emitters
 	void start();
-	// Stop emitting 
+	// Stop all particle emitters
 	void stop();
 
 	// Returns true if any emitter is still emitting, false otherwise
@@ -44,3 +45,6 @@ public:
 	bool isVisible() const;
 	void setVisible(const bool v);
 };
+
+inline bool ParticleSystem::isVisible() const { return visible; }
+inline void ParticleSystem::setVisible(const bool v) { visible = v; }
