@@ -23,7 +23,7 @@ private:
 	static const float MOUSE_SENSITIVITY;
 
 	bool debug;
-	bool mouseView;
+	bool mouseLook;
 
 	glm::vec3 _position;
 	glm::vec3 _rotation;
@@ -49,7 +49,8 @@ public:
 	void processInput(const sf::Input& input, const sf::Clock& clock);
 
 	void toggleDebug();
-	void setMouseView(bool val);
+	void toggleMouseLook();
+	bool isMouseLook() const;
 
 	void position(const glm::vec3& p);
 	void position(const float x, const float y, const float z);
@@ -72,7 +73,8 @@ public:
 
 
 inline void Camera::toggleDebug() { debug = !debug; }
-inline void Camera::setMouseView(bool val) { mouseView = val; }
+inline void Camera::toggleMouseLook() { mouseLook = !mouseLook; }
+inline bool Camera::isMouseLook() const { return mouseLook; }
 
 inline void Camera::position(const glm::vec3& p) { _position = p; }
 inline void Camera::position(const float x, const float y, const float z) { _position = glm::vec3(x,y,z); }

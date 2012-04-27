@@ -33,7 +33,6 @@ MainWindow::MainWindow()
 	: sf::Window(videoMode, title, windowStyle, windowSettings)
 	, scene()
 	, timer()
-	, mouseView(true)
 {
 	init();
 	sf::Randomizer::SetSeed(0);
@@ -79,12 +78,18 @@ void MainWindow::mainLoop()
 void MainWindow::update(const sf::Clock& clock)
 {
 	handleEvents();
+
 	scene.update(clock, GetInput());
-	if( mouseView)
+
+	if( scene.isMouseLook() )
 	{
 		SetCursorPosition(MainWindow::videoMode.Width  / 2
 						, MainWindow::videoMode.Height / 2);
 		ShowMouseCursor(false);
+	}
+	else
+	{
+		ShowMouseCursor(true);
 	}
 }
 
@@ -102,39 +107,14 @@ void MainWindow::handleEvents()
 	sf::Event ev;
 	while( GetEvent(ev) )
 	{
+		// Let the scene handle events 
+		scene.handle(ev);
+
 		// Close the window
 		if( ev.Type == sf::Event::Closed
 		|| (ev.Type == sf::Event::KeyPressed && ev.Key.Code == sf::Key::Escape) )
 		{
 			Close();
-		}
-		if( ev.Type == sf::Event::KeyPressed && ev.Key.Code == sf::Key::RControl)
-		{
-			if(mouseView)
-			{
-				SetCursorPosition(MainWindow::videoMode.Width  / 2
-								, MainWindow::videoMode.Height / 2);
-				ShowMouseCursor(true);
-				mouseView = false;
-				scene.setMouseView(false);
-			}
-			else if(!mouseView)
-			{
-				SetCursorPosition(MainWindow::videoMode.Width  / 2
-								, MainWindow::videoMode.Height / 2);
-				ShowMouseCursor(false);
-				mouseView = true;
-				scene.setMouseView(true);
-			}
-		}
-
-		// Toggle rendering states
-		if( ev.Type == sf::Event::KeyPressed )
-		{
-			if( ev.Key.Code == sf::Key::Num1 )
-				scene.toggleFluidLighting();
-			if( ev.Key.Code == sf::Key::Num2 )
-				scene.toggleFluidBlending();
 		}
 	}
 }

@@ -19,6 +19,7 @@ namespace sf
 {
 	class Clock;
 	class Input;
+	class Event;
 }
 
 
@@ -27,11 +28,10 @@ class Scene
 protected:
 	Camera						*camera;	// the current camera
 	CameraVector				cameras;	// all the cameras in the scene
-	Skybox						skybox;    // the current skybox
-	HeightMap					heightmap; // a test heightmap
-	Fluid*						fluid;     // a test fluid surface
-	std::vector<SceneObject*>	objects;
-	bool		 mouseView;
+	Skybox						skybox;     // the current skybox
+	HeightMap					heightmap;  // a test heightmap
+	Fluid*						fluid;      // a test fluid surface
+	std::vector<SceneObject*>	objects;    // scene objects
 
 public:
 	Scene();
@@ -43,14 +43,11 @@ public:
 	void update(const sf::Clock& clock, const sf::Input& input);
 	// Render this scene's objects from the current camera perspective
 	void render(const sf::Clock& clock);
+	// Handle an event generated from an SFML Window
+	void handle(const sf::Event& event);
 
-	// Turn mouse look on or off
-	void setMouseView(bool val);
-
-	// Toggle opengl lighting for the scene's fluid surface
-	void toggleFluidLighting();
-	// Toggle opengl blending for the scene's fluid surface
-	void toggleFluidBlending();
+	// Is mouse look on or off? 
+	bool isMouseLook() const;
 
 	// Peek at the camera position
 	const glm::vec3& cameraPosition() const;
@@ -64,5 +61,5 @@ private:
 	void cleanup();
 };
 
-inline void Scene::setMouseView(bool val) { camera->setMouseView(val); }
+inline bool Scene::isMouseLook() const { return camera->isMouseLook(); }
 inline const glm::vec3& Scene::cameraPosition() const { return camera->position(); }
