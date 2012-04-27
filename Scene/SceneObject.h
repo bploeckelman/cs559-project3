@@ -12,6 +12,8 @@ class SceneObject
 {
 protected:
 	glm::vec3	pos;
+	glm::vec3	posEdge;
+	glm::vec3	negEdge;
 	int			ID;
 
 public:
@@ -23,6 +25,10 @@ public:
 	virtual void update(const sf::Clock &clock);
 
 	glm::vec3 getPos() const;
+	glm::vec3 getPosEdge() const;
+	glm::vec3 getNegEdge() const;
 };
 
 inline glm::vec3 SceneObject::getPos() const	{ return pos;}
+inline glm::vec3 SceneObject::getPosEdge() const	{ return posEdge;}
+inline glm::vec3 SceneObject::getNegEdge() const	{ return negEdge;}

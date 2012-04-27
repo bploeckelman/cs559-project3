@@ -11,6 +11,8 @@ static int nextID = 0;
 
 SceneObject::SceneObject()
 	: pos()
+	 ,posEdge()
+	 ,negEdge()
 	 ,ID(nextID)
 {
 	nextID++;

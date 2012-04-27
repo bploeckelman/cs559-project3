@@ -13,6 +13,8 @@
 #include "../Core/Common.h"
 #include "../Core/ImageManager.h"
 
+#include <iostream>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -157,6 +159,20 @@ void Scene::render( const Clock& clock )
 	for(unsigned int i = 0; i < objects.size(); ++i){
 		objects[i]->draw();
 	}
+
+	glm::vec3 campos = camera->position();
+
+	for(unsigned int i = 0; i < objects.size(); ++i){
+		if((campos.x > objects[i]->getNegEdge().x - 1.5f && campos.x < objects[i]->getPos().x) && campos.z > objects[i]->getNegEdge().z && campos.z < objects[i]->getPosEdge().z)
+			camera->position(glm::vec3(objects[i]->getNegEdge().x - 1.5f, campos.y, campos.z));
+		if((campos.x < objects[i]->getPosEdge().x + 1.5f && campos.x > objects[i]->getPos().x) && campos.z > objects[i]->getNegEdge().z && campos.z < objects[i]->getPosEdge().z)
+			camera->position(glm::vec3(objects[i]->getPosEdge().x + 1.5f, campos.y, campos.z));
+		if((campos.z > objects[i]->getNegEdge().z - 1.5f && campos.z < objects[i]->getPos().z) && campos.x > objects[i]->getNegEdge().x && campos.x < objects[i]->getPosEdge().x)
+			camera->position(glm::vec3(campos.x, campos.y, objects[i]->getNegEdge().z - 1.5f));
+		if((campos.z < objects[i]->getPosEdge().z + 1.5f && campos.z > objects[i]->getPos().z) && campos.x > objects[i]->getNegEdge().x && campos.x < objects[i]->getPosEdge().x)
+			camera->position(glm::vec3(campos.x, campos.y, objects[i]->getPosEdge().z + 1.5f));
+	}
+
 
 	Render::basis();
 }

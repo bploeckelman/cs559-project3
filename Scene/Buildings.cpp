@@ -30,7 +30,6 @@ House::~House()
 void House::draw()
 {
 
-	//TODO: needs work, should really probably move the texturing into RenderUtils
 	float size = 6.f;
 
 	glPushMatrix();
@@ -109,5 +108,7 @@ void House::draw()
 
 	glPopMatrix();
 
+	posEdge = glm::vec3(tmp.x + radius, tmp.y + height, tmp.z + radius);
+	negEdge = glm::vec3(tmp.x - radius, tmp.y - height, tmp.z - radius);
 
 }
