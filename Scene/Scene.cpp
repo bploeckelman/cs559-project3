@@ -172,3 +172,13 @@ void Scene::cleanup()
 	Log("\nCleaning up scene...");
 	delete fluid;
 }
+
+void Scene::toggleFluidLighting()
+{
+	fluid->light = !fluid->light;
+}
+
+void Scene::toggleFluidBlending()
+{
+	fluid->blend = !fluid->blend;
+}

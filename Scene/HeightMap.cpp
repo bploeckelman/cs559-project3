@@ -76,7 +76,7 @@ void HeightMap::render(Camera *camera)
 			const float r = static_cast<float>(row) / static_cast<float>(heights.rows());
 			const float g = static_cast<float>(col) / static_cast<float>(heights.cols());
 			const float b = static_cast<float>(row) / static_cast<float>(col);
-			glColor3f(r,g,b);
+			glColor4f(r,g,b,1.f);
 			// row, col
 			glTexCoord2f(s, t);
 			glVertex3d(groundScale * col

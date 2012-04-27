@@ -44,7 +44,13 @@ public:
 	// Render this scene's objects from the current camera perspective
 	void render(const sf::Clock& clock);
 
+	// Turn mouse look on or off
 	void setMouseView(bool val);
+
+	// Toggle opengl lighting for the scene's fluid surface
+	void toggleFluidLighting();
+	// Toggle opengl blending for the scene's fluid surface
+	void toggleFluidBlending();
 
 	// Peek at the camera position
 	const glm::vec3& cameraPosition() const;
@@ -59,5 +65,4 @@ private:
 };
 
 inline void Scene::setMouseView(bool val) { camera->setMouseView(val); }
-
 inline const glm::vec3& Scene::cameraPosition() const { return camera->position(); }

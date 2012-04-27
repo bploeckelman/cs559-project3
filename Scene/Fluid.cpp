@@ -90,6 +90,9 @@ Fluid::Fluid( long n, long m, float d, float t, float c, float mu )
 
 	evalTimer.Reset();
 	t_step = t;
+
+	blend = true;
+	light = true;
 }
 
 Fluid::~Fluid()
@@ -103,9 +106,19 @@ Fluid::~Fluid()
 
 void Fluid::render()
 {
-	glEnable(GL_LIGHTING);
 	glDisable(GL_TEXTURE_2D);
-//	glPolygonMode(GL_FRONT, GL_LINE);
+
+	if( light )
+	{
+		glEnable(GL_LIGHTING);
+	}
+
+	if( blend )
+	{
+		glDepthMask(GL_FALSE);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
@@ -115,10 +128,11 @@ void Fluid::render()
 	glVertexPointer(3, GL_FLOAT, 0, vertexArray);
 	glNormalPointer(GL_FLOAT, 0, normalArray);
 
-	glColor3d(0.0, 0.8, 1.0);
 	glPushMatrix();
 		glTranslatef(0.f, 0.75f, 0.f); // TODO: remove this
 		glRotatef(90.f, 1.f, 0.f, 0.f);
+
+		glColor4f(0.0f, 0.8f, 1.0f, 0.5f);
 		glDrawElements(GL_TRIANGLES
 					 , numIndices
 					 , GL_UNSIGNED_INT
@@ -128,9 +142,18 @@ void Fluid::render()
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 
-//	glPolygonMode(GL_FRONT, GL_FILL);
+	if( blend )
+	{
+		glDisable(GL_BLEND);
+		glDepthMask(GL_TRUE);
+	}
+
+	if( light )
+	{
+		glDisable(GL_LIGHTING);
+	}
+
 	glEnable(GL_TEXTURE_2D);
-	glDisable(GL_LIGHTING);
 }
 
 void Fluid::evaluate()

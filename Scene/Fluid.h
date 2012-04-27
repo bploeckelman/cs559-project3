@@ -35,6 +35,9 @@ private:
 	float* getNormalBufferPtr();
 
 public:
+	bool blend;  // Toggle alpha blending
+	bool light;  // Toggle lighting effects
+
 	/**
 	* Fluid surface ctor
 	* n,m - width, height of vertex array

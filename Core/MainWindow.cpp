@@ -129,16 +129,12 @@ void MainWindow::handleEvents()
 		}
 
 		// Toggle rendering states
-/*
 		if( ev.Type == sf::Event::KeyPressed )
 		{
 			if( ev.Key.Code == sf::Key::Num1 )
-				scene.toggleRenderState(Scene::textures);
+				scene.toggleFluidLighting();
 			if( ev.Key.Code == sf::Key::Num2 )
-				scene.toggleRenderState(Scene::wireframe);
-			if( ev.Key.Code == sf::Key::Num3 )
-				scene.toggleRenderState(Scene::points);
+				scene.toggleFluidBlending();
 		}
-*/
 	}
 }
