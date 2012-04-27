@@ -5,13 +5,39 @@
 /************************************************************************/
 #include "ParticleEmitter.h"
 #include "Particle.h"
+#include "../Scene/Camera.h"
 #include "../Utility/Logger.h"
 
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-#include <SFML/Graphics/Image.hpp>
+#include <SFML/Graphics.hpp>
+
+#include <cassert>
 
 using namespace glm;
+
+// Setup static geometry shared by all particles
+const vec3 ParticleEmitter::vertices[4] = 
+{
+	vec3(0,0,0),
+	vec3(1,0,0),
+	vec3(1,1,0),
+	vec3(0,1,0)
+};
+const vec2 ParticleEmitter::texcoords[4] = 
+{
+	vec2(0,0),
+	vec2(1,0),
+	vec2(1,1),
+	vec2(0,1)
+};
+const unsigned char ParticleEmitter::indices[6] = 
+{
+	0, 2, 3, 
+	0, 1, 2
+};
 
 
 ParticleEmitter::ParticleEmitter(const unsigned int maxParticles
@@ -49,10 +75,8 @@ void ParticleEmitter::init()
 		p.active = false;
 		particles.push_back(p);
 	}
+
 	emissionCounter = 0.f;
-
-	// TODO: static geometry?
-
 	emitting = true;
 }
 
@@ -100,9 +124,73 @@ void ParticleEmitter::update(const float delta)
 	}
 }
 
-void ParticleEmitter::render()
+void ParticleEmitter::render(const Camera& camera)
 {
-	// TODO: setup geometry once
+	glDisable(GL_LIGHTING);
+
+	if( blendMode != NONE )
+	{
+		glDepthMask(GL_FALSE);
+		glEnable(GL_BLEND);
+		switch(blendMode)
+		{
+		case ALPHA:    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); break;
+		case ADD:      glBlendFunc(GL_ONE, GL_ONE); break;
+		case MULTIPLY: glBlendFunc(GL_DST_COLOR, GL_ZERO); break;
+		}
+	}
+
+	glEnable(GL_TEXTURE_2D);
+	assert(texture != nullptr);
+	texture->Bind();
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glVertexPointer(3, GL_FLOAT, 0, value_ptr(vertices[0]));
+	glTexCoordPointer(2, GL_FLOAT, 0, value_ptr(texcoords[0]));
+
+	glPushMatrix();
+	glLoadIdentity();
+
+	for each(const Particle& p in particles)
+	{
+		glPushMatrix();
+			// Undo camera transformation
+			const mat4 inv = inverse(camera.view());
+			glMultMatrixf(value_ptr(inv));
+
+			// Move particle into position with the correct scale
+			mat4 m = translate(camera.view(), p.position);
+			m = scale(m, vec3(p.scale, p.scale, p.scale));
+			glMultMatrixf(value_ptr(m));
+
+			// Set the particle's color
+			if( grayscale )
+				glColor4f(1,1,1,p.color.a);
+			else
+				glColor4fv(value_ptr(p.color));
+
+			// Draw the triangles
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
+		glPopMatrix();
+	}
+
+	glPopMatrix();
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glDisable(GL_TEXTURE_2D);
+
+	if( blendMode != NONE )
+	{
+		glDepthMask(GL_TRUE);
+		glDisable(GL_BLEND);
+	}
+
+	glEnable(GL_LIGHTING);
 }
 
 void ParticleEmitter::clean()

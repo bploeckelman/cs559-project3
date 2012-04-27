@@ -5,6 +5,7 @@
 /* Manages a collection of Particle objects
 /************************************************************************/
 #include "Particle.h"
+#include "../Scene/Camera.h"
 
 #include <SFML/Graphics/Image.hpp>
 
@@ -21,6 +22,10 @@ enum BlendMode { NONE = 0, ALPHA, ADD, MULTIPLY };
 class ParticleEmitter
 {
 private:
+	static const glm::vec3 vertices[];
+	static const glm::vec2 texcoords[];
+	static const unsigned char indices[];
+
 	Particles particles;
 
 	unsigned int maxParticles;
@@ -51,7 +56,7 @@ public:
 	// Update all the particles
 	virtual void update(const float delta);
 	// Render all the particles
-	virtual void render();
+	virtual void render(const Camera& camera);
 	// Cleanup all particles
 	virtual void clean();
 
