@@ -154,20 +154,30 @@ void ParticleEmitter::render(const Camera& camera)
 	glTexCoordPointer(2, GL_FLOAT, 0, value_ptr(texcoords[0]));
 
 	glPushMatrix();
-	glLoadIdentity();
 
 	for each(const Particle& p in particles)
 	{
 		glPushMatrix();
-			// Undo camera transformation
-			const mat4 inv = inverse(translate(camera.view(),camera.position()));
-			glMultMatrixf(value_ptr(inv));
+			// Undo the camera translation and get the inverse rotation
+			const mat4 inverseCameraRotation(
+				inverse( translate( camera.view(), camera.position() ) )
+			);
 
-			// Move particle into position with the correct scale
-			glTranslatef(p.position.x, p.position.y, p.position.z);
-			glScalef(p.scale, p.scale, p.scale);
-			// TODO: this projects the quad onto the view plane
-			glMultMatrixf(value_ptr(translate(camera.view(), camera.position())));
+			// Move the origin to the center of the particle
+			const float halfScale = p.scale / 2.f;
+			const mat4 centerOrigin(
+				translate(inverseCameraRotation
+						, vec3(-halfScale, -halfScale, 0) )
+			);
+
+			// Scale and move the particle into position
+			const float s = p.scale;
+			const mat4 mat(
+				translate( scale( centerOrigin, vec3(s,s,s) ), p.position )
+			);
+
+			// Apply the final matrix for the billboarded particle
+			glMultMatrixf(value_ptr(mat));
 
 			// Set the particle's color
 			if( grayscale )
