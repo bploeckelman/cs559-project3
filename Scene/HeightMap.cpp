@@ -115,7 +115,9 @@ void HeightMap::loadFromImage( const std::string& filename )
 {
 	imageName = filename;
 
-	const sf::Image& image = ImageManager::get().getImage(filename);
+	sf::Image& image = ImageManager::get().getImage(filename);
+	image.SetSmooth(false); // fixes bad pixel border
+
 	const unsigned int width  = image.GetWidth();
 	const unsigned int height = image.GetHeight();
 	heights = HeightMatrix(height, width);
