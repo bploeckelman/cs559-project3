@@ -112,12 +112,21 @@ void Fluid::render()
 	{
 		glEnable(GL_LIGHTING);
 	}
+	else
+	{
+		glDisable(GL_LIGHTING);
+	}
 
 	if( blend )
 	{
 		glDepthMask(GL_FALSE);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+	else 
+	{
+		glDepthMask(GL_TRUE);
+		glDisable(GL_BLEND);
 	}
 
 	glEnableClientState(GL_VERTEX_ARRAY);
