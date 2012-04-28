@@ -32,7 +32,7 @@ protected:
 	unsigned int oneTimeNumParticles;
 
 	glm::vec3  position;
-	const sf::Image *texture;
+	sf::Image *texture;
 	BlendMode  blendMode;
 
 	float emissionRate;
@@ -74,7 +74,7 @@ public:
 	void setOneTimeNumParticles(const unsigned int num);
 	void setEmissionRate(const float rate);
 	void setBlendMode(const BlendMode& mode);
-	void setTexture(const sf::Image* image);
+	void setTexture(sf::Image* image);
 
 protected:
 	virtual void initParticle(Particle& p) = 0;
@@ -96,4 +96,4 @@ inline void ParticleEmitter::setOneTimeEmission(const bool o) { oneTimeEmission 
 inline void ParticleEmitter::setOneTimeNumParticles(const unsigned int n) { oneTimeNumParticles = n; }
 inline void ParticleEmitter::setEmissionRate(const float r) { emissionRate = r; }
 inline void ParticleEmitter::setBlendMode(const BlendMode& m) { blendMode = m; }
-inline void ParticleEmitter::setTexture(const sf::Image* t) { texture = t; }
+inline void ParticleEmitter::setTexture(sf::Image* t) { texture = t; texture->SetSmooth(false); }

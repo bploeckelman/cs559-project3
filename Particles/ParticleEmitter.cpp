@@ -110,11 +110,11 @@ void ParticleEmitter::update(const float delta)
 	// Run the default update on each particle
 	for each(auto particle in particles)
 	{
-//		if( particle.active )
-//		{
+		if( particle.active )
+		{
 			allInactive = false;
 			particle.update(delta);
-//		}
+		}
 	}
 
 	// If all particles are inactive, 
@@ -158,6 +158,9 @@ void ParticleEmitter::render(const Camera& camera)
 	for each(const Particle& p in particles)
 	{
 		glPushMatrix();
+			// Move the particle into position in world space
+			glTranslatef(p.position.x, p.position.y, p.position.z);
+
 			// Undo the camera translation and get the inverse rotation
 			const mat4 inverseCameraRotation(
 				inverse( translate( camera.view(), camera.position() ) )
@@ -170,10 +173,10 @@ void ParticleEmitter::render(const Camera& camera)
 						, vec3(-halfScale, -halfScale, 0) )
 			);
 
-			// Scale and move the particle into position
+			// Scale the particle 
 			const float s = p.scale;
 			const mat4 mat(
-				translate( scale( centerOrigin, vec3(s,s,s) ), p.position )
+				scale( centerOrigin, vec3(s,s,s) )
 			);
 
 			// Apply the final matrix for the billboarded particle
@@ -256,11 +259,12 @@ void ParticleEmitter::emitParticles(const float delta)
 		// Stop emitting if there aren't any particles left
 		if( it == end ) break;
 
-		Particle p = *it;
+		Particle& p = *it;
 		if( !p.active )
 		{
 			initParticle(p);
 			++numEmitted;
 		}
+		++it;
 	}
 }
