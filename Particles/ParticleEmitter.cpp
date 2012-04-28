@@ -14,6 +14,7 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <algorithm>
 #include <cassert>
 
 using namespace glm;
@@ -108,6 +109,17 @@ void ParticleEmitter::update(const float delta)
 	bool allInactive = true;
 
 	// Run the default update on each particle
+	std::for_each(particles.begin(), particles.end()
+		, [&](Particle& p) {
+			if( p.active )
+			{
+				allInactive = false;
+				p.update(delta);
+			}
+	});
+	/* for-each only gives a copy instead of a ref...
+	// so copies were being updated and promptly discarded
+	// while the actual particle remained in its init state
 	for each(auto particle in particles)
 	{
 		if( particle.active )
@@ -116,6 +128,7 @@ void ParticleEmitter::update(const float delta)
 			particle.update(delta);
 		}
 	}
+	*/
 
 	// If all particles are inactive, 
 	// and more aren't being emitted, 
@@ -141,8 +154,12 @@ void ParticleEmitter::render(const Camera& camera)
 		case MULTIPLY: glBlendFunc(GL_DST_COLOR, GL_ZERO); break;
 		}
 	}
+	else
+	{
+		glDepthMask(GL_TRUE);
+		glDisable(GL_BLEND);
+	}
 
-	glDisable(GL_CULL_FACE);
 	glEnable(GL_TEXTURE_2D);
 	assert(texture != nullptr);
 	texture->Bind();
@@ -166,17 +183,13 @@ void ParticleEmitter::render(const Camera& camera)
 				inverse( translate( camera.view(), camera.position() ) )
 			);
 
-			// Move the origin to the center of the particle
-			const float halfScale = p.scale / 2.f;
-			const mat4 centerOrigin(
-				translate(inverseCameraRotation
-						, vec3(-halfScale, -halfScale, 0) )
-			);
+			const float halfScale = -p.scale * 0.5f;
+			const vec3  originCentered(halfScale, halfScale, 0.f);
 
-			// Scale the particle 
-			const float s = p.scale;
+			// Move the origin to the center of the particle, and scale it
 			const mat4 mat(
-				scale( centerOrigin, vec3(s,s,s) )
+				scale( translate( inverseCameraRotation, originCentered )
+					 , vec3(p.scale, p.scale, p.scale) )
 			);
 
 			// Apply the final matrix for the billboarded particle
@@ -200,7 +213,6 @@ void ParticleEmitter::render(const Camera& camera)
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
-	glEnable(GL_CULL_FACE);
 
 	if( blendMode != NONE )
 	{

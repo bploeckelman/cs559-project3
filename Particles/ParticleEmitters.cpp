@@ -21,7 +21,9 @@ ExplosionEmitter::ExplosionEmitter(const vec3& position
 {
 	setPosition(position);
 	setBlendMode(ALPHA);
-	setTexture(&ImageManager::get().getImage("particle.png"));
+	setOneTimeEmission(true);
+	setOneTimeNumParticles(maxParticles);
+	setTexture(&ImageManager::get().getImage("particle-point.png"));
 }
 
 void ExplosionEmitter::initParticle(Particle& p)
@@ -43,8 +45,8 @@ void ExplosionEmitter::initParticle(Particle& p)
 				  , linearRand(0.1f, 1.f)
 				  , 1.f);
 
-	pp.lifespan = 2.5f;
-	pp.scale = linearRand(0.3f, 0.6f);
+	pp.lifespan = 1.f;
+	pp.scale = linearRand(0.1f, 0.4f);
 
 	pp.active = true;
 

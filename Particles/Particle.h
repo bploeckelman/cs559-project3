@@ -55,6 +55,8 @@ inline void Particle::update(const float delta)
 {
 	if( !active ) return;
 
+	const float dt = delta * 10.f;
+
 	if( !immortal )
 	{
 		// Kill particle if appropriate
@@ -66,12 +68,12 @@ inline void Particle::update(const float delta)
 		}
 		else
 		{
-			age += delta;
+			age += dt;
 		}
 	}
 
 	prevPosition  = position;
 
-	velocity += accel * delta;
-	position += velocity * delta;
+	velocity += dt * accel;
+	position += dt * velocity;
 }

@@ -96,4 +96,4 @@ inline void ParticleEmitter::setOneTimeEmission(const bool o) { oneTimeEmission 
 inline void ParticleEmitter::setOneTimeNumParticles(const unsigned int n) { oneTimeNumParticles = n; }
 inline void ParticleEmitter::setEmissionRate(const float r) { emissionRate = r; }
 inline void ParticleEmitter::setBlendMode(const BlendMode& m) { blendMode = m; }
-inline void ParticleEmitter::setTexture(sf::Image* t) { texture = t; texture->SetSmooth(false); }
+inline void ParticleEmitter::setTexture(sf::Image* t) { texture = t; }// texture->SetSmooth(false); }
