@@ -31,7 +31,7 @@ public:
 	// tries to load from the working directory, 
 	// if that fails, tries to load from each directory 
 	// specified in resourceDirs.
-	const sf::Image& getImage(const std::string& filename);
+	sf::Image& getImage(const std::string& filename);
 
 	// Delete the specified image, by value
 	void deleteImage(const sf::Image& image);

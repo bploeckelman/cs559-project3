@@ -90,6 +90,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Particles\ParticleAffector.h" />
+    <ClInclude Include="Particles\ParticleAffectors.h" />
+    <ClInclude Include="Particles\Particle.h" />
+    <ClInclude Include="Particles\ParticleEmitter.h" />
+    <ClInclude Include="Particles\ParticleEmitters.h" />
+    <ClInclude Include="Particles\ParticleManager.h" />
+    <ClInclude Include="Particles\Particles.h" />
+    <ClInclude Include="Particles\ParticleSystem.h" />
     <ClInclude Include="Scene\Buildings.h" />
     <ClInclude Include="Core\Common.h" />
     <ClInclude Include="Core\ImageManager.h" />
@@ -130,6 +138,11 @@
     <ClInclude Include="Utility\RenderUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Particles\ParticleAffectors.cpp" />
+    <ClCompile Include="Particles\ParticleEmitter.cpp" />
+    <ClCompile Include="Particles\ParticleEmitters.cpp" />
+    <ClCompile Include="Particles\ParticleManager.cpp" />
+    <ClCompile Include="Particles\ParticleSystem.cpp" />
     <ClCompile Include="Scene\Buildings.cpp" />
     <ClCompile Include="Core\ImageManager.cpp" />
     <ClCompile Include="Core\main.cpp" />

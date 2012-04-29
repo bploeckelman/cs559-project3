@@ -11,7 +11,7 @@
 #include <string>
 
 
-class MainWindow : public sf::Window
+class MainWindow : public sf::RenderWindow
 {
 public:
 	static const std::string		title;

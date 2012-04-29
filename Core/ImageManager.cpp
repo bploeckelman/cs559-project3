@@ -20,14 +20,14 @@ using namespace sf;
 using namespace std;
 
 
-const Image& ImageManager::getImage( const string& filename )
+sf::Image& ImageManager::getImage( const std::string& filename )
 {	
 	//error stream to toss
 	stringstream toss;
 	streambuf* old = cerr.rdbuf(toss.rdbuf());
 
 	// See if it is already loaded
-	StringImageMapConstIter it = images.find(filename);
+	StringImageMapIter it = images.find(filename);
 
 	if( it != images.end() )
 	{

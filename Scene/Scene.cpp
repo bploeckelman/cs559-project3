@@ -12,10 +12,12 @@
 #include "../Utility/RenderUtils.h"
 #include "../Core/Common.h"
 #include "../Core/ImageManager.h"
+#include "../Particles/Particles.h"
 
 #include <algorithm>
 
 #include <glm/glm.hpp>
+#include <glm/gtc/random.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -35,6 +37,7 @@ Scene::Scene()
 	, skybox()
 	, heightmap()
 	, fluid(nullptr)
+	, particleMgr()
 { }
 
 Scene::~Scene()
@@ -49,7 +52,7 @@ void Scene::setup()
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_POINTS);
 	glEnable(GL_POINT_SMOOTH);
-	glPointSize(10.f);
+	glPointSize(5.f);
 	glLineWidth(3.f);
 
 	glShadeModel(GL_SMOOTH);
@@ -86,8 +89,8 @@ void Scene::setup()
 	objects.push_back(new House(10, 4, 10, sf::Color(0, 255, 0)));
 
 	// create and position cameras
-	cameras.push_back(Camera(glm::vec3(-2.5, 25.0, -2.5)   // position
-							,glm::vec3(40.0, 135.0, 0.0)));// rotation
+	cameras.push_back(Camera(vec3(-2.5, 25.0, -2.5)   // position
+							,vec3(40.0, 135.0, 0.0)));// rotation
 	camera = &cameras[0];
 }
 
@@ -133,13 +136,13 @@ void Scene::update( const Clock& clock, const Input& input )
 	std::for_each(cameras.begin(), cameras.end()
 		, [&](Camera& cam){ cam.update(clock, input); }
 	);
-
 	// update scene objects
 	for each(auto object in objects)
 		object->update(clock);
 
 	// update other things
 	fluid->evaluate();
+	particleMgr.update(clock.GetElapsedTime());
 }
 
 void Scene::render( const Clock& clock )
@@ -169,6 +172,8 @@ void Scene::render( const Clock& clock )
 	}
 
 	Render::basis();
+
+	particleMgr.render(*camera);
 }
 
 void Scene::handle(const Event& event)
@@ -184,6 +189,17 @@ void Scene::handle(const Event& event)
 			fluid->displace();
 		if( event.Key.Code == Key::RControl )
 			camera->toggleMouseLook();
+		if( event.Key.Code == Key::Space )
+		{
+			fluid->displace();
+			vec3 position(linearRand(10.f, 40.f)
+						, linearRand(10.f, 20.f)
+						, linearRand(10.f, 40.f));
+			ParticleSystem *ps = new ParticleSystem();
+			ps->add(new ExplosionEmitter(position));
+			ps->start();
+			particleMgr.add(ps);
+		}
 		break;
 	case Event::KeyReleased:
 		break;
