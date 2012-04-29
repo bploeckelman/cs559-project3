@@ -79,7 +79,7 @@ FountainEmitter::FountainEmitter( const glm::vec3& position
 	setBlendMode(ALPHA);
 	setPosition(position);
 	setOneTimeEmission(false);
-	setTexture(&ImageManager::get().getImage("particle-sphere.png"));
+	setTexture(&ImageManager::get().getImage("particle-droplet.png"));
 
 	// TODO: hacking around SFML's low delta value... 
 	// should probably accumulate deltas until a 
@@ -100,12 +100,9 @@ void FountainEmitter::initParticle( Particle& p )
 					 , linearRand(-10.f, 10.f));
 	pp.accel = vec3(0,0,0);
 
-	pp.color = vec4(linearRand(0.3f, 1.f)
-				  , linearRand(0.3f, 1.f)
-				  , linearRand(0.3f, 1.f)
-				  , 1.f);
+	pp.color = vec4(0, 0.8f, 1, 1);
 
-	pp.lifespan = 0.5f;
+	pp.lifespan = 0.4f;
 	pp.scale = linearRand(0.2f, 0.4f);
 
 	pp.active = true;
