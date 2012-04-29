@@ -30,7 +30,7 @@ const unsigned int MainWindow::windowStyle = sf::Style::Close | sf::Style::Resiz
 
 
 MainWindow::MainWindow()
-	: sf::Window(videoMode, title, windowStyle, windowSettings)
+	: sf::RenderWindow(videoMode, title, windowStyle, windowSettings)
 	, scene()
 	, timer()
 {
@@ -47,6 +47,7 @@ void MainWindow::init()
 {
 	Log(title + " initializing...");
 
+	PreserveOpenGLStates(true);
 	SetFramerateLimit(60);
 	SetCursorPosition(MainWindow::videoMode.Width  / 2
 					, MainWindow::videoMode.Height / 2);
