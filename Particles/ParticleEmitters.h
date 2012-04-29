@@ -14,7 +14,7 @@ class ExplosionEmitter : public ParticleEmitter
 {
 public:
 	ExplosionEmitter( const glm::vec3& position
-					, const unsigned int maxParticles = 20
+					, const unsigned int maxParticles = 100
 					, const float lifetime            = 1.f );
 protected:
 	virtual void initParticle(Particle& p);

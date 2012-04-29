@@ -19,11 +19,11 @@ ExplosionEmitter::ExplosionEmitter(const vec3& position
 								 , const float lifetime)
 	: ParticleEmitter(maxParticles, lifetime)
 {
-	setPosition(position);
 	setBlendMode(ALPHA);
+	setPosition(position);
 	setOneTimeEmission(true);
 	setOneTimeNumParticles(maxParticles);
-	setTexture(&ImageManager::get().getImage("particle-point.png"));
+	setTexture(&ImageManager::get().getImage("particle-dot.png"));
 }
 
 void ExplosionEmitter::initParticle(Particle& p)
@@ -33,16 +33,12 @@ void ExplosionEmitter::initParticle(Particle& p)
 	pp.position     = position;
 	pp.prevPosition = position;
 
-	pp.velocity = vec3(linearRand(-15.f, 15.f)
-					 , linearRand(-15.f, 15.f)
-					 , linearRand(-15.f, 15.f));
-	pp.accel    = vec3(linearRand(-1.f, 1.f)
-					 , linearRand(-1.f, 1.f)
-					 , linearRand(-1.f, 1.f));
+	pp.velocity = sphericalRand(15.f);
+	pp.accel    = -0.5f * pp.velocity;
 
-	pp.color = vec4(linearRand(0.1f, 1.f)
-				  , linearRand(0.1f, 1.f)
-				  , linearRand(0.1f, 1.f)
+	pp.color = vec4(linearRand(0.3f, 1.f)
+				  , linearRand(0.3f, 1.f)
+				  , linearRand(0.3f, 1.f)
 				  , 1.f);
 
 	pp.lifespan = 1.f;
