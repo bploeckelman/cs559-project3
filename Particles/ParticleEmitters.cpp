@@ -20,8 +20,9 @@ ExplosionEmitter::ExplosionEmitter(const vec3& position
 								 , const float lifetime)
 	: ParticleEmitter(maxParticles, lifetime)
 {
+	add(new ScaleDownAffector(this, 0.f, 10.f));
 	add(new FadeOutAffector(this, 0.f, 20.f));
-	add(new ForceAffector(this, vec3(0,-2,0)));
+	add(new ForceAffector(this, vec3(0,-10,0)));
 
 	setBlendMode(ALPHA);
 	setPosition(position);
