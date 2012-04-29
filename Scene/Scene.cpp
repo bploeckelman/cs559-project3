@@ -52,7 +52,7 @@ void Scene::setup()
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_POINTS);
 	glEnable(GL_POINT_SMOOTH);
-	glPointSize(10.f);
+	glPointSize(5.f);
 	glLineWidth(3.f);
 
 	glShadeModel(GL_SMOOTH);

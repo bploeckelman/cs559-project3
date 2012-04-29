@@ -117,18 +117,6 @@ void ParticleEmitter::update(const float delta)
 				p.update(delta);
 			}
 	});
-	/* for-each only gives a copy instead of a ref...
-	// so copies were being updated and promptly discarded
-	// while the actual particle remained in its init state
-	for each(auto particle in particles)
-	{
-		if( particle.active )
-		{
-			allInactive = false;
-			particle.update(delta);
-		}
-	}
-	*/
 
 	// If all particles are inactive, 
 	// and more aren't being emitted, 
@@ -141,10 +129,9 @@ void ParticleEmitter::update(const float delta)
 
 void ParticleEmitter::render(const Camera& camera)
 {
-	glDisable(GL_LIGHTING);
-
 	if( blendMode != NONE )
 	{
+		glDisable(GL_LIGHTING);
 		glDepthMask(GL_FALSE);
 		glEnable(GL_BLEND);
 		switch(blendMode)
@@ -175,8 +162,12 @@ void ParticleEmitter::render(const Camera& camera)
 	for each(const Particle& p in particles)
 	{
 		glPushMatrix();
-			// Move the particle into position in world space
-			glTranslatef(p.position.x, p.position.y, p.position.z);
+			// Move the particle into position and scale it  
+			const mat4 particleTransform(
+				scale( translate( mat4(1.0), p.position )
+					 , vec3(p.scale, p.scale, p.scale) )
+			);
+			glMultMatrixf(value_ptr(particleTransform));
 
 			// Undo the camera translation and get the inverse rotation
 			const mat4 inverseCameraRotation(
@@ -185,12 +176,8 @@ void ParticleEmitter::render(const Camera& camera)
 
 			const float halfScale = -p.scale * 0.5f;
 			const vec3  originCentered(halfScale, halfScale, 0.f);
-
-			// Move the origin to the center of the particle, and scale it
-			const mat4 mat(
-				scale( translate( inverseCameraRotation, originCentered )
-					 , vec3(p.scale, p.scale, p.scale) )
-			);
+			// Move the origin to the center of the particle
+			const mat4 mat(	translate( inverseCameraRotation, originCentered ) );
 
 			// Apply the final matrix for the billboarded particle
 			glMultMatrixf(value_ptr(mat));
@@ -201,8 +188,14 @@ void ParticleEmitter::render(const Camera& camera)
 			else
 				glColor4fv(value_ptr(p.color));
 
+			// Draw as points for now... 
+			glBegin(GL_POINTS);
+				glVertex3f(0,0,0);
+			glEnd();
+
+			// TODO: the textured particles aren't blending properly
 			// Draw the triangles
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
+			//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
 		glPopMatrix();
 	}
 
@@ -218,9 +211,8 @@ void ParticleEmitter::render(const Camera& camera)
 	{
 		glDepthMask(GL_TRUE);
 		glDisable(GL_BLEND);
+		glEnable(GL_LIGHTING);
 	}
-
-	glEnable(GL_LIGHTING);
 }
 
 void ParticleEmitter::clean()
