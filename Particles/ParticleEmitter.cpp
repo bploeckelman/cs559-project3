@@ -4,6 +4,7 @@
 /* Manages a collection of Particle objects
 /************************************************************************/
 #include "ParticleEmitter.h"
+#include "ParticleAffector.h"
 #include "Particle.h"
 #include "../Scene/Camera.h"
 #include "../Utility/Logger.h"
@@ -44,6 +45,7 @@ const unsigned char ParticleEmitter::indices[6] =
 ParticleEmitter::ParticleEmitter(const unsigned int maxParticles
 							   , const float lifetime)
 	: particles()
+	, affectors()
 	, maxParticles(maxParticles)
 	, oneTimeNumParticles(maxParticles)
 	, position(0,0,0)
@@ -115,8 +117,13 @@ void ParticleEmitter::update(const float delta)
 			{
 				allInactive = false;
 				p.update(delta);
+
+				// Run each affector for this particle
+				for each(auto a in affectors)
+					a->update(p, delta);
 			}
-	});
+		}
+	);
 
 	// If all particles are inactive, 
 	// and more aren't being emitted, 
@@ -219,6 +226,16 @@ void ParticleEmitter::clean()
 {
 	texture = nullptr;
 	particles.clear();
+	
+	for each(auto affector in affectors)
+		delete affector;
+	affectors.clear();
+}
+
+void ParticleEmitter::add( ParticleAffector* affector )
+{
+	assert(affector != nullptr);
+	affectors.push_back(affector);
 }
 
 void ParticleEmitter::emitParticles(const float delta)

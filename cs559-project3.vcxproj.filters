@@ -189,6 +189,12 @@
     <ClInclude Include="Particles\ParticleEmitters.h">
       <Filter>Particles</Filter>
     </ClInclude>
+    <ClInclude Include="Particles\ParticleAffector.h">
+      <Filter>Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Particles\ParticleAffectors.h">
+      <Filter>Particles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Behavior.cpp">
@@ -309,6 +315,9 @@
       <Filter>Particles</Filter>
     </ClCompile>
     <ClCompile Include="Particles\ParticleEmitters.cpp">
+      <Filter>Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Particles\ParticleAffectors.cpp">
       <Filter>Particles</Filter>
     </ClCompile>
   </ItemGroup>

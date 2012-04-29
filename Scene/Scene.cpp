@@ -192,10 +192,10 @@ void Scene::handle(const Event& event)
 		if( event.Key.Code == Key::Space )
 		{
 			fluid->displace();
-			ParticleSystem *ps = new ParticleSystem();
-			vec3 position(linearRand(0.f, 50.f)
+			vec3 position(linearRand(10.f, 40.f)
 						, linearRand(10.f, 20.f)
-						, linearRand(0.f, 50.f));
+						, linearRand(10.f, 40.f));
+			ParticleSystem *ps = new ParticleSystem();
 			ps->add(new ExplosionEmitter(position));
 			ps->start();
 			particleMgr.add(ps);

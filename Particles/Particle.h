@@ -55,6 +55,7 @@ inline void Particle::update(const float delta)
 {
 	if( !active ) return;
 
+	// SFML has a fairly short delta between frames
 	const float dt = delta * 10.f;
 
 	if( !immortal )
@@ -72,7 +73,7 @@ inline void Particle::update(const float delta)
 		}
 	}
 
-	prevPosition  = position;
+	prevPosition = position;
 
 	velocity += dt * accel;
 	position += dt * velocity;

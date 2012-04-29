@@ -5,6 +5,7 @@
 /************************************************************************/
 #include "ParticleEmitters.h"
 #include "ParticleEmitter.h"
+#include "ParticleAffectors.h"
 #include "Particle.h"
 #include "../Core/ImageManager.h"
 
@@ -19,6 +20,9 @@ ExplosionEmitter::ExplosionEmitter(const vec3& position
 								 , const float lifetime)
 	: ParticleEmitter(maxParticles, lifetime)
 {
+	add(new FadeOutAffector(this, 0.f, 20.f));
+	add(new ForceAffector(this, vec3(0,-2,0)));
+
 	setBlendMode(ALPHA);
 	setPosition(position);
 	setOneTimeEmission(true);
@@ -33,8 +37,8 @@ void ExplosionEmitter::initParticle(Particle& p)
 	pp.position     = position;
 	pp.prevPosition = position;
 
-	pp.velocity = sphericalRand(15.f);
-	pp.accel    = -0.5f * pp.velocity;
+	pp.velocity = sphericalRand(30.f);
+	pp.accel    = -0.1f * pp.velocity;
 
 	pp.color = vec4(linearRand(0.3f, 1.f)
 				  , linearRand(0.3f, 1.f)

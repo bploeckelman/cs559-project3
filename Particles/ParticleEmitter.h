@@ -5,6 +5,7 @@
 /* Manages a collection of Particle objects
 /************************************************************************/
 #include "Particle.h"
+#include "ParticleAffector.h"
 #include "../Scene/Camera.h"
 
 #include <SFML/Graphics/Image.hpp>
@@ -14,6 +15,10 @@
 typedef std::vector<Particle>     Particles;
 typedef Particles::iterator       ParticlesIter;
 typedef Particles::const_iterator ParticlesConstIter;
+
+typedef std::vector<ParticleAffector*>    ParticleAffectors;
+typedef ParticleAffectors::iterator       ParticleAffectorsIter;
+typedef ParticleAffectors::const_iterator ParticleAffectorsConstIter;
 
 
 enum BlendMode { NONE = 0, ALPHA, ADD, MULTIPLY };
@@ -27,6 +32,7 @@ protected:
 	static const unsigned char indices[];
 
 	Particles particles;
+	ParticleAffectors affectors;
 
 	unsigned int maxParticles;
 	unsigned int oneTimeNumParticles;
@@ -64,6 +70,9 @@ public:
 	void start();
 	// Stop emitting 
 	void stop();
+
+	// Add a particle affector to this emitter
+	void add(ParticleAffector* affector);
 
 	bool isAlive() const;
 	bool isEmitting() const;
