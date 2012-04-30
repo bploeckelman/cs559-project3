@@ -89,6 +89,7 @@ void Scene::setup()
 	// add Scene objects
 	objects.push_back(new House(10, 4, 10, sf::Color(0, 255, 0)));
 	objects.push_back(new Fish(20, 0.5, 20, sf::Color(255, 127, 0)));
+	//objects.push_back(new Fountain(30, 4, 30, 5));
 
 	// add particle systems
 	ParticleSystem *system = new ParticleSystem();
