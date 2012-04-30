@@ -65,6 +65,7 @@ Skybox::Skybox()
 	: textures(nullptr) 
 	, dayTextures()
 	, nightTextures()
+	, timer()
 	, toggleDayNight(true)
 {
 	if( !init() )
@@ -81,45 +82,19 @@ bool Skybox::init()
 	// Get the day time textures -------------------
 	directory = dayDir;
 	textures  = &dayTextures;
-
-	vector<string> filenames;
-	map<Face, string> faceImages;
-
-	// Get filenames from the image file directory
-	if( !getFilenames(filenames) )
-		return false;
-
-	// Match each face to an image filename 
-	if( !getFaceImageMap(filenames, faceImages) )
-		return false;
-
-	// Generate texture objects for each image
-	if( !buildTextureObjects(faceImages) )
-		return false;
-
+	getTextures();
 
 	// Get the night time textures -----------------
 	directory = nightDir;
 	textures  = &nightTextures;
-
-	filenames.clear();
-	faceImages.clear();
-
-	// Get filenames from the image file directory
-	if( !getFilenames(filenames) )
-		return false;
-
-	// Match each face to an image filename 
-	if( !getFaceImageMap(filenames, faceImages) )
-		return false;
-
-	// Generate texture objects for each image
-	if( !buildTextureObjects(faceImages) )
-		return false;
+	getTextures();
 
 	// Set textures to day -------------------------
 	textures = &dayTextures;
 	toggleDayNight = true;
+
+	// Start the day-night cycle timer -------------
+	timer.Reset();
 
 	cout << "Initialized skybox..." << endl;
 	return true;
@@ -138,11 +113,78 @@ void Skybox::cleanup()
 	nightTextures.clear();
 }
 
+void Skybox::render(const Camera& camera)
+{
+	// Handle fading between night and day -----------------------
+	// TODO: expose this to user 
+	static const float timeLimit = 60.f; // in seconds
+
+	static bool  toggle    = true;
+	static float deltaTime = 0.f;
+
+	if( toggle )
+	{
+		deltaTime += timer.GetElapsedTime();
+		if( deltaTime > timeLimit )
+		{
+			toggle = !toggle;
+			deltaTime = timeLimit;
+		}
+	}
+	else 
+	{
+		deltaTime -= timer.GetElapsedTime();
+		if( deltaTime < 0.f )
+		{
+			toggle = !toggle;
+			deltaTime = 0.f;
+		}
+	}
+
+	timer.Reset();
+
+	// Day-night cycle delta [0,1]
+	const float delta = deltaTime / timeLimit;
+
+	// Setup skybox drawing --------------------------------------
+	glDisable(GL_LIGHTING);
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDepthMask(GL_FALSE);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glMatrixMode(GL_MODELVIEW);
+
+	// Draw day --------------------------------------------------
+	setDay();
+	glColor4f(1.f, 1.f, 1.f, delta);
+	drawSkybox(camera);
+
+	// Draw night ------------------------------------------------
+	setNight();
+	glColor4f(1.f, 1.f, 1.f, 1.f - delta);
+	drawSkybox(camera);
+
+	// Re-clear the depth buffer so we 
+	// don't have to turn off depth testing
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glDepthMask(GL_TRUE);
+	glDisable(GL_BLEND);
+	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_LIGHTING);
+}
+
 void Skybox::drawFace(const Face& face)
 {
 	assert(textues != nullptr);
 	(*textures)[face]->Bind();
-	glColor4f(1.f, 1.f, 1.f, 1.f);
 
 	glVertexPointer  (3, GL_FLOAT, 0, value_ptr( vertices[0]));
 	glTexCoordPointer(2, GL_FLOAT, 0, value_ptr(texcoords[0]));
@@ -151,76 +193,69 @@ void Skybox::drawFace(const Face& face)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Skybox::render(const Camera& camera)
+void Skybox::drawSkybox(const Camera& camera)
 {
-	glEnable(GL_TEXTURE_2D);
-	glDisable(GL_LIGHTING);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
+	// half the size of one cube face
+	const float T = faceSize; 
 
 	// Undo camera translation, and 
 	// roll the coordinate system 180 degrees
 	glm::mat4 m;
 	m = glm::translate(m, camera.position());
 	m = glm::rotate(m, 180.f, glm::vec3(0,0,1));
-	glMultMatrixf(glm::value_ptr(m));
-
-	glDepthMask(GL_FALSE);
-
-	// half the size of one cube face
-	const float T = faceSize; 
 
 	glPushMatrix();
-		glTranslatef(0.f, 0.f, -T);
-		drawFace(front);
+		glMultMatrixf(glm::value_ptr(m));
+		glPushMatrix();
+			glTranslatef(0.f, 0.f, -T);
+			drawFace(front);
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(0.f, 0.f, T);
+			glRotatef(180.f, 0.f, 1.f, 0.f);
+			drawFace(back);
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(-T, 0.f, 0.f);
+			glRotatef(90.f, 0.f, 1.f, 0.f);
+			drawFace(left);
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(T, 0.f, 0.f);
+			glRotatef(270.f, 0.f, 1.f, 0.f);
+			drawFace(right);
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(0.f, T, 0.f);
+			glRotatef(90.f, 1.f, 0.f, 0.f);
+			drawFace(bottom);
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(0.f, -T, 0.f);
+			glRotatef(270.f, 1.f, 0.f, 0.f);
+			drawFace(top);
+		glPopMatrix();
 	glPopMatrix();
-	
-	glPushMatrix();
-		glTranslatef(0.f, 0.f, T);
-		glRotatef(180.f, 0.f, 1.f, 0.f);
-		drawFace(back);
-	glPopMatrix();
+}
 
-	glPushMatrix();
-		glTranslatef(-T, 0.f, 0.f);
-		glRotatef(90.f, 0.f, 1.f, 0.f);
-		drawFace(left);
-	glPopMatrix();
+bool Skybox::getTextures()
+{
+	vector<string> filenames;
+	map<Face, string> faceImages;
 
-	glPushMatrix();
-		glTranslatef(T, 0.f, 0.f);
-		glRotatef(270.f, 0.f, 1.f, 0.f);
-		drawFace(right);
-	glPopMatrix();
+	// Get filenames from the image file directory
+	if( !getFilenames(filenames) )
+		return false;
 
-	glPushMatrix();
-		glTranslatef(0.f, T, 0.f);
-		glRotatef(90.f, 1.f, 0.f, 0.f);
-		drawFace(bottom);
-	glPopMatrix();
+	// Match each face to an image filename 
+	if( !getFaceImageMap(filenames, faceImages) )
+		return false;
 
-	glPushMatrix();
-		glTranslatef(0.f, -T, 0.f);
-		glRotatef(270.f, 1.f, 0.f, 0.f);
-		drawFace(top);
-	glPopMatrix();
+	// Generate texture objects for each image
+	if( !buildTextureObjects(faceImages) )
+		return false;
 
-	// Re-clear the depth buffer so we don't have to turn off depth testing
-	glClear(GL_DEPTH_BUFFER_BIT);
-
-	glDepthMask(GL_TRUE);
-
-	glPopMatrix();
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	glDisable(GL_TEXTURE_2D);
-	glEnable(GL_LIGHTING);
+	return true;
 }
 
 bool Skybox::buildTextureObjects(map<Face, string>& faceImages)

@@ -11,6 +11,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Image.hpp>
+#include <SFML/System/Clock.hpp>
 
 #include <string>
 #include <map>
@@ -46,12 +47,16 @@ private:
 	FaceImageMap  dayTextures;
 	FaceImageMap  nightTextures;
 
+	sf::Clock timer;
 	bool toggleDayNight;  // true = day, false = night
 
 	bool init();
 	void cleanup();
 
 	void drawFace(const Face& face);
+	void drawSkybox(const Camera& camera);
+
+	bool getTextures();
 
 	bool buildTextureObjects(std::map<Face, std::string>& faceImages);
 	bool getFilenames(std::vector<std::string>& filenames);
