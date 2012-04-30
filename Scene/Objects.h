@@ -7,6 +7,7 @@
 #include <SFML\Graphics.hpp>
 #include "SceneObject.h"
 #include "../Core/ImageManager.h"
+#include "HeightMap.h"
 
 class Fish : public SceneObject{
 private:
@@ -27,6 +28,7 @@ public:
 class Fountain : public SceneObject{
 private:
 	float size;
+	HeightMap * heightMap;
 	sf::Image texture;
 
 public:

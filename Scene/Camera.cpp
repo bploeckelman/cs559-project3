@@ -28,13 +28,15 @@ const glm::vec3 yAxis(0.f, 1.f, 0.f);
 const glm::vec3 zAxis(0.f, 0.f, 1.f);
 
 
-Camera::Camera(const glm::vec3& pos
+Camera::Camera(HeightMap& heightmap
+			 , const glm::vec3& pos
 			 , const glm::vec3& rot
 			 , const glm::vec3& rotSpeed
 			 , const glm::mat4& v
 			 , const glm::mat4& proj)
 	 : debug(false)
 	 , mouseLook(true)
+	 , heightmap(heightmap)
 	 , _position(pos)
 	 , _rotation(rot)
 	 , _rotationSpeed(rotSpeed)
@@ -74,6 +76,26 @@ void Camera::update(const sf::Clock& clock, const sf::Input& input)
 	_view = glm::rotate(_view, _rotation.y, yAxis);
 	_view = glm::rotate(_view, _rotation.z, zAxis);
 	_view = glm::translate(_view, -_position);
+
+	// Force the camera to stay above the heightmap
+	glm::vec3 campos(this->position());
+	glm::vec2 mapcoords(campos.z / heightmap.getGroundScale(), campos.x / heightmap.getGroundScale());
+	if( mapcoords.x >= 0 && mapcoords.y >= 0
+		&& mapcoords.x < (heightmap.getHeights()->rows() - 1) && mapcoords.y < (heightmap.getHeights()->cols() - 1) )
+	{
+		const unsigned int x = static_cast<unsigned int>(mapcoords.x);
+		double influenceX = mapcoords.x - x;
+		const unsigned int y = static_cast<unsigned int>(mapcoords.y);
+		double influenceY = mapcoords.y - y;
+
+		double yHeight = (heightmap.heightAt(x, y) * (1 - influenceY) + heightmap.heightAt(x, y + 1) * influenceY);
+		double xHeight = (heightmap.heightAt(x + 1, y) * (1 - influenceY) + heightmap.heightAt(x + 1, y + 1) * influenceY);
+		const double height = (yHeight * (1 - influenceX) + xHeight * influenceX) * heightmap.getHeightScale();
+
+		if( campos.y < height + 5.f ) 
+			this->position(glm::vec3(campos.x, height + 5.f, campos.z));	
+
+	}
 }
 
 void Camera::processInput(const Input& input, const Clock& clock)

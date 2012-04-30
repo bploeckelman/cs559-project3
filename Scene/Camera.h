@@ -5,6 +5,7 @@
 /* A simple 3d camera
 /************************************************************************/
 #include <glm/glm.hpp>
+#include "HeightMap.h"
 
 
 namespace sf
@@ -25,6 +26,8 @@ private:
 	bool debug;
 	bool mouseLook;
 
+	HeightMap& heightmap;
+
 	glm::vec3 _position;
 	glm::vec3 _rotation;
 	glm::vec3 _rotationSpeed;
@@ -37,7 +40,8 @@ private:
 	void moveY(const float speed=1.f);
 
 public:
-	Camera(const glm::vec3& pos=glm::vec3(0,0,0)
+	Camera(HeightMap& heightmap
+		 , const glm::vec3& pos=glm::vec3(0,0,0)
 		 , const glm::vec3& rot=glm::vec3(0,0,0)
 		 , const glm::vec3& rotSpeed=glm::vec3(0.7, 1.0, 1.0)
 		 , const glm::mat4& v=glm::mat4(1.0)

@@ -107,6 +107,7 @@ Fountain::Fountain()
 
 Fountain::Fountain(float x, float y, float z, float size)
 	: SceneObject(x, y, z)
+	 ,texture(ImageManager::get().getImage("roof.png"))
 	 ,size(size)
 {
 }
