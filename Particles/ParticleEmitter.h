@@ -85,6 +85,8 @@ public:
 	void setBlendMode(const BlendMode& mode);
 	void setTexture(sf::Image* image);
 
+	Particles getParticles() const;
+
 protected:
 	virtual void initParticle(Particle& p) = 0;
 	virtual void emitParticles(const float deltaTime);
@@ -92,6 +94,9 @@ protected:
 private:
 	virtual void subUpdate(const float deltaTime) { }
 };
+
+
+inline Particles ParticleEmitter::getParticles() const { return particles;}
 
 inline void ParticleEmitter::start() { emitting = true; }
 inline void ParticleEmitter::stop()  { emitting = false; }

@@ -238,6 +238,16 @@ void Fluid::displace()
 	v.z -= d * scale;
 }
 
+void Fluid::displace(float x, float z)
+{
+	const float scale = .01f;
+	const float d = glm::linearRand(0.f, 0.5f);
+	const int i = static_cast<int>(x);
+	const int j = static_cast<int>(z);
+	vec3& v = *(buffer[1 - renderBuffer] + j * width + i);
+	v.z -= d * scale;
+}
+
 float* Fluid::getVertexBufferPtr()
 {
 	return glm::value_ptr(buffer[renderBuffer][0]);

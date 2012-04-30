@@ -55,6 +55,7 @@ public:
 
 	void evaluate();
 	void displace();
+	void displace(float x, float z);
 
 	
 };

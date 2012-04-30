@@ -86,6 +86,7 @@ void House::draw()
 		glPushMatrix();
 			glRotatef(180, 1, 0, 0);
 			glBegin(GL_QUADS);
+				glNormal3d(0, 1, 0);
 				glVertex3d(-radius, 0, -radius);
 				glVertex3d(-radius, 0, radius);
 				glVertex3d(radius, 0, radius);
@@ -93,6 +94,8 @@ void House::draw()
 			glEnd();
 		glPopMatrix();
 		glEnable(GL_TEXTURE_2D);
+
+
 
 		glBegin(GL_TRIANGLE_FAN);
 			glTexCoord2f(0.5f,    1.f);glVertex3d(0, height, 0);
