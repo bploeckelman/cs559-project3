@@ -8,6 +8,7 @@
 #include "Skybox.h"
 #include "Fluid.h"
 #include "Buildings.h"
+#include "Objects.h"
 #include "../Utility/Plane.h"
 #include "../Utility/RenderUtils.h"
 #include "../Core/Common.h"
@@ -87,6 +88,7 @@ void Scene::setup()
 
 	// add Scene objects
 	objects.push_back(new House(10, 4, 10, sf::Color(0, 255, 0)));
+	objects.push_back(new Fish(20, 0.5, 20, sf::Color(255, 127, 0)));
 
 	// create and position cameras
 	cameras.push_back(Camera(vec3(-2.5, 25.0, -2.5)   // position
@@ -153,10 +155,13 @@ void Scene::render( const Clock& clock )
 
 	skybox.render(*camera);
 	heightmap.render(camera);
-	fluid->render();
 
 	for each(auto object in objects)
 		object->draw();
+
+	fluid->render();
+
+	
 
 	glm::vec3 campos = camera->position();
 

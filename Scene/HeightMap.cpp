@@ -53,7 +53,8 @@ void HeightMap::render(Camera *camera)
 			const double height = (yHeight * (1 - influenceX) + xHeight * influenceX) * heightScale;
 
 			if( campos.y < height + 5.f ) 
-				camera->position(glm::vec3(campos.x, height + 5.f, campos.z));
+				camera->position(glm::vec3(campos.x, height + 5.f, campos.z));	
+
 		}
 	}
 

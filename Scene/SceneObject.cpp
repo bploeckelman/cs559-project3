@@ -6,7 +6,6 @@
 
 #include "SceneObject.h"
 
-
 static int nextID = 0;
 
 SceneObject::SceneObject()

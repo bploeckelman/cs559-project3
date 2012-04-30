@@ -195,6 +195,9 @@
     <ClInclude Include="Particles\ParticleAffectors.h">
       <Filter>Particles</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\Objects.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Behavior.cpp">
@@ -319,6 +322,9 @@
     </ClCompile>
     <ClCompile Include="Particles\ParticleAffectors.cpp">
       <Filter>Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Objects.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
