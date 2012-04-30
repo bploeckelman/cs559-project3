@@ -28,11 +28,12 @@ public:
 
 	void render(Camera *camera);
 
-	double heightAt(const unsigned int row, const unsigned int col);
+	double heightAt(const unsigned int row
+				  , const unsigned int col) const;
 };
 
 inline double HeightMap::heightAt(const unsigned int row
-								, const unsigned int col)
+								, const unsigned int col) const
 {
 	return heights(row,col);
 }
