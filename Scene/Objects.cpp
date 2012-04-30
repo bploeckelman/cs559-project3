@@ -10,12 +10,20 @@
 #include <SFML\Graphics.hpp>
 
 
+static HeightMap& heightmap; 
+
 static float lastTime = 0.f;
+
+void Objects::setup(const HeightMap& shit)
+{
+	heightmap = shit;
+}
 
 Fish::Fish()
 	: color()
 	
 {
+
 }
 
 Fish::Fish(float x, float y, float z, sf::Color color)
