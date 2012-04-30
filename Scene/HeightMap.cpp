@@ -32,6 +32,8 @@ HeightMap::HeightMap(const unsigned int width, const unsigned int height)
 
 void HeightMap::render(Camera *camera)
 {
+	glDisable(GL_LIGHTING); // TODO: calculate and store normals
+
 	const float groundScale = 0.25f;
 	const float heightScale = 2.f;
 
@@ -60,6 +62,7 @@ void HeightMap::render(Camera *camera)
 
 	const sf::Image& image = ImageManager::get().getImage(imageName);
 	image.Bind();
+	glColor4f(1,1,1,1);
 
 	const float dt = 1.f / static_cast<float>(heights.rows() - 1);
 	const float ds = 1.f / static_cast<float>(heights.cols() - 1);
@@ -74,10 +77,6 @@ void HeightMap::render(Camera *camera)
 		{
 			float s = col * ds; 
 
-			const float r = static_cast<float>(row) / static_cast<float>(heights.rows());
-			const float g = static_cast<float>(col) / static_cast<float>(heights.cols());
-			const float b = static_cast<float>(row) / static_cast<float>(col);
-			glColor4f(r,g,b,1.f);
 			// row, col
 			glTexCoord2f(s, t);
 			glVertex3d(groundScale * col
@@ -101,6 +100,8 @@ void HeightMap::render(Camera *camera)
 		}
 		glEnd();
 	}
+
+	glEnable(GL_LIGHTING); // TODO: calculate and store normals
 }
 
 void HeightMap::randomize()
