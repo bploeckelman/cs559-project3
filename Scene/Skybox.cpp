@@ -3,10 +3,6 @@
 /* ------
 /* A collection of 6 textures to apply to the interior of a cube
 /* drawn around a camera to simulate a distant environment
-
-TODO: update Skybox to use ImageManager to get its textures from SFML
-instead of generating them itself and messing up the texture env mode
-
 /************************************************************************/
 #include "Skybox.h"
 #include "Camera.h"

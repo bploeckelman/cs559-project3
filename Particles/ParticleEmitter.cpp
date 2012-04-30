@@ -158,10 +158,6 @@ void ParticleEmitter::render(const Camera& camera)
 	assert(texture != nullptr);
 	texture->Bind();
 
-	// TODO: this is a hack due to Skybox messing 
-	// with the texture environment mode
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
@@ -211,10 +207,6 @@ void ParticleEmitter::render(const Camera& camera)
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glDisable(GL_TEXTURE_2D);
-
-	// TODO: this is a hack due to Skybox messing 
-	// with the texture environment mode
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 
 	if( blendMode != NONE )
 	{
