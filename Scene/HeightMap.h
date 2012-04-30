@@ -18,33 +18,22 @@ class HeightMap
 private:
 	HeightMatrix heights;	
 	std::string  imageName;
-	const float groundScale;
-	const float heightScale;
-
 
 	void randomize();
 
 public:
 	HeightMap(const unsigned int width=100
-			, const unsigned int height=100
-			, const float groundScale = .25f
-			, const float heightScale = 2.f);	
+			, const unsigned int height=100);
 	void loadFromImage(const std::string& filename);
 
 	void render(Camera *camera);
 
-	double heightAt(const unsigned int row, const unsigned int col);
-	float getGroundScale();
-	float getHeightScale();
-	HeightMatrix* getHeights();
+	double heightAt(const unsigned int row
+				  , const unsigned int col) const;
 };
 
-inline HeightMatrix* HeightMap::getHeights()		{ return &heights;}
-inline float HeightMap::getGroundScale()	{ return groundScale;}
-inline float HeightMap::getHeightScale()	{ return heightScale;}
-
 inline double HeightMap::heightAt(const unsigned int row
-								, const unsigned int col)
+								, const unsigned int col) const
 {
 	return heights(row,col);
 }
