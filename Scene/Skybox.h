@@ -7,7 +7,10 @@
 /************************************************************************/
 #include "Camera.h"
 
+#include <glm/glm.hpp>
+
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Image.hpp>
 
 #include <string>
 #include <map>
@@ -27,11 +30,15 @@ public:
 	void render(const Camera& camera);
 
 private:
+	static const std::string dayDir;
+	static const std::string nightDir;
 	static const std::string directory;
-	static const float vertices[];
-	static const float texcoords[];
 
-	std::map<Face, GLuint> textures;
+	static const glm::vec3 vertices[]; 
+	static const glm::vec2 texcoords[]; 
+	static const unsigned char indices[];
+
+	std::map<Face, sf::Image*> textures;
 
 	bool init();
 	void cleanup();

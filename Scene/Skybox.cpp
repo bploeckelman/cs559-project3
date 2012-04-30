@@ -30,6 +30,7 @@ instead of generating them itself and messing up the texture env mode
 #define GL_CLAMP_TO_EDGE 0x812F
 
 using namespace std;
+using namespace glm;
 
 // A way to print the Face enumeration values as strings
 const string face_names[] = { 
@@ -37,19 +38,30 @@ const string face_names[] = {
 	"left", "right", 
 	"top", "bottom" 
 };
-const string Skybox::directory("./Resources/images/skybox/");
+
+const string Skybox::dayDir("./Resources/images/skybox/day/");
+const string Skybox::nightDir("./Resources/images/skybox/night/");
+const string Skybox::directory = Skybox::nightDir;
+
 const float faceSize = 5.f;
-const float Skybox::vertices[] = {
-	-faceSize, -faceSize, 0.f,		// vertex 0
-	 faceSize, -faceSize, 0.f,		// vertex 3
-	 faceSize,  faceSize, 0.f,		// vertex 6 
-	-faceSize,  faceSize, 0.f		// vertex 9 
+const vec3 Skybox::vertices[] = 
+{
+	vec3(-faceSize, -faceSize, 0.f),
+	vec3( faceSize, -faceSize, 0.f),
+	vec3( faceSize,  faceSize, 0.f),
+	vec3(-faceSize,  faceSize, 0.f)
 };
-const float Skybox::texcoords[] = { 
-	0.f, 0.f,	// texcoord 0
-	1.f, 0.f,	// texcoord 2
-	1.f, 1.f,	// texcoord 4 
-	0.f, 1.f	// texcoord 6 
+const vec2 Skybox::texcoords[] = 
+{ 
+	vec2(0,0),
+	vec2(1,0),
+	vec2(1,1),
+	vec2(0,1)
+};
+const unsigned char Skybox::indices[] = 
+{
+	0, 2, 3, 
+	0, 1, 2
 };
 
 
@@ -87,38 +99,31 @@ bool Skybox::init()
 
 void Skybox::cleanup()
 {
-	for(auto t = textures.begin(); t != textures.end(); ++t)
-	{
-		if( (*t).second != 0 )
-			glDeleteTextures(1, &(*t).second);
-		else
-			cerr << "Error cleaning up skybox texture: " << endl 
-				 << "\tface: " << face_names[(*t).first] << endl;
-	}
+	for each(auto namedImage in textures)
+		delete namedImage.second;
+	textures.clear();
 }
 
-void Skybox::drawFace(const Face& face)//, const RenderState& state)
+void Skybox::drawFace(const Face& face)
 {
-	glBlendFunc(GL_ONE, GL_ZERO);
-
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textures[face]);
-
+	textures[face]->Bind();
 	glColor4f(1.f, 1.f, 1.f, 1.f);
-	glBegin(GL_QUADS);
-	glTexCoord2fv(&texcoords[0]);
-		glVertex3fv(&vertices[0]);
-	glTexCoord2fv(&texcoords[2]);
-		glVertex3fv(&vertices[3]);
-	glTexCoord2fv(&texcoords[4]);
-		glVertex3fv(&vertices[6]);
-	glTexCoord2fv(&texcoords[6]);
-		glVertex3fv(&vertices[9]);
-	glEnd();
+
+	glVertexPointer  (3, GL_FLOAT, 0, value_ptr( vertices[0]));
+	glTexCoordPointer(2, GL_FLOAT, 0, value_ptr(texcoords[0]));
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Skybox::render(const Camera& camera)
 {
+	glEnable(GL_TEXTURE_2D);
+	glDisable(GL_LIGHTING);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 
@@ -175,6 +180,12 @@ void Skybox::render(const Camera& camera)
 	glDepthMask(GL_TRUE);
 
 	glPopMatrix();
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_LIGHTING);
 }
 
 bool Skybox::buildTextureObjects(map<Face, string>& faceImages)
@@ -194,39 +205,23 @@ bool Skybox::buildTextureObjects(map<Face, string>& faceImages)
 			return false;
 		}
 
-		// Generate a new opengl texture object id
-		glGenTextures(1, &textures[face]);
-		glBindTexture(GL_TEXTURE_2D, textures[face]);
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-				
 		// Load the image file
+
 		stringstream ss;
 		ss << directory << filename; 
-		sf::Image image;
-		if( !image.LoadFromFile(ss.str()) ) 
+		textures[face] = new sf::Image(); 
+		if( !textures[face]->LoadFromFile(ss.str()) )
 		{
 			Log("Error opening : " + ss.str());
 			cout << "Error opening : " << ss.str() << endl;
 			return false;
 		}
 
-		// Generate the opengl TexImage
-		const unsigned int width  = image.GetWidth();
-		const unsigned int height = image.GetHeight(); 
-		const GLvoid* pixels = image.GetPixelsPtr();
-		glTexImage2D(
-			GL_TEXTURE_2D, 
-			0, 
-			GL_RGBA, 
-			width, height, 
-			0, 
-			GL_RGBA, 
-			GL_UNSIGNED_BYTE, 
-			pixels );
+		// Bind texture and update wrap mode
+		glEnable(GL_TEXTURE_2D);
+		textures[face]->Bind();
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 		// Unbind the texture
 		glBindTexture(GL_TEXTURE_2D, 0);
