@@ -7,7 +7,11 @@
 /************************************************************************/
 #include "Camera.h"
 
+#include <glm/glm.hpp>
+
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Image.hpp>
+#include <SFML/System/Clock.hpp>
 
 #include <string>
 #include <map>
@@ -20,27 +24,55 @@ class Skybox
 {
 public:
 	enum Face { front, back, left, right, top, bottom };
-	
+	typedef std::map<Skybox::Face, sf::Image*> FaceImageMap;
+
 	Skybox();
 	~Skybox();
 
 	void render(const Camera& camera);
+	
+	void setDay();
+	void setNight();
 
 private:
-	static const std::string directory;
-	static const float vertices[];
-	static const float texcoords[];
+	static const std::string dayDir;
+	static const std::string nightDir;
+	static std::string directory;
 
-	std::map<Face, GLuint> textures;
+	static const glm::vec3 vertices[]; 
+	static const glm::vec2 texcoords[]; 
+	static const unsigned char indices[];
+
+	FaceImageMap *textures;
+	FaceImageMap  dayTextures;
+	FaceImageMap  nightTextures;
+
+	sf::Clock timer;
+	bool toggleDayNight;  // true = day, false = night
 
 	bool init();
 	void cleanup();
 
 	void drawFace(const Face& face);
+	void drawSkybox(const Camera& camera);
+
+	bool getTextures();
 
 	bool buildTextureObjects(std::map<Face, std::string>& faceImages);
 	bool getFilenames(std::vector<std::string>& filenames);
 	bool getFaceImageMap(const std::vector<std::string>& filenames, 
 						 std::map<Face, std::string>& faceImages);
-
 };
+
+
+inline void Skybox::setDay() 
+{
+	toggleDayNight = true;
+	textures = &dayTextures;
+}
+
+inline void Skybox::setNight()
+{
+	toggleDayNight = false;
+	textures = &nightTextures;
+}
