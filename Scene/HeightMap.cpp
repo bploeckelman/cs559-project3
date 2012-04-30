@@ -37,36 +37,8 @@ HeightMap::HeightMap(const unsigned int width
 
 void HeightMap::render(Camera *camera)
 {
-<<<<<<< HEAD
-=======
+
 	glDisable(GL_LIGHTING); // TODO: calculate and store normals
-
-	const float groundScale = 0.25f;
-	const float heightScale = 2.f;
-
-	// Force the camera to stay above the heightmap
-	if( camera != nullptr )
-	{
-		glm::vec3 campos(camera->position());
-		glm::vec2 mapcoords(campos.z / groundScale, campos.x / groundScale);
-		if( mapcoords.x >= 0 && mapcoords.y >= 0
-		 && mapcoords.x < (heights.rows() - 1) && mapcoords.y < (heights.cols() - 1) )
-		{
-			const unsigned int x = static_cast<unsigned int>(mapcoords.x);
-			double influenceX = mapcoords.x - x;
-			const unsigned int y = static_cast<unsigned int>(mapcoords.y);
-			double influenceY = mapcoords.y - y;
-
-			double yHeight = (heightAt(x, y) * (1 - influenceY) + heightAt(x, y + 1) * influenceY);
-			double xHeight = (heightAt(x + 1, y) * (1 - influenceY) + heightAt(x + 1, y + 1) * influenceY);
-			const double height = (yHeight * (1 - influenceX) + xHeight * influenceX) * heightScale;
-
-			if( campos.y < height + 5.f ) 
-				camera->position(glm::vec3(campos.x, height + 5.f, campos.z));	
-
-		}
-	}
->>>>>>> 8787f972b60d839fcb359741fdebd6b865c468c0
 
 	const sf::Image& image = ImageManager::get().getImage(imageName);
 	image.Bind();
