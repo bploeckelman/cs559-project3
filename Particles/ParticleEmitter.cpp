@@ -168,6 +168,9 @@ void ParticleEmitter::render(const Camera& camera)
 
 	for each(const Particle& p in particles)
 	{
+		// Don't draw inactive particles
+		if( !p.active ) continue;
+
 		glPushMatrix();
 			// Move the particle into position and scale it  
 			const mat4 particleTransform(
