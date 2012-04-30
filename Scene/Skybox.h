@@ -23,22 +23,30 @@ class Skybox
 {
 public:
 	enum Face { front, back, left, right, top, bottom };
-	
+	typedef std::map<Skybox::Face, sf::Image*> FaceImageMap;
+
 	Skybox();
 	~Skybox();
 
 	void render(const Camera& camera);
+	
+	void setDay();
+	void setNight();
 
 private:
 	static const std::string dayDir;
 	static const std::string nightDir;
-	static const std::string directory;
+	static std::string directory;
 
 	static const glm::vec3 vertices[]; 
 	static const glm::vec2 texcoords[]; 
 	static const unsigned char indices[];
 
-	std::map<Face, sf::Image*> textures;
+	FaceImageMap *textures;
+	FaceImageMap  dayTextures;
+	FaceImageMap  nightTextures;
+
+	bool toggleDayNight;  // true = day, false = night
 
 	bool init();
 	void cleanup();
@@ -49,5 +57,17 @@ private:
 	bool getFilenames(std::vector<std::string>& filenames);
 	bool getFaceImageMap(const std::vector<std::string>& filenames, 
 						 std::map<Face, std::string>& faceImages);
-
 };
+
+
+inline void Skybox::setDay() 
+{
+	toggleDayNight = true;
+	textures = &dayTextures;
+}
+
+inline void Skybox::setNight()
+{
+	toggleDayNight = false;
+	textures = &nightTextures;
+}

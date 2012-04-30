@@ -168,8 +168,6 @@ void Scene::render( const Clock& clock )
 
 	fluid->render();
 
-	
-
 	glm::vec3 campos = camera->position();
 
 	for(unsigned int i = 0; i < objects.size(); ++i){
@@ -201,6 +199,10 @@ void Scene::handle(const Event& event)
 			fluid->displace();
 		if( event.Key.Code == Key::RControl )
 			camera->toggleMouseLook();
+		if( event.Key.Code == Key::N)
+			skybox.setNight();
+		if( event.Key.Code == Key::M)
+			skybox.setDay();
 		if( event.Key.Code == Key::Space )
 		{
 			vec3 position(linearRand(10.f, 40.f)

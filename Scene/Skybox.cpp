@@ -37,7 +37,7 @@ const string face_names[] = {
 
 const string Skybox::dayDir("./Resources/images/skybox/day/");
 const string Skybox::nightDir("./Resources/images/skybox/night/");
-const string Skybox::directory = Skybox::nightDir;
+string Skybox::directory = Skybox::nightDir;
 
 const float faceSize = 5.f;
 const vec3 Skybox::vertices[] = 
@@ -62,7 +62,10 @@ const unsigned char Skybox::indices[] =
 
 
 Skybox::Skybox()
-	: textures() 
+	: textures(nullptr) 
+	, dayTextures()
+	, nightTextures()
+	, toggleDayNight(true)
 {
 	if( !init() )
 		throw exception("Error initializing skybox.");
@@ -75,13 +78,18 @@ Skybox::~Skybox()
 
 bool Skybox::init()
 {
-	// Get filenames from the image file directory
+	// Get the day time textures -------------------
+	directory = dayDir;
+	textures  = &dayTextures;
+
 	vector<string> filenames;
+	map<Face, string> faceImages;
+
+	// Get filenames from the image file directory
 	if( !getFilenames(filenames) )
 		return false;
 
 	// Match each face to an image filename 
-	map<Face, string> faceImages;
 	if( !getFaceImageMap(filenames, faceImages) )
 		return false;
 
@@ -89,20 +97,51 @@ bool Skybox::init()
 	if( !buildTextureObjects(faceImages) )
 		return false;
 
+
+	// Get the night time textures -----------------
+	directory = nightDir;
+	textures  = &nightTextures;
+
+	filenames.clear();
+	faceImages.clear();
+
+	// Get filenames from the image file directory
+	if( !getFilenames(filenames) )
+		return false;
+
+	// Match each face to an image filename 
+	if( !getFaceImageMap(filenames, faceImages) )
+		return false;
+
+	// Generate texture objects for each image
+	if( !buildTextureObjects(faceImages) )
+		return false;
+
+	// Set textures to day -------------------------
+	textures = &dayTextures;
+	toggleDayNight = true;
+
 	cout << "Initialized skybox..." << endl;
 	return true;
 }
 
 void Skybox::cleanup()
 {
-	for each(auto namedImage in textures)
+	textures = nullptr;
+
+	for each(auto namedImage in dayTextures)
 		delete namedImage.second;
-	textures.clear();
+	dayTextures.clear();
+
+	for each(auto namedImage in nightTextures)
+		delete namedImage.second;
+	nightTextures.clear();
 }
 
 void Skybox::drawFace(const Face& face)
 {
-	textures[face]->Bind();
+	assert(textues != nullptr);
+	(*textures)[face]->Bind();
 	glColor4f(1.f, 1.f, 1.f, 1.f);
 
 	glVertexPointer  (3, GL_FLOAT, 0, value_ptr( vertices[0]));
@@ -202,11 +241,10 @@ bool Skybox::buildTextureObjects(map<Face, string>& faceImages)
 		}
 
 		// Load the image file
-
 		stringstream ss;
 		ss << directory << filename; 
-		textures[face] = new sf::Image(); 
-		if( !textures[face]->LoadFromFile(ss.str()) )
+		(*textures)[face] = new sf::Image(); 
+		if( !(*textures)[face]->LoadFromFile(ss.str()) )
 		{
 			Log("Error opening : " + ss.str());
 			cout << "Error opening : " << ss.str() << endl;
@@ -215,7 +253,7 @@ bool Skybox::buildTextureObjects(map<Face, string>& faceImages)
 
 		// Bind texture and update wrap mode
 		glEnable(GL_TEXTURE_2D);
-		textures[face]->Bind();
+		(*textures)[face]->Bind();
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
