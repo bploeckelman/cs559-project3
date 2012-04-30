@@ -114,12 +114,11 @@ void Fish::draw()
 
 }
 
-Fountain::Fountain(float x, float y, float z, float size, Camera& camera)
+Fountain::Fountain(float x, float y, float z, float size, ParticleEmitter& emitter)
 	: SceneObject(x, y, z)
 	 ,texture(ImageManager::get().getImage("fountain.png"))
+	 ,emitter(emitter)
 	 ,size(size)
-	 ,emitter(new FountainEmitter(glm::vec3(x, y, z), 5000, 10))
-	 ,camera(camera)
 {
 	fluid = new Fluid(
 		size*2 + 1,   // number of vertices wide
@@ -132,7 +131,6 @@ Fountain::Fountain(float x, float y, float z, float size, Camera& camera)
 		,y + .5f
 		,z - (size/2.f)
 	);
-	emitter->start();
 }
 
 Fountain::~Fountain()
@@ -141,7 +139,6 @@ Fountain::~Fountain()
 
 void Fountain::update(const sf::Clock &clock)
 {
-	emitter->update(clock.GetElapsedTime());
 	fluid->evaluate();
 }
 
@@ -259,5 +256,4 @@ void Fountain::draw()
 	glPopMatrix();
 
 	fluid->render();
-	emitter->render(camera);
 }

@@ -94,17 +94,25 @@ void Scene::setup()
 	objects.push_back(new Fish(40, .5, 40, sf::Color(255, 127, 0), heightmap));
 
 	// add particle systems
-	/*ParticleSystem *system = new ParticleSystem();
+	ParticleSystem *system = new ParticleSystem();
 	system->add(new FountainEmitter(vec3(25.f, 0.f, 25.f)));
 	system->start();
-	particleMgr.add(system);*/
+	particleMgr.add(system);
+
+	ParticleSystem *founSystem = new ParticleSystem();
+	FountainEmitter *fountain = new FountainEmitter(vec3(60.f, 1.75f, 60.f));
+	founSystem->add(fountain);
+	particleMgr.add(founSystem);
+
+
+	objects.push_back(new Fountain(60.f, 1.75f, 60.f, 5, *fountain));
 
 	// create and position cameras
 	cameras.push_back(Camera(heightmap, vec3(-2.5, 25.0, -2.5)   // position
 							,vec3(40.0, 135.0, 0.0)));// rotation
 	camera = &cameras[0];
 
-	objects.push_back(new Fountain(60.f, 1.75f, 60.f, 5, *camera));
+	
 }
 
 void Scene::setupLights()

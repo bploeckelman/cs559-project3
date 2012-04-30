@@ -35,15 +35,14 @@ public:
 class Fountain : public SceneObject{
 private:
 	float size;
-	ParticleEmitter* emitter;
+	ParticleEmitter& emitter;
 	Fluid* fluid;
-	Camera& camera;
 
 	sf::Image texture;
 
 public:
 	Fountain();
-	Fountain(float x, float y, float z, float size, Camera& camera);
+	Fountain(float x, float y, float z, float size, ParticleEmitter& emitter);
 
 	~Fountain();
 
