@@ -83,26 +83,28 @@ void Scene::setup()
 		0.5f,  // distance between vertices
 		0.03f, // time step for evaluation
 		4.0f,  // wave velocity
-		0.4f   // fluid viscosity
+		0.4f,	// fluid viscosity
+		0.f,
+		.75f,
+		0.f
 	);
 
 	// add Scene objects
-	
-
 	objects.push_back(new House(10, 4, 10, sf::Color(0, 255, 0)));
-	objects.push_back(new Fish(20, 0.5, 20, sf::Color(255, 127, 0)));
-	objects.push_back(new Fountain(30, 4, 30, 5, heightmap));
+	objects.push_back(new Fish(40, .5, 40, sf::Color(255, 127, 0), heightmap));
 
 	// add particle systems
-	ParticleSystem *system = new ParticleSystem();
+	/*ParticleSystem *system = new ParticleSystem();
 	system->add(new FountainEmitter(vec3(25.f, 0.f, 25.f)));
 	system->start();
-	particleMgr.add(system);
+	particleMgr.add(system);*/
 
 	// create and position cameras
 	cameras.push_back(Camera(heightmap, vec3(-2.5, 25.0, -2.5)   // position
 							,vec3(40.0, 135.0, 0.0)));// rotation
 	camera = &cameras[0];
+
+	objects.push_back(new Fountain(60.f, 1.75f, 60.f, 5, *camera));
 }
 
 void Scene::setupLights()

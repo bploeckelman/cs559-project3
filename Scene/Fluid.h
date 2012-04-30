@@ -38,6 +38,8 @@ public:
 	bool blend;  // Toggle alpha blending
 	bool light;  // Toggle lighting effects
 
+	glm::vec3 pos;
+
 	/**
 	* Fluid surface ctor
 	* n,m - width, height of vertex array
@@ -46,11 +48,13 @@ public:
 	*   c - wave velocity (0 < c < [(d/2t)*sqrt(mu*t + 2)])
 	*  mu - fluid viscosity
 	**/
-	Fluid(long n, long m, float d, float t, float c, float mu);
+	Fluid(long n, long m, float d, float t, float c, float mu, float posx, float posy, float posz);
 	~Fluid();
 
 	void render();
 
 	void evaluate();
 	void displace();
+
+	
 };

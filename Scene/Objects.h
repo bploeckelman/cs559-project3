@@ -8,19 +8,20 @@
 #include "SceneObject.h"
 #include "../Core/ImageManager.h"
 #include "HeightMap.h"
+#include "../Particles/Particles.h"
+#include "Fluid.h"
 
-class Objects{
-public:
-	void setup(const HeightMap& heights);
-}
+static void setupObjects(HeightMap& map);
 
 class Fish : public SceneObject{
 private:
 	sf::Color color;
+	int posNeg;
+	HeightMap& heightmap;
 
 public:
 	Fish();
-	Fish(float x, float y, float z, sf::Color color);
+	Fish(float x, float y, float z, sf::Color color, HeightMap& heightmap);
 
 	~Fish();
 
@@ -30,15 +31,19 @@ public:
 
 };
 
+
 class Fountain : public SceneObject{
 private:
 	float size;
+	ParticleEmitter* emitter;
+	Fluid* fluid;
+	Camera& camera;
 
 	sf::Image texture;
 
 public:
 	Fountain();
-	Fountain(float x, float y, float z, float size);
+	Fountain(float x, float y, float z, float size, Camera& camera);
 
 	~Fountain();
 

@@ -8,27 +8,15 @@
 #include <glm\glm.hpp>
 #include "../Utility/RenderUtils.h"
 #include <SFML\Graphics.hpp>
-
-
-static HeightMap& heightmap; 
+#include "../Particles/Particles.h"
 
 static float lastTime = 0.f;
 
-void Objects::setup(const HeightMap& shit)
-{
-	heightmap = shit;
-}
-
-Fish::Fish()
-	: color()
-	
-{
-
-}
-
-Fish::Fish(float x, float y, float z, sf::Color color)
+Fish::Fish(float x, float y, float z, sf::Color color, HeightMap& heightmap)
 	: SceneObject(x, y, z)
+	 ,posNeg(1)
 	 ,color(color)
+	 ,heightmap(heightmap)
 {
 }
 
@@ -36,9 +24,10 @@ Fish::~Fish()
 {
 }
 
+
 void Fish::update(const sf::Clock &clock)
 {
-	
+	//TODO: make this a little more flashy (all 3 axes instead of one, rotate instead of flip, fix minor visual glitch)
 	if(lastTime < .0001)
 	{
 		lastTime += clock.GetElapsedTime();
@@ -51,7 +40,25 @@ void Fish::update(const sf::Clock &clock)
 	float randz = sf::Randomizer::Random(0.f, .05f);
 	float randx = sf::Randomizer::Random(-.01f, .01f);
 
-	this->pos = glm::vec3(this->getPos().x + randx, this->getPos().y, this->getPos().z + randz);
+	glm::vec3 newPos = glm::vec3(this->getPos().x + randx, this->getPos().y, this->getPos().z + randz);
+	glm::vec2 mapcoords(newPos.z / heightmap.getGroundScale(), newPos.x / heightmap.getGroundScale());
+	if( mapcoords.x >= 0 && mapcoords.y >= 0
+		&& mapcoords.x < (heightmap.getHeights().rows() - 1) && mapcoords.y < (heightmap.getHeights().cols() - 1) )
+	{
+		const unsigned int x = static_cast<unsigned int>(mapcoords.x);
+		double influenceX = mapcoords.x - x;
+		const unsigned int y = static_cast<unsigned int>(mapcoords.y);
+		double influenceY = mapcoords.y - y;
+
+		double yHeight = (heightmap.heightAt(x, y) * (1 - influenceY) + heightmap.heightAt(x, y + 1) * influenceY);
+		double xHeight = (heightmap.heightAt(x + 1, y) * (1 - influenceY) + heightmap.heightAt(x + 1, y + 1) * influenceY);
+		const double height = (yHeight * (1 - influenceX) + xHeight * influenceX) * heightmap.getHeightScale();
+
+		if( height > .5f )		//need to reverse direction
+			posNeg *= -1;
+
+	}
+	this->pos = glm::vec3(this->getPos().x + randx, this->getPos().y, this->getPos().z + (randz * posNeg));
 }
 
 void Fish::draw()
@@ -68,7 +75,7 @@ void Fish::draw()
 
 	glPushMatrix();
 		glTranslated(pos.x, pos.y, pos.z);
-		glRotatef(90, 1, 0, 0);
+		glRotatef(90*posNeg, 1, 0, 0);
 		glPushMatrix();
 			glRotatef(180, 1, 0, 0);
 			glBegin(GL_QUADS);
@@ -107,17 +114,25 @@ void Fish::draw()
 
 }
 
-Fountain::Fountain()
-	: size()
-	
-{
-}
-
-Fountain::Fountain(float x, float y, float z, float size)
+Fountain::Fountain(float x, float y, float z, float size, Camera& camera)
 	: SceneObject(x, y, z)
-	 ,texture(ImageManager::get().getImage("roof.png"))
+	 ,texture(ImageManager::get().getImage("fountain.png"))
 	 ,size(size)
+	 ,emitter(new FountainEmitter(glm::vec3(x, y, z), 5000, 10))
+	 ,camera(camera)
 {
+	fluid = new Fluid(
+		size*2 + 1,   // number of vertices wide
+		size*4 + 1,   // number of vertices high
+		0.5f,  // distance between vertices
+		0.03f, // time step for evaluation
+		4.0f,  // wave velocity
+		0.4f   // fluid viscosity
+		,x - (size)
+		,y + .5f
+		,z - (size/2.f)
+	);
+	emitter->start();
 }
 
 Fountain::~Fountain()
@@ -126,50 +141,123 @@ Fountain::~Fountain()
 
 void Fountain::update(const sf::Clock &clock)
 {
+	emitter->update(clock.GetElapsedTime());
+	fluid->evaluate();
 }
 
 void Fountain::draw()
 {
 
 	glPushMatrix();
+		glTranslatef(pos.x, pos.y, pos.z);
 
-		glEnable(GL_TEXTURE_2D);
-		glTranslated(pos.x, pos.y, pos.z);
 		texture.Bind();
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-		const float nl = -5.5f * size;
-		const float pl =  .5f * size;
+		float l =  1.f * size;
+		float w =  0.5f * size;
+		const float height = .5f;
 
 		glBegin(GL_QUADS);
 			glNormal3d( 0,0,1);
-				glTexCoord2f(0.f,    0.f);glVertex3d(pl,pl,pl);
-				glTexCoord2f(size,    0.f);glVertex3d(nl,pl,pl);
-				glTexCoord2f(0.f,    size);glVertex3d(nl,nl,pl);
-				glTexCoord2f(size,   size);glVertex3d(pl,nl,pl);
+				glTexCoord2f(0.f,    0.f);glVertex3d(-w,-height,-l);
+				glTexCoord2f(size,    0.f);glVertex3d(w,-height,-l);
+				glTexCoord2f(size,    1.f);glVertex3d(w,height,-l);
+				glTexCoord2f(0.f,   1.f);glVertex3d(-w,height,-l);
 			glNormal3d( 0, 0, -1);
-				glTexCoord2f(0.f,    0.f);glVertex3d(pl,pl, nl);
-				glTexCoord2f(size,    size);glVertex3d(pl,nl, nl);
-				glTexCoord2f(0.f,    size);glVertex3d(nl,nl, nl);
-				glTexCoord2f(size,    0.f);glVertex3d(nl,pl, nl);
+				glTexCoord2f(0.f,    0.f);glVertex3d(w,-height, -l);
+				glTexCoord2f(size * 2,    0.f);glVertex3d(w,-height, l);
+				glTexCoord2f(size * 2,    1.f);glVertex3d(w,height, l);
+				glTexCoord2f(0.f,   1.f);glVertex3d(w,height, -l);
 			glNormal3d( 1,0,0);
-				glTexCoord2f(0.f,    0.f);glVertex3d(pl,pl,pl);
-				glTexCoord2f(size,   size);glVertex3d(pl,nl,pl);
-				glTexCoord2f(0.f,    size);glVertex3d(pl,nl,nl);
-				glTexCoord2f(size,   0.f);glVertex3d(pl,pl,nl);
+				glTexCoord2f(0.f,    0.f);glVertex3d(w,-height,l);
+				glTexCoord2f(size, 0.f);glVertex3d(-w,-height,l);
+				glTexCoord2f(size, 1.f);glVertex3d(-w,height,l);
+				glTexCoord2f(0.f,   1.f);glVertex3d(w,height,l);
 			glNormal3d(-1,0,0);
-				glTexCoord2f(0.f,    0.f);glVertex3d(nl,pl,pl);
-				glTexCoord2f(size,    0.f);glVertex3d(nl,pl,nl);
-				glTexCoord2f(0.f,    size);glVertex3d(nl,nl,nl);
-				glTexCoord2f(size,    size);glVertex3d(nl,nl,pl);
+				glTexCoord2f(0.f,    0.f);glVertex3d(-w,-height,l);
+				glTexCoord2f(size * 2, 0.f);glVertex3d(-w,-height,-l);
+				glTexCoord2f(size * 2, 1.f);glVertex3d(-w,height,-l);
+				glTexCoord2f(0.f,   1.f);glVertex3d(-w,height,l);
+		glEnd();
+		
+
+		l += 1;
+		w += 1;
+
+		glBegin(GL_QUADS);
+			glNormal3d(-1,0,0);
+				glTexCoord2f(size * 2,    0.f);glVertex3d(-w,-height,l);
+				glTexCoord2f(0.f, 0.f);glVertex3d(w,-height,l);
+				glTexCoord2f(0.f, 1.f);glVertex3d(w,height,l);
+				glTexCoord2f(size * 2,   1.f);glVertex3d(-w,height,l);
+
+			glNormal3d( 1,0,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(-w,-height,-l);
+				glTexCoord2f(0.f,  1.f);glVertex3d(-w,height,-l);
+				glTexCoord2f(size, 1.f);glVertex3d(w,height,-l);
+				glTexCoord2f(size,   0.f);glVertex3d(w,-height,-l);
+
+			glNormal3d( 0, 0, -1);
+				glTexCoord2f(0.f,    0.f);glVertex3d(w,-height, -l);
+				glTexCoord2f(0.f,    1.f);glVertex3d(w,height, -l);
+				glTexCoord2f(size * 2,    1.f);glVertex3d(w,height, l);
+				glTexCoord2f(size * 2,   0.f);glVertex3d(w,-height,l);
+
+
+			glNormal3d( 0,0,-1);
+				glTexCoord2f(0.f,    0.f);glVertex3d(-w,-height,-l);
+				glTexCoord2f(size * 2,    0.f);glVertex3d(-w,-height,l);
+				glTexCoord2f(size * 2,    1.f);glVertex3d(-w,height,l);
+				glTexCoord2f(0.f,   1.f);glVertex3d(-w,height,-l);
+
+			glNormal3d( 0,1,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(-w,-height,-l);
+				glTexCoord2f(size * 2,    0.f);glVertex3d(-w,-height,l);
+				glTexCoord2f(size * 2,    size);glVertex3d(w,-height,l);
+				glTexCoord2f(0.f,   size);glVertex3d(w,-height,-l);
+		
+			
+			
+		glEnd();
+
+		glBegin(GL_QUADS);
+
+			glNormal3d( 0,1,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(-w,height,-l);
+				glTexCoord2f(0.f,    1.f);glVertex3d(-w,height,-l+ 1);
+				glTexCoord2f(size,   1.f);glVertex3d(w,height,-l+ 1);
+				glTexCoord2f(size,   0.f);glVertex3d(w,height,-l);
+
+			glNormal3d( 0,1,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(-w,height,l-1);
+				glTexCoord2f(0.f,    1.f);glVertex3d(-w,height,l);
+				glTexCoord2f(size,   1.f);glVertex3d(w,height,l);
+				glTexCoord2f(size,   0.f);glVertex3d(w,height,l-1);
+
+			glNormal3d( 0,1,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(-w+1,height,-l+1);
+				glTexCoord2f(0.f,    1.f);glVertex3d(-w,height,-l+1);
+				glTexCoord2f(size*2,   1.f);glVertex3d(-w,height,l-1);
+				glTexCoord2f(size*2,   0.f);glVertex3d(-w+1,height,l-1);
+
+			glNormal3d( 0,1,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(w-1,height,l-1);
+				glTexCoord2f(0.f,    1.f);glVertex3d(w,height,l-1);
+				glTexCoord2f(size*2,   1.f);glVertex3d(w,height,-l+1);
+				glTexCoord2f(size*2,   0.f);glVertex3d(w-1,height,-l+1);
+		
+			
+			
 		glEnd();
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		glDisable(GL_TEXTURE_2D);
-
 	glPopMatrix();
+
+	fluid->render();
+	emitter->render(camera);
 }

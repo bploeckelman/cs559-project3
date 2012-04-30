@@ -25,7 +25,8 @@ using glm::vec3;
 *   c - wave velocity (0 < c < [(d/2t)*sqrt(mu*t + 2)])
 *  mu - fluid viscosity
 **/
-Fluid::Fluid( long n, long m, float d, float t, float c, float mu )
+Fluid::Fluid( long n, long m, float d, float t, float c, float mu, float posx, float posy, float posz )
+	:pos(glm::vec3(posx, posy, posz))
 {
 	width  = n;
 	height = m;
@@ -138,7 +139,7 @@ void Fluid::render()
 	glNormalPointer(GL_FLOAT, 0, normalArray);
 
 	glPushMatrix();
-		glTranslatef(0.f, 0.75f, 0.f); // TODO: remove this
+		glTranslatef(pos.z, pos.y, pos.x); 
 		glRotatef(90.f, 1.f, 0.f, 0.f);
 
 		glColor4f(0.0f, 0.8f, 1.0f, 0.5f);

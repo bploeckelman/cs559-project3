@@ -81,7 +81,7 @@ void Camera::update(const sf::Clock& clock, const sf::Input& input)
 	glm::vec3 campos(this->position());
 	glm::vec2 mapcoords(campos.z / heightmap.getGroundScale(), campos.x / heightmap.getGroundScale());
 	if( mapcoords.x >= 0 && mapcoords.y >= 0
-		&& mapcoords.x < (heightmap.getHeights()->rows() - 1) && mapcoords.y < (heightmap.getHeights()->cols() - 1) )
+		&& mapcoords.x < (heightmap.getHeights().rows() - 1) && mapcoords.y < (heightmap.getHeights().cols() - 1) )
 	{
 		const unsigned int x = static_cast<unsigned int>(mapcoords.x);
 		double influenceX = mapcoords.x - x;
