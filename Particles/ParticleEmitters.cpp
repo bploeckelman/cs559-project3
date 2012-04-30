@@ -74,7 +74,7 @@ FountainEmitter::FountainEmitter( const glm::vec3& position
 {
 	add(new ScaleDownAffector(this, 0.f, 10.f));
 	add(new FadeOutAffector(this, 0.f, 20.f));
-	add(new ForceAffector(this, vec3(0,-5,0)));
+	add(new ForceAffector(this, vec3(0,-5.f,0)));
 
 	setBlendMode(ALPHA);
 	setPosition(position);

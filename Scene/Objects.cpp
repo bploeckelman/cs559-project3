@@ -38,7 +38,7 @@ void Fish::update(const sf::Clock &clock)
 		lastTime = 0;
 	}
 	float randz = sf::Randomizer::Random(0.f, .05f);
-	float randx = sf::Randomizer::Random(-.01f, .01f);
+	float randx = sf::Randomizer::Random(-.02f, .02f);
 
 	glm::vec3 newPos = glm::vec3(this->getPos().x + randx, this->getPos().y, this->getPos().z + randz);
 	glm::vec2 mapcoords(newPos.z / heightmap.getGroundScale(), newPos.x / heightmap.getGroundScale());
@@ -54,7 +54,7 @@ void Fish::update(const sf::Clock &clock)
 		double xHeight = (heightmap.heightAt(x + 1, y) * (1 - influenceY) + heightmap.heightAt(x + 1, y + 1) * influenceY);
 		const double height = (yHeight * (1 - influenceX) + xHeight * influenceX) * heightmap.getHeightScale();
 
-		if( height > .5f )		//need to reverse direction
+		if( height > this->getPos().y )		//need to reverse direction
 			posNeg *= -1;
 
 	}
@@ -75,7 +75,7 @@ void Fish::draw()
 
 	glPushMatrix();
 		glTranslated(pos.x, pos.y, pos.z);
-		glRotatef(90*posNeg, 1, 0, 0);
+		glRotatef(90*posNeg, 1.f, 0.f, 0.f);
 		glPushMatrix();
 			glRotatef(180, 1, 0, 0);
 			glBegin(GL_QUADS);
@@ -128,23 +128,30 @@ Fountain::Fountain(float x, float y, float z, float size, ParticleEmitter& emitt
 		4.0f,  // wave velocity
 		0.4f   // fluid viscosity
 		,x - (size)
-		,y + .5f
+		,y + .25f
 		,z - (size/2.f)
 	);
 }
 
 Fountain::~Fountain()
 {
+	delete fluid;
 }
 
 void Fountain::update(const sf::Clock &clock)
 {
-	fluid->evaluate();
+	for each(auto particle in emitter.getParticles())
+	{
+		if(particle.position.y <= .25f)
+			fluid->displace(particle.position.x, particle.position.z);
+			particle.active = false;
+	}
+	//fluid->evaluate();		enabling this causes it to crash
 }
 
 void Fountain::draw()
 {
-
+	glColor3f(1.0, 1.0, 1.0);
 	glPushMatrix();
 		glTranslatef(pos.x, pos.y, pos.z);
 

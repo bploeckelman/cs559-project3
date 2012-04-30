@@ -92,15 +92,19 @@ void Scene::setup()
 	// add Scene objects
 	objects.push_back(new House(10, 4, 10, sf::Color(0, 255, 0)));
 	objects.push_back(new Fish(40, .5, 40, sf::Color(255, 127, 0), heightmap));
+	objects.push_back(new Fish(30, .5, 50, sf::Color(255, 127, 0), heightmap));
+	objects.push_back(new Fish(50, .5, 30, sf::Color(255, 127, 0), heightmap));
+	objects.push_back(new Fish(35, .5, 50, sf::Color(255, 127, 0), heightmap));
+	objects.push_back(new Fish(50, .5, 35, sf::Color(255, 127, 0), heightmap));
 
 	// add particle systems
-	ParticleSystem *system = new ParticleSystem();
+	/*ParticleSystem *system = new ParticleSystem();
 	system->add(new FountainEmitter(vec3(25.f, 0.f, 25.f)));
 	system->start();
-	particleMgr.add(system);
+	particleMgr.add(system);*/
 
 	ParticleSystem *founSystem = new ParticleSystem();
-	FountainEmitter *fountain = new FountainEmitter(vec3(60.f, 1.75f, 60.f));
+	FountainEmitter *fountain = new FountainEmitter(vec3(60.f, 5.f, 60.f));
 	founSystem->add(fountain);
 	particleMgr.add(founSystem);
 
