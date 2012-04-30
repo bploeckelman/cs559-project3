@@ -260,9 +260,8 @@ void ParticleEmitter::emitParticles(const float delta)
 			// Prevent div-0
 			if( emissionRate > 0.f ) 
 			{
-				int diff = static_cast<int>(
-					std::floor(emissionRate * emissionCounter + 0.5f));
-				numParticlesToEmit -= diff;
+				int diff = static_cast<int>(std::ceil(emissionRate * emissionCounter + 0.5f));
+				numParticlesToEmit = diff;
 				emissionCounter -= numParticlesToEmit / emissionRate;
 			}
 			else

@@ -90,6 +90,12 @@ void Scene::setup()
 	objects.push_back(new House(10, 4, 10, sf::Color(0, 255, 0)));
 	objects.push_back(new Fish(20, 0.5, 20, sf::Color(255, 127, 0)));
 
+	// add particle systems
+	ParticleSystem *system = new ParticleSystem();
+	system->add(new FountainEmitter(vec3(25.f, 0.f, 25.f)));
+	system->start();
+	particleMgr.add(system);
+
 	// create and position cameras
 	cameras.push_back(Camera(vec3(-2.5, 25.0, -2.5)   // position
 							,vec3(40.0, 135.0, 0.0)));// rotation
@@ -196,7 +202,6 @@ void Scene::handle(const Event& event)
 			camera->toggleMouseLook();
 		if( event.Key.Code == Key::Space )
 		{
-			fluid->displace();
 			vec3 position(linearRand(10.f, 40.f)
 						, linearRand(10.f, 20.f)
 						, linearRand(10.f, 40.f));
