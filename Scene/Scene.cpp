@@ -52,9 +52,8 @@ void Scene::setup()
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_POINTS);
-	glEnable(GL_POINT_SMOOTH);
 	glPointSize(5.f);
-	glLineWidth(3.f);
+	glLineWidth(1.f);
 
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_COLOR_MATERIAL);
@@ -88,6 +87,9 @@ void Scene::setup()
 		.75f,
 		0.f
 	);
+	
+	// generate a new mesh for testing
+	mesh = new Mesh(64, 64, 5.f);
 
 	// add Scene objects
 	objects.push_back(new House(10, 4, 10, sf::Color(0, 255, 0)));
@@ -170,8 +172,9 @@ void Scene::render( const Clock& clock )
 	camera->apply();
 
 	skybox.render(*camera);
-	heightmap.render(camera);
-
+//	heightmap.render(camera);
+	mesh->render();
+/*
 	for each(auto object in objects)
 		object->draw();
 
@@ -242,5 +245,12 @@ void Scene::init()
 void Scene::cleanup()
 {
 	Log("\nCleaning up scene...");
+
+	for each(auto obj in objects)
+		delete obj;
+	objects.clear();
+
+	delete mesh;
+
 	delete fluid;
 }

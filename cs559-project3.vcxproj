@@ -135,6 +135,7 @@
     <ClInclude Include="Utility\dirent.h" />
     <ClInclude Include="Utility\Logger.h" />
     <ClInclude Include="Utility\Matrix2d.h" />
+    <ClInclude Include="Utility\Mesh.h" />
     <ClInclude Include="Utility\Plane.h" />
     <ClInclude Include="Utility\RenderUtils.h" />
   </ItemGroup>
@@ -180,6 +181,7 @@
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\Skybox.cpp" />
     <ClCompile Include="Utility\Logger.cpp" />
+    <ClCompile Include="Utility\Mesh.cpp" />
     <ClCompile Include="Utility\RenderUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
