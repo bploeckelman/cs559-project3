@@ -32,12 +32,11 @@ HeightMap::HeightMap(const unsigned int width
 	, heightScale(heightScale)
 	, imageName("")
 {
-	randomize();
+	randomizeGaussian();
 }
 
 void HeightMap::render(Camera *camera)
 {
-
 	glDisable(GL_LIGHTING); // TODO: calculate and store normals
 
 	const sf::Image& image = ImageManager::get().getImage(imageName);
@@ -84,7 +83,7 @@ void HeightMap::render(Camera *camera)
 	glEnable(GL_LIGHTING); // TODO: calculate and store normals
 }
 
-void HeightMap::randomize()
+void HeightMap::randomizeGaussian()
 {
 	for(unsigned int row = 0; row < heights.rows(); ++row)
 	for(unsigned int col = 0; col < heights.cols(); ++col)
@@ -108,8 +107,7 @@ void HeightMap::loadFromImage( const std::string& filename )
 	for(unsigned int x = 0; x < width;  ++x)
 	{
 		const sf::Color pixel  = image.GetPixel(x,y);
-//		const double grey = static_cast<double>(pixel.r) / 255.0;
-//		heights(y,x) = grey;
+		// Use luminance value to determine height in [0,1]
 		const double lum = 0.299 * (pixel.r / 255.0)
 						 + 0.587 * (pixel.g / 255.0)
 						 + 0.114 * (pixel.b / 255.0);
