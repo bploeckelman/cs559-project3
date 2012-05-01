@@ -14,17 +14,15 @@ namespace sf { class Image; }
 
 class Mesh
 {
-private:
-	std::vector<sf::Image*> textures;
+protected:
+	std::vector<const sf::Image*> textures;
 
 	glm::vec4 *colors;
 	glm::vec3 *vertices;
 	glm::vec3 *normals;
 
-	// TODO: store multi-texture coords in a more general way
-	glm::vec2 *texcoords0;
-	glm::vec2 *texcoords1;
-	glm::vec2 *texcoords2;
+	// TODO: store multi-texture coords
+	glm::vec2 *texcoords;
 
 	unsigned int *indices;
 
@@ -48,25 +46,71 @@ public:
 	// Create a mesh with the specified dimension
 	Mesh( const unsigned int width
 		, const unsigned int height
-		, const float spread );
+		, const float spread = 1.f );
 	// Create a mesh by loading an image with the specified filename
-	Mesh( const std::string& imageFileName );
+	Mesh( const std::string& imageFileName
+		, const float spread = 1.f);
 	// Create a mesh by loading displacement data from the specified image
-	Mesh( const sf::Image& image );
+	Mesh( const sf::Image& image
+		, const float spread = 1.f );
 	
+	// Deallocate mesh resources
 	~Mesh();
 
 	// Render this mesh to the screen in the positive quadrant of the XZ-plane
 	void render() const;
 
-	void addTexture(sf::Image *texture);
+	// TODO: add texture coordinates too?
+	// Add a new texture layer to this mesh
+	void addTexture(const sf::Image *texture);
+
+	void toggleBlending();
+	void toggleLighting();
+	void toggleWireframe();
+
+	int getWidth()        const;
+	int getHeight()       const;
+	int getNumIndices()   const;
+	int getNumVertices()  const;
+	int getNumTriangles() const;
 
 private:
 	// Non-copyable
 	Mesh(const Mesh& other);
 	void operator=(const Mesh& other);
 
+	// Helper methods for the constructors
+	void initialize();
+	void initialize(const unsigned int width
+				  , const unsigned int height
+				  , const float spread);
+	void initialize(const std::string& imageFileName
+				  , const float spread);
+	void initialize(const sf::Image& image
+				  , const float spread);
+
+	// Generate indices for a planar mesh
 	void generateArrayIndices();
+	// Generate vertices in the XZ-plane
+	void regenerateArrays( const unsigned int w
+						 , const unsigned int h
+						 , const float s );
+	
+	// Clean up memory and zero out all members
+	void dropMesh();
+
+	void zeroMembers();
+
 };
 
-inline void Mesh::addTexture(sf::Image *texture) { textures.push_back(texture); }
+inline void Mesh::addTexture(const sf::Image *texture) { textures.push_back(texture); }
+
+inline int Mesh::getWidth()        const { return width; }
+inline int Mesh::getHeight()       const { return height; }
+inline int Mesh::getNumIndices()   const { return numIndices; }
+inline int Mesh::getNumVertices()  const { return numVertices; }
+inline int Mesh::getNumTriangles() const { return numTriangles; }
+
+inline void Mesh::toggleBlending()  { blend = !blend; }
+inline void Mesh::toggleLighting()  { light = !light; }
+inline void Mesh::toggleWireframe() { fill  = !fill; }

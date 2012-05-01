@@ -4,6 +4,7 @@
 /* A simple 3d triangle mesh 
 /************************************************************************/
 #include "Mesh.h"
+#include "../Core/ImageManager.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/random.hpp>
@@ -20,144 +21,49 @@ using namespace glm;
 
 
 Mesh::Mesh()
-	: textures     ()
-	, colors       (nullptr)
-	, vertices     (nullptr)
-	, normals      (nullptr)
-	, texcoords0   (nullptr)
-	, texcoords1   (nullptr)
-	, texcoords2   (nullptr)
-	, indices      (nullptr)
-	, width        (0)
-	, height       (0)
-	, numVertices  (0)
-	, numTriangles (0)
-	, numIndices   (0)
-	, blend        (false)
-	, light        (false)
-	, fill         (false)
-{ }
+{
+	initialize();
+}
 
 Mesh::Mesh( const unsigned int width
 		  , const unsigned int height
 		  , const float spread )
-	: textures()
-	, indices (nullptr)
-	, width   (width)
-	, height  (height)
-	, blend   (false)
-	, light   (false)
-	, fill    (false)
 {
-	numVertices  = width * height;
-	numTriangles = 2 * (width - 1) * (height - 1);
-	numIndices   = 3 * numTriangles;
-
-	colors     = new vec4[numVertices];
-	vertices   = new vec3[numVertices];
-	normals    = new vec3[numVertices];
-	texcoords0 = new vec2[numVertices];
-	texcoords1 = nullptr;
-	texcoords2 = nullptr;
-//	texcoords1 = new vec2[numVertices];
-//	texcoords2 = new vec2[numVertices];
-
-	for(unsigned int i = 0, x = 0, z = 0; 
-		i < numVertices; ++i)
-	{
-		const float xx = spread * x;// / width;
-		const float zz = spread * z;// / height;
-
-		colors[i]     = vec4(1.f, 1.f, 1.f, 1.f);
-		vertices[i]   = vec3(xx, 0.f, zz);
-		normals[i]    = vec3(0.f, 1.f, 0.f);
-		texcoords0[i] = vec2(0.f, 0.f);
-//		texcoords1[i] = vec2(0.f, 0.f);
-//		texcoords2[i] = vec2(0.f, 0.f);
-
-		if( ++x >= width )
-		{
-			x = 0;
-			++z;
-		}
-	}
-
-	generateArrayIndices();
+	initialize(width, height, spread);
 }
 
-Mesh::Mesh( const string& imageFileName )
-	: textures     ()
-	, colors       (nullptr)
-	, vertices     (nullptr)
-	, normals      (nullptr)
-	, texcoords0   (nullptr)
-	, texcoords1   (nullptr)
-	, texcoords2   (nullptr)
-	, indices      (nullptr)
-	, width        (0)
-	, height       (0)
-	, numVertices  (0)
-	, numTriangles (0)
-	, numIndices   (0)
-	, blend        (false)
-	, light        (false)
-	, fill         (false)
+Mesh::Mesh( const string& imageFileName
+		  , const float spread )
 {
-	// TODO
-//  const sf::Image& image = ImageManager::get().getImage(imageFileName);
-//	loadFromImage(image);
+	initialize(imageFileName, spread);
 }
 
-Mesh::Mesh( const sf::Image& image )
-	: textures     ()
-	, colors       (nullptr)
-	, vertices     (nullptr)
-	, normals      (nullptr)
-	, texcoords0   (nullptr)
-	, texcoords1   (nullptr)
-	, texcoords2   (nullptr)
-	, indices      (nullptr)
-	, width        (0)
-	, height       (0)
-	, numVertices  (0)
-	, numTriangles (0)
-	, numIndices   (0)
-	, blend        (false)
-	, light        (false)
-	, fill         (false)
+Mesh::Mesh( const sf::Image& image
+		  , const float spread )
 {
-	// TODO
-//	loadFromImage(image);
+	initialize(image, spread);
 }
 
 Mesh::~Mesh()
 {
-	delete[] indices;
-	delete[] texcoords2;
-	delete[] texcoords1;
-	delete[] texcoords0;
-	delete[] normals;
-	delete[] vertices;
-	delete[] colors;
-	textures.clear();
+	dropMesh();
 }
 
 void Mesh::render() const
 {
-	assert(colors != nullptr);
-	assert(vertices != nullptr);
-	assert(normals != nullptr);
-//	assert(texcoords0 != nullptr);
-	assert(indices != nullptr);
-
 	// TODO: texture toggle
 	glDisable(GL_TEXTURE_2D);
+//	glEnable(GL_TEXTURE_2D);
+//	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+//	assert(texcoords != nullptr);
+//	glTexCoordPointer(2, GL_FLOAT, 0, value_ptr(texcoords[0]));
 
 	// Set lighting state -------------------------
 	if( light )
 	{
 		glEnable(GL_LIGHTING);
 		glEnableClientState(GL_NORMAL_ARRAY);
+		assert(normals != nullptr);
 		glNormalPointer(GL_FLOAT, 0, value_ptr(normals[0]));
 	}
 	else
@@ -182,9 +88,12 @@ void Mesh::render() const
 	glEnableClientState(GL_COLOR_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);
 
+	assert(colors   != nullptr);
+	assert(vertices != nullptr);
 	glColorPointer (4, GL_FLOAT, 0, value_ptr(colors[0]));
 	glVertexPointer(3, GL_FLOAT, 0, value_ptr(vertices[0]));
 
+	assert(indices != nullptr);
 	glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, indices);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -208,7 +117,10 @@ void Mesh::render() const
 	else
 		glEnable(GL_LIGHTING);
 
+	// TODO: texture toggle
 	glEnable(GL_TEXTURE_2D);
+//	glDisable(GL_TEXTURE_2D);
+//	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 void Mesh::generateArrayIndices()
@@ -238,4 +150,140 @@ void Mesh::generateArrayIndices()
 		indices[i++] = i2;
 		indices[i++] = i3;
 	}
+}
+
+void Mesh::regenerateArrays( const unsigned int w
+						   , const unsigned int h
+						   , const float s )
+{
+	width  = w;
+	height = h;
+	numVertices  = width * height;
+	numTriangles = 2 * (width - 1) * (height - 1);
+	numIndices   = 3 * numTriangles;
+
+	colors    = new vec4[numVertices];
+	vertices  = new vec3[numVertices];
+	normals   = new vec3[numVertices];
+	texcoords = new vec2[numVertices];
+
+	for(unsigned int i = 0, x = 0, z = 0; 
+		i < numVertices; ++i)
+	{
+		const float xx = s * x;
+		const float zz = s * z;
+
+		colors[i]    = vec4(1.f, 1.f, 1.f, 1.f);
+		vertices[i]  = vec3(xx, 0.f, zz);
+		normals[i]   = vec3(0.f, 1.f, 0.f);
+		texcoords[i] = vec2(x / width, z / height);
+
+		if( ++x >= width )
+		{
+			x = 0;
+			++z;
+		}
+	}
+}
+
+void Mesh::dropMesh()
+{
+	if( indices   != nullptr ) delete[] indices;
+	if( texcoords != nullptr ) delete[] texcoords;
+	if( normals   != nullptr ) delete[] normals;
+	if( vertices  != nullptr ) delete[] vertices;
+	if( colors    != nullptr ) delete[] colors;
+	textures.clear();
+
+	zeroMembers();
+}
+
+
+void Mesh::initialize()
+{
+	zeroMembers();
+}
+
+void Mesh::initialize( const unsigned int width
+					 , const unsigned int height
+					 , const float spread )
+{
+	zeroMembers();
+	regenerateArrays(width, height, spread);
+	generateArrayIndices();
+}
+
+void Mesh::initialize( const string& imageFileName
+					 , const float spread )
+{
+	zeroMembers();
+	initialize(ImageManager::get().getImage(imageFileName), spread);
+}
+
+void Mesh::initialize( const sf::Image& image
+					 , const float spread )
+{
+	zeroMembers();
+
+	width  = image.GetWidth();
+	height = image.GetHeight();
+	numVertices  = width * height;
+	numTriangles = 2 * (width - 1) * (height - 1);
+	numIndices   = 3 * numTriangles;
+
+	colors    = new vec4[numVertices];
+	vertices  = new vec3[numVertices];
+	normals   = new vec3[numVertices];
+	texcoords = new vec2[numVertices];
+
+	for(unsigned int i = 0, x = 0, z = 0; 
+		i < numVertices; ++i)
+	{
+		// Use pixel color value for base vertex color
+		const sf::Color pixel  = image.GetPixel(x,z);
+		const float r = pixel.r / 255.f;
+		const float g = pixel.g / 255.f;
+		const float b = pixel.b / 255.f;
+		const float a = pixel.a / 255.f;
+
+		colors[i] = vec4(r,g,b,a);
+
+		// Use luminance value to determine height in [0,1]
+		const float xx = spread * x;
+		const float zz = spread * z;
+		const float lum = 0.299f * r + 0.587f * g + 0.114f * b; 
+
+		// TODO: expose this scaling factor
+		vertices[i]  = vec3(xx, 20.f * lum, zz);
+
+		// TODO: calculate normals based on neighboring verts
+		normals[i]   = vec3(0.f, 1.f, 0.f);
+
+		texcoords[i] = vec2(x / width, z / height);
+
+		if( ++x >= width )
+		{
+			x = 0;
+			++z;
+		}
+	}
+
+	generateArrayIndices();
+}
+
+void Mesh::zeroMembers()
+{
+	colors       = nullptr;
+	vertices     = nullptr;
+	normals      = nullptr;
+	texcoords    = nullptr;
+	indices      = nullptr;
+	width        = 0;
+	height       = 0;
+	numVertices  = 0;
+	numTriangles = 0;
+	numIndices   = 0;
+	blend        = false;
+	light        = false;
+	fill         = false;
 }

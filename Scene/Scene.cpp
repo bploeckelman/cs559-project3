@@ -89,7 +89,8 @@ void Scene::setup()
 	);
 	
 	// generate a new mesh for testing
-	mesh = new Mesh(64, 64, 5.f);
+//	mesh = new Mesh(64, 64, 5.f);
+	mesh = new Mesh("heightmap-test.png", 5.f);
 
 	// add Scene objects
 	objects.push_back(new House(10, 4, 10, sf::Color(0, 255, 0)));
@@ -172,7 +173,7 @@ void Scene::render( const Clock& clock )
 	camera->apply();
 
 	skybox.render(*camera);
-//	heightmap.render(camera);
+	heightmap.render(camera);
 	mesh->render();
 /*
 	for each(auto object in objects)
@@ -209,6 +210,8 @@ void Scene::handle(const Event& event)
 			fluid->blend = !fluid->blend;
 		if( event.Key.Code == Key::Space ) 
 			fluid->displace();
+		if( event.Key.Code == Key::Num3)
+			mesh->toggleWireframe();
 		if( event.Key.Code == Key::RControl )
 			camera->toggleMouseLook();
 		if( event.Key.Code == Key::N)
