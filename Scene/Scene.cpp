@@ -104,15 +104,12 @@ void Scene::setup()
 	founSystem->add(fountain);
 	particleMgr.add(founSystem);
 
-
 	objects.push_back(new Fountain(60.f, 1.75f, 60.f, 5, *fountain));*/
 
 	// create and position cameras
 	cameras.push_back(Camera(heightmap, vec3(-2.5, 25.0, -2.5)   // position
 							,vec3(40.0, 135.0, 0.0)));// rotation
 	camera = &cameras[0];
-
-	
 }
 
 void Scene::setupLights()
@@ -179,7 +176,7 @@ void Scene::render( const Clock& clock )
 		object->draw();
 
 	fluid->render();
-
+/*
 	glm::vec3 campos = camera->position();
 
 	for(unsigned int i = 0; i < objects.size(); ++i){
@@ -192,7 +189,7 @@ void Scene::render( const Clock& clock )
 		if((campos.z < objects[i]->getPosEdge().z + 1.5f && campos.z > objects[i]->getPos().z) && campos.x > objects[i]->getNegEdge().x && campos.x < objects[i]->getPosEdge().x)
 			camera->position(glm::vec3(campos.x, campos.y, objects[i]->getPosEdge().z + 1.5f));
 	}
-
+*/
 	Render::basis();
 
 	particleMgr.render(*camera);

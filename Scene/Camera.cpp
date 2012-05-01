@@ -76,7 +76,7 @@ void Camera::update(const sf::Clock& clock, const sf::Input& input)
 	_view = glm::rotate(_view, _rotation.y, yAxis);
 	_view = glm::rotate(_view, _rotation.z, zAxis);
 	_view = glm::translate(_view, -_position);
-
+/* TODO: this causes heavy slowdown on my system when moving over the heightmap
 	// Force the camera to stay above the heightmap
 	glm::vec3 campos(this->position());
 	glm::vec2 mapcoords(campos.z / heightmap.getGroundScale(), campos.x / heightmap.getGroundScale());
@@ -96,11 +96,11 @@ void Camera::update(const sf::Clock& clock, const sf::Input& input)
 			this->position(glm::vec3(campos.x, height + 5.f, campos.z));	
 
 	}
+*/
 }
 
 void Camera::processInput(const Input& input, const Clock& clock)
 {
-
 	if( input.IsKeyDown(Key::Left))		turn(left,  1.0, clock);
 	if( input.IsKeyDown(Key::Right))	turn(right, 1.0, clock);
 	if( input.IsKeyDown(Key::Up))		turn(up,    1.0, clock);
@@ -121,16 +121,16 @@ void Camera::processInput(const Input& input, const Clock& clock)
 	}
 
 	float moveSpeed   = 0.f;
-	if( input.IsKeyDown(Key::W) )		moveSpeed = -0.1f;
-	if( input.IsKeyDown(Key::S) )		moveSpeed =  0.1f;
+	if( input.IsKeyDown(Key::W) )		moveSpeed = -0.5f;
+	if( input.IsKeyDown(Key::S) )		moveSpeed =  0.5;
 
 	float strafeSpeed = 0.f;
-	if( input.IsKeyDown(Key::A) )		strafeSpeed =  0.1f;
-	if( input.IsKeyDown(Key::D) )		strafeSpeed = -0.1f;
+	if( input.IsKeyDown(Key::A) )		strafeSpeed =  0.4f;
+	if( input.IsKeyDown(Key::D) )		strafeSpeed = -0.4f;
 
 	move(moveSpeed,strafeSpeed);
 
-	const float y = 0.1f;
+	const float y = 0.5f;
 	if( input.IsKeyDown(Key::Q) )		moveY(-y);
 	if( input.IsKeyDown(Key::E) )		moveY(y);
 
