@@ -93,12 +93,12 @@ void Scene::setup()
 	mesh = new Mesh("heightmap-test.png", 5.f);
 
 	// add Scene objects
-	objects.push_back(new House(10, 4, 10, sf::Color(0, 255, 0)));
-	objects.push_back(new Fish(40, .5, 40, sf::Color(255, 127, 0), heightmap));
-	objects.push_back(new Fish(30, .5, 50, sf::Color(255, 127, 0), heightmap));
-	objects.push_back(new Fish(50, .5, 30, sf::Color(255, 127, 0), heightmap));
-	objects.push_back(new Fish(35, .5, 50, sf::Color(255, 127, 0), heightmap));
-	objects.push_back(new Fish(50, .5, 35, sf::Color(255, 127, 0), heightmap));
+	objects.push_back(new House(glm::vec3(10, 4, 10), sf::Color(0, 255, 0)));
+	objects.push_back(new Fish(glm::vec3(40, .5, 40), sf::Color(255, 127, 0), heightmap, *fluid));
+	objects.push_back(new Fish(glm::vec3(30, .5, 50), sf::Color(255, 127, 0), heightmap, *fluid));
+	objects.push_back(new Fish(glm::vec3(50, .5, 30), sf::Color(255, 127, 0), heightmap, *fluid));
+	objects.push_back(new Fish(glm::vec3(35, .5, 50), sf::Color(255, 127, 0), heightmap, *fluid));
+	objects.push_back(new Fish(glm::vec3(50, .5, 35), sf::Color(255, 127, 0), heightmap, *fluid));
 
 	// add particle systems
 	/*ParticleSystem *system = new ParticleSystem();
@@ -111,7 +111,8 @@ void Scene::setup()
 	founSystem->add(fountain);
 	particleMgr.add(founSystem);
 
-	objects.push_back(new Fountain(60.f, 1.75f, 60.f, 5, *fountain));*/
+
+	objects.push_back(new Fountain(glm::vec3(60.f, 1.75f, 60.f), 5, *fountain));
 
 	// create and position cameras
 	cameras.push_back(Camera(heightmap, vec3(-2.5, 25.0, -2.5)   // position
@@ -187,7 +188,7 @@ void Scene::render( const Clock& clock )
 /*
 	glm::vec3 campos = camera->position();
 
-	for(unsigned int i = 0; i < objects.size(); ++i){
+	/*for(unsigned int i = 0; i < objects.size(); ++i){
 		if((campos.x > objects[i]->getNegEdge().x - 1.5f && campos.x < objects[i]->getPos().x) && campos.z > objects[i]->getNegEdge().z && campos.z < objects[i]->getPosEdge().z)
 			camera->position(glm::vec3(objects[i]->getNegEdge().x - 1.5f, campos.y, campos.z));
 		if((campos.x < objects[i]->getPosEdge().x + 1.5f && campos.x > objects[i]->getPos().x) && campos.z > objects[i]->getNegEdge().z && campos.z < objects[i]->getPosEdge().z)
@@ -196,8 +197,9 @@ void Scene::render( const Clock& clock )
 			camera->position(glm::vec3(campos.x, campos.y, objects[i]->getNegEdge().z - 1.5f));
 		if((campos.z < objects[i]->getPosEdge().z + 1.5f && campos.z > objects[i]->getPos().z) && campos.x > objects[i]->getNegEdge().x && campos.x < objects[i]->getPosEdge().x)
 			camera->position(glm::vec3(campos.x, campos.y, objects[i]->getPosEdge().z + 1.5f));
-	}
-*/
+
+	}*/
+
 	Render::basis();
 
 	particleMgr.render(*camera);

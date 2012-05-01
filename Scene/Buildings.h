@@ -16,7 +16,7 @@ private:
 
 public:
 	House();
-	House(float x, float y, float z, sf::Color color);
+	House(glm::vec3 pos, sf::Color color);
 
 	~House();
 

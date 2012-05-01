@@ -15,8 +15,8 @@ House::House()
 {
 }
 
-House::House(float x, float y, float z, sf::Color color)
-	: SceneObject(x, y, z)
+House::House(glm::vec3 pos, sf::Color color)
+	: SceneObject(pos)
 	 ,roof(ImageManager::get().getImage("roof.png"))
 	 ,side(ImageManager::get().getImage("side.png"))
 	 ,color(color)
@@ -33,7 +33,7 @@ void House::draw()
 	float size = 6.f;
 
 	glPushMatrix();
-		glTranslated(pos.x, pos.y, pos.z);
+		glTranslated(transform[3][0], transform[3][1], transform[3][2]);
 
 		side.Bind();
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -71,7 +71,7 @@ void House::draw()
 
 	glPopMatrix();
 
-	glm::vec3 tmp(pos);
+	glm::vec3 tmp(transform[3]);
 	tmp.y += size/2.f;
 	
 	float radius = size/2.f + 1;
@@ -111,7 +111,5 @@ void House::draw()
 
 	glPopMatrix();
 
-	posEdge = glm::vec3(tmp.x + radius, tmp.y + height, tmp.z + radius);
-	negEdge = glm::vec3(tmp.x - radius, tmp.y - height, tmp.z - radius);
 
 }

@@ -11,24 +11,18 @@
 class SceneObject
 {
 protected:
-	glm::vec3	pos;
-	glm::vec3	posEdge;
-	glm::vec3	negEdge;
-	int			ID;
+	int				ID;
+	glm::mat4x4		transform;
 
 public:
 	SceneObject();
-	SceneObject(float x, float y, float z);
+	SceneObject(glm::vec3 pos);
 	virtual ~SceneObject();
 
 	virtual void draw();
 	virtual void update(const sf::Clock &clock);
 
 	glm::vec3 getPos() const;
-	glm::vec3 getPosEdge() const;
-	glm::vec3 getNegEdge() const;
 };
 
-inline glm::vec3 SceneObject::getPos() const	{ return pos;}
-inline glm::vec3 SceneObject::getPosEdge() const	{ return posEdge;}
-inline glm::vec3 SceneObject::getNegEdge() const	{ return negEdge;}
+inline glm::vec3 SceneObject::getPos() const	{ return glm::vec3(transform[3][0], transform[3][1], transform[3][2]) ;}
