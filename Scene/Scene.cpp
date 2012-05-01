@@ -107,7 +107,7 @@ void Scene::setup()
 	particleMgr.add(system);*/
 
 	ParticleSystem *founSystem = new ParticleSystem();
-	FountainEmitter *fountain = new FountainEmitter(vec3(60.f, 5.f, 60.f));
+	WaterEmitter *fountain = new WaterEmitter(vec3(60.f, 5.f, 60.f), 1.f);
 	founSystem->add(fountain);
 	particleMgr.add(founSystem);
 

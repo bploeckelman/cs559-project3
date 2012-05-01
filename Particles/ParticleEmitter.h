@@ -86,6 +86,7 @@ public:
 	void setTexture(sf::Image* image);
 
 	Particles getParticles() const;
+	glm::vec3 getPos() const;
 
 protected:
 	virtual void initParticle(Particle& p) = 0;
@@ -95,6 +96,7 @@ private:
 	virtual void subUpdate(const float deltaTime) { }
 };
 
+inline glm::vec3 ParticleEmitter::getPos() const { return position;}
 
 inline Particles ParticleEmitter::getParticles() const { return particles;}
 

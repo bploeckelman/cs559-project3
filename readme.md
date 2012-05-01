@@ -1,7 +1,7 @@
 UW-Madison - CS559 - Project 3 - Graphics Town
 
 Author:
-Brian Ploeckelman
+Brian Ploeckelman and James Pulec
 
 This program uses several libraries, and requires some environment variables to be set in order to build correctly.
 

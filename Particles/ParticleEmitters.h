@@ -43,3 +43,20 @@ public:
 protected:
 	virtual void initParticle(Particle& p);
 };
+
+
+/************************************************************************/
+/* WaterEmitter 
+/* James's edits
+/* Affectors: FadeOut, ScaleDown, Force (gravity) 
+/************************************************************************/
+class WaterEmitter : public ParticleEmitter
+{
+public:
+	WaterEmitter( const glm::vec3& position
+		, const unsigned int maxParticles = 500
+		, const float lifetime            = -1.f);
+
+protected:
+	virtual void initParticle(Particle& p);
+};
