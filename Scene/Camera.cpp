@@ -71,12 +71,10 @@ void Camera::lookAt(const glm::vec3& eye
 
 void Camera::update(const sf::Clock& clock, const sf::Input& input)
 {
-	_view = glm::mat4(1.0);
-	_view = glm::rotate(_view, _rotation.x, xAxis);
-	_view = glm::rotate(_view, _rotation.y, yAxis);
-	_view = glm::rotate(_view, _rotation.z, zAxis);
-	_view = glm::translate(_view, -_position);
-/* TODO: this causes heavy slowdown on my system when moving over the heightmap
+//* TODO: this causes heavy slowdown on my system when moving over the heightmap
+//  Update: changing HeightMap::getHeight() to return a const & 
+//  eliminated the slowdown, so it must have been copying the entire height matrix
+//  twice per camera update... yikes..
 	// Force the camera to stay above the heightmap
 	glm::vec3 campos(this->position());
 	glm::vec2 mapcoords(campos.z / heightmap.getGroundScale(), campos.x / heightmap.getGroundScale());
@@ -96,7 +94,14 @@ void Camera::update(const sf::Clock& clock, const sf::Input& input)
 			this->position(glm::vec3(campos.x, height + 5.f, campos.z));	
 
 	}
-*/
+//*/
+// Had to move this down here so the updated camera position is 
+// taken into account in the overall camera view matrix
+	_view = glm::mat4(1.0);
+	_view = glm::rotate(_view, _rotation.x, xAxis);
+	_view = glm::rotate(_view, _rotation.y, yAxis);
+	_view = glm::rotate(_view, _rotation.z, zAxis);
+	_view = glm::translate(_view, -_position);
 }
 
 void Camera::processInput(const Input& input, const Clock& clock)

@@ -90,7 +90,7 @@ void Scene::setup()
 	
 	// generate a new mesh for testing
 //	mesh = new Mesh(64, 64, 5.f);
-	mesh = new Mesh("heightmap-test.png", 5.f);
+	mesh = new Mesh("heightmap-island.png", 5.f);
 
 	// add Scene objects
 	objects.push_back(new House(10, 4, 10, sf::Color(0, 255, 0)));
@@ -98,7 +98,8 @@ void Scene::setup()
 
 	// add particle systems
 	ParticleSystem *system = new ParticleSystem();
-	system->add(new FountainEmitter(vec3(25.f, 0.f, 25.f)));
+	vec3 position1(128.f, 30.f, 128.f);
+	system->add(new FountainEmitter(position1));
 	system->start();
 	particleMgr.add(system);
 
@@ -126,7 +127,7 @@ void Scene::setupLights()
 	vec4 ambient(0.3f, 0.3f, 0.3f, 1.f);
 	vec4 diffuse(0.3f, 0.3f, 0.3f, 1.f);
 	vec4 specular(1.f, 1.f, 1.f, 1.f);
-	vec4 position0(0.f, 10.f, 0.f, 1.f);
+	vec4 position0(128.f, 30.f, 128.f, 1.f);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, value_ptr(ambient));
 //	glLightfv(GL_LIGHT0, GL_DIFFUSE, value_ptr(diffuse));
 	glLightfv(GL_LIGHT0, GL_SPECULAR, value_ptr(specular));
@@ -135,17 +136,19 @@ void Scene::setupLights()
 
 	// Light 1
 	vec4 orange(1.f, 0.54f, 0.f, 1.f);
-	vec4 position1(10.f, 10.f, 10.f, 1.f);
+	vec4 position1(128.f, 30.f, 128.f, 1.f);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, value_ptr(orange));
 	glLightfv(GL_LIGHT1, GL_POSITION, value_ptr(position1));
 	glEnable(GL_LIGHT1);
 
 	// Light 2
-	vec4 white(1.f, 1.f, 1.f, 1.f);
-	vec4 position2(-10.f, 10.f, -10.f, 1.f);
-	glLightfv(GL_LIGHT2, GL_SPECULAR, value_ptr(white));
+	vec4 magenta(1.f, 0.f, 1.f, 1.f);
+	vec4 position2(256.f, 30.f, 256.f, 1.f);
+	glLightfv(GL_LIGHT2, GL_SPECULAR, value_ptr(magenta));
 	glLightfv(GL_LIGHT2, GL_POSITION, value_ptr(position2));
 	glEnable(GL_LIGHT2);
+
+	glEnable(GL_NORMALIZE);
 }
 
 void Scene::update( const Clock& clock, const Input& input )
@@ -175,25 +178,14 @@ void Scene::render( const Clock& clock )
 	skybox.render(*camera);
 	heightmap.render(camera);
 	mesh->render();
+
 /*
 	for each(auto object in objects)
 		object->draw();
 
 	fluid->render();
-/*
-	glm::vec3 campos = camera->position();
-
-	for(unsigned int i = 0; i < objects.size(); ++i){
-		if((campos.x > objects[i]->getNegEdge().x - 1.5f && campos.x < objects[i]->getPos().x) && campos.z > objects[i]->getNegEdge().z && campos.z < objects[i]->getPosEdge().z)
-			camera->position(glm::vec3(objects[i]->getNegEdge().x - 1.5f, campos.y, campos.z));
-		if((campos.x < objects[i]->getPosEdge().x + 1.5f && campos.x > objects[i]->getPos().x) && campos.z > objects[i]->getNegEdge().z && campos.z < objects[i]->getPosEdge().z)
-			camera->position(glm::vec3(objects[i]->getPosEdge().x + 1.5f, campos.y, campos.z));
-		if((campos.z > objects[i]->getNegEdge().z - 1.5f && campos.z < objects[i]->getPos().z) && campos.x > objects[i]->getNegEdge().x && campos.x < objects[i]->getPosEdge().x)
-			camera->position(glm::vec3(campos.x, campos.y, objects[i]->getNegEdge().z - 1.5f));
-		if((campos.z < objects[i]->getPosEdge().z + 1.5f && campos.z > objects[i]->getPos().z) && campos.x > objects[i]->getNegEdge().x && campos.x < objects[i]->getPosEdge().x)
-			camera->position(glm::vec3(campos.x, campos.y, objects[i]->getPosEdge().z + 1.5f));
-	}
 */
+
 	Render::basis();
 
 	particleMgr.render(*camera);
@@ -210,8 +202,10 @@ void Scene::handle(const Event& event)
 			fluid->blend = !fluid->blend;
 		if( event.Key.Code == Key::Space ) 
 			fluid->displace();
-		if( event.Key.Code == Key::Num3)
+		if( event.Key.Code == Key::Num3 )
 			mesh->toggleWireframe();
+		if( event.Key.Code == Key::Num4 )
+			mesh->toggleLighting();
 		if( event.Key.Code == Key::RControl )
 			camera->toggleMouseLook();
 		if( event.Key.Code == Key::N)

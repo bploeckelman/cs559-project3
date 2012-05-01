@@ -184,6 +184,20 @@ void Mesh::regenerateArrays( const unsigned int w
 			++z;
 		}
 	}
+
+	// Calculate normals
+	for(unsigned int j = 1; j < height - 1; ++j)
+	{
+		const vec3 *next = vertices + j * width;
+		vec3 *nrml = normals  + j * width;
+
+		for(unsigned int i = 1; i < width - 1; ++i)
+		{
+			nrml[i].x = next[i - 1].z - next[i + 1].z;
+			nrml[i].y = next[i - width].z - next[i + width].z;
+			nrml[i].z = next[i + 1].z - next[i - 1].z;
+		}
+	}
 }
 
 void Mesh::dropMesh()
@@ -265,6 +279,20 @@ void Mesh::initialize( const sf::Image& image
 		{
 			x = 0;
 			++z;
+		}
+	}
+
+	// Calculate normals
+	for(unsigned int j = 1; j < height - 1; ++j)
+	{
+		const vec3 *next = vertices + j * width;
+		vec3 *nrml = normals  + j * width;
+
+		for(unsigned int i = 1; i < width - 1; ++i)
+		{
+			nrml[i].x = next[i - 1].z - next[i + 1].z;
+			nrml[i].y = next[i - width].z - next[i + width].z;
+			nrml[i].z = next[i + 1].z - next[i - 1].z;
 		}
 	}
 
