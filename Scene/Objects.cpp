@@ -11,6 +11,7 @@
 #include "../Particles/Particles.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
 
 
 static float lastTime = 0.f;
@@ -138,13 +139,14 @@ Fountain::Fountain(glm::vec3 pos, float size, ParticleEmitter& emitter)
 	 ,texture(ImageManager::get().getImage("fountain.png"))
 	 ,emitter(emitter)
 	 ,size(size)
+	 ,count(0)
 {
 	fluid = new Fluid(
-		size*2 + 1,   // number of vertices wide
-		size*4 + 1,   // number of vertices high
+		(size*2) + 1,   // number of vertices wide
+		(size*4) + 1,   // number of vertices high
 		0.5f,  // distance between vertices
 		0.03f, // time step for evaluation
-		4.0f,  // wave velocity
+		4.f,  // wave velocity
 		0.4f   // fluid viscosity
 		,pos.x - (size)
 		,pos.y + .25f
@@ -161,11 +163,42 @@ void Fountain::update(const sf::Clock &clock)
 {
 	for each(auto particle in emitter.getParticles())
 	{
-		if(particle.position.y <= .25f)
-			fluid->displace(particle.position.x, particle.position.z);
+		//std::cout << "POS:" << particle.position.z << std::endl;
+		//std::cout << "EPOS" <<  emitter.getPos().z  << std::endl;
+		//std::cout << "Flu" <<  fluid->pos.y  << std::endl;
+		//std::cout << "FluidW:" <<  fluid->getHeight() << std::endl;
+		//std::cout << "ALL:" << particle.position.z - emitter.getPos().z + (fluid->getHeight()/2.f)*fluid->getDist() << std::endl;
+		glm::vec3 translated = glm::vec3(particle.position.x - emitter.getPos().x + (fluid->getWidth()/2.f)*fluid->getDist(), particle.position.y, 
+			particle.position.z - emitter.getPos().z + (fluid->getHeight()/2.f)*fluid->getDist());
+
+		if((translated.x > fluid->getWidth()) || (translated.x < 0) || (translated.z > fluid->getHeight()) || (translated.z < 0) || !particle.active) //outside fluid
+		{
+			//std::cout << "HERE" << std::endl;
 			particle.active = false;
+		}
+		else if(particle.position.y + emitter.getPos().y <= fluid->pos.y)
+		{
+			//std::cout << "EPOS:" <<  particle.position.y + emitter.getPos().y  << std::endl;
+			//std::cout << "Flu:" <<  fluid->pos.y  << std::endl;
+			//std::cout << "X:" << translated.x << std::endl;
+			//std::cout << "Z:" << translated.z << std::endl;
+			//std::cout << "HIT" << std::endl;
+			//std::cout << translated.x << std::endl;
+			//std::cout << translated.z << std::endl;
+			if(count == 100)	//TODO: SERIEUSLY THIS NEEDS TO GET FIXED
+			{
+				fluid->displace();
+				count = 0;
+			}
+			else
+				count++;
+				
+			//fluid->displace(translated.x, translated.z);
+			particle.lifespan = 0;
+			particle.active = false;
+		}
 	}
-	//fluid->evaluate();		enabling this causes it to crash
+	fluid->evaluate();
 }
 
 void Fountain::draw()

@@ -40,7 +40,7 @@ private:
 	float size;
 	ParticleEmitter& emitter;
 	Fluid* fluid;
-
+	int count;
 	sf::Image texture;
 
 public:
