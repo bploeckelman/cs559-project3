@@ -215,7 +215,11 @@ void Scene::handle(const Event& event)
 			skybox.setNight();
 		if( event.Key.Code == Key::M)
 			skybox.setDay();
-		if( event.Key.Code == Key::Space )
+		break;
+	case Event::KeyReleased:
+		break;
+	case Event::MouseButtonPressed:
+		if( event.MouseButton.Button == Mouse::Button::Left )
 		{
 			vec3 position(linearRand(10.f, 40.f)
 						, linearRand(10.f, 20.f)
@@ -225,10 +229,6 @@ void Scene::handle(const Event& event)
 			ps->start();
 			particleMgr.add(ps);
 		}
-		break;
-	case Event::KeyReleased:
-		break;
-	case Event::MouseButtonPressed:
 		break;
 	case Event::MouseButtonReleased:
 		break;
