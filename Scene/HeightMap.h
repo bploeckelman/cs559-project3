@@ -2,51 +2,70 @@
 /************************************************************************/
 /* HeightMap 
 /* ---------
-/* A basic height map 
+/* A basic height map mesh
 /************************************************************************/
-#include "../Utility/Matrix2d.h"
+#include "../Utility/Mesh.h"
 
 #include <string>
-
-typedef Matrix2d<double> HeightMatrix;
-
-class Camera;
+#include <limits>
 
 
-class HeightMap
+class HeightMap : public Mesh
 {
 private:
-	HeightMatrix heights;	
 	std::string  imageName;
 	float heightScale;
 	float groundScale;
 
-	void randomize();
-
 public:
-	HeightMap(const unsigned int width=100
-			, const unsigned int height=100
-			, const float groundScale=.5f
-			, const float heightScale=2.f);
-	void loadFromImage(const std::string& filename);
+	/**
+	 * Creates a new heightmap with the specified parameters
+	 * \param width  - number of vertices wide
+	 * \param height - number of vertices long
+	 * \param groundScale - distance between vertices in the plane
+	 * \param heightScale - distance between vertices vertically
+	**/
+	HeightMap(const unsigned int width  = 100
+			, const unsigned int height = 100
+			, const float groundScale   = 1.f
+			, const float heightScale   = 1.f);
 
-	void render(Camera *camera);
+	/**
+	 * Creates a new heightmap by loading height data from an image 
+	 * \param imageFilename - the name of the image file that has height data 
+	 * \param groundScale - distance between vertices in the plane
+	 * \param heightScale - distance between vertices vertically
+	**/
+	HeightMap(const std::string& imageFilename
+			, const float groundScale   = 0.5f
+			, const float heightScale   = 2.f);
 
-	double heightAt(const unsigned int row
-				  , const unsigned int col) const;
+	/**
+	 * Get the height value for the given row,col vertex index
+	 * \param col - the column index to lookup
+	 * \param row - the row index to lookup
+	 * \return - the height value at the specified indices,
+	 *           or the smallest possible float 
+	**/
+	float heightAt(const unsigned int col  
+                 , const unsigned int row);
 
-	float getHeightScale();
-	float getGroundScale();
-	HeightMatrix getHeights();
+	float getHeightScale() const;
+	float getGroundScale() const;
 
+private:
+	void randomizeGaussian();
 };
 
-inline float HeightMap::getHeightScale()	{return heightScale;}
-inline float HeightMap::getGroundScale()	{return groundScale;}
-inline HeightMatrix HeightMap::getHeights()	{return heights;}
 
-inline double HeightMap::heightAt(const unsigned int row
-								, const unsigned int col) const
+inline float HeightMap::getHeightScale() const {return heightScale;}
+inline float HeightMap::getGroundScale() const {return groundScale;}
+
+inline float HeightMap::heightAt( const unsigned int col 
+								, const unsigned int row )
 {
-	return heights(row,col);
+	if( col < width && row < height )
+		return vertexAt(col, row).y; 
+	else
+		return std::numeric_limits<float>::min();
 }

@@ -19,6 +19,7 @@
 
 using namespace std;
 using namespace sf;
+using namespace glm;
 
 
 const float Camera::MOUSE_SENSITIVITY = 15.0;
@@ -28,7 +29,7 @@ const glm::vec3 yAxis(0.f, 1.f, 0.f);
 const glm::vec3 zAxis(0.f, 0.f, 1.f);
 
 
-Camera::Camera(HeightMap& heightmap
+Camera::Camera(Mesh& mesh 
 			 , const glm::vec3& pos
 			 , const glm::vec3& rot
 			 , const glm::vec3& rotSpeed
@@ -36,7 +37,7 @@ Camera::Camera(HeightMap& heightmap
 			 , const glm::mat4& proj)
 	 : debug(false)
 	 , mouseLook(true)
-	 , heightmap(heightmap)
+	 , mesh(mesh)
 	 , _position(pos)
 	 , _rotation(rot)
 	 , _rotationSpeed(rotSpeed)
@@ -71,36 +72,55 @@ void Camera::lookAt(const glm::vec3& eye
 
 void Camera::update(const sf::Clock& clock, const sf::Input& input)
 {
+	// TODO: store these values in the Mesh
+	const float groundScale = 1.f;
+	const float heightScale = 1.f;
+
+	// TODO: there's a problem somewhere here,
+	// it's not as smooth as it should be, seems to hiccup on edges 
+
+	// keep the current camera above the mesh
+	const vec3 campos(_position);
+	const vec2 mapcoords( campos.x / groundScale
+						, campos.z / groundScale );
+
+//	cout << "grid-coords(" << mapcoords.x << " , " << mapcoords.y << ")" << endl;
+
+	if( mapcoords.x >= 0.f && mapcoords.y >= 0.f
+	 && mapcoords.x < (mesh.getWidth()  - 1) 
+	 && mapcoords.y < (mesh.getHeight() - 1) )
+	{
+		const unsigned int x = static_cast<unsigned int>((mapcoords.x));
+		const unsigned int y = static_cast<unsigned int>((mapcoords.y));
+
+		const vec3& v0 = mesh.vertexAt(x  , y  );
+		const vec3& v1 = mesh.vertexAt(x  , y+1);
+		const vec3& v2 = mesh.vertexAt(x+1, y  );
+		const vec3& v3 = mesh.vertexAt(x+y, y+1);
+
+		const float dx = mapcoords.x - x;
+		const float dy = mapcoords.y - y;
+				
+		const float y1 = v0.y + dy * (v1.y - v0.y);
+		const float y2 = v2.y + dy * (v3.y - v2.y);
+
+		const float height = heightScale * (y1 + dx * (y2 - y1));
+
+		static const float above = 5.f;
+		if( campos.y < height + above )
+			moveY(height - campos.y + above);
+	}
+
+	// Apply the current transformations to the camera view
 	_view = glm::mat4(1.0);
 	_view = glm::rotate(_view, _rotation.x, xAxis);
 	_view = glm::rotate(_view, _rotation.y, yAxis);
 	_view = glm::rotate(_view, _rotation.z, zAxis);
 	_view = glm::translate(_view, -_position);
-
-	// Force the camera to stay above the heightmap
-	glm::vec3 campos(this->position());
-	glm::vec2 mapcoords(campos.z / heightmap.getGroundScale(), campos.x / heightmap.getGroundScale());
-	if( mapcoords.x >= 0 && mapcoords.y >= 0
-		&& mapcoords.x < (heightmap.getHeights().rows() - 1) && mapcoords.y < (heightmap.getHeights().cols() - 1) )
-	{
-		const unsigned int x = static_cast<unsigned int>(mapcoords.x);
-		double influenceX = mapcoords.x - x;
-		const unsigned int y = static_cast<unsigned int>(mapcoords.y);
-		double influenceY = mapcoords.y - y;
-
-		double yHeight = (heightmap.heightAt(x, y) * (1 - influenceY) + heightmap.heightAt(x, y + 1) * influenceY);
-		double xHeight = (heightmap.heightAt(x + 1, y) * (1 - influenceY) + heightmap.heightAt(x + 1, y + 1) * influenceY);
-		const double height = (yHeight * (1 - influenceX) + xHeight * influenceX) * heightmap.getHeightScale();
-
-		if( campos.y < height + 5.f ) 
-			this->position(glm::vec3(campos.x, height + 5.f, campos.z));	
-
-	}
 }
 
 void Camera::processInput(const Input& input, const Clock& clock)
 {
-
 	if( input.IsKeyDown(Key::Left))		turn(left,  1.0, clock);
 	if( input.IsKeyDown(Key::Right))	turn(right, 1.0, clock);
 	if( input.IsKeyDown(Key::Up))		turn(up,    1.0, clock);
@@ -121,16 +141,16 @@ void Camera::processInput(const Input& input, const Clock& clock)
 	}
 
 	float moveSpeed   = 0.f;
-	if( input.IsKeyDown(Key::W) )		moveSpeed = -0.1f;
-	if( input.IsKeyDown(Key::S) )		moveSpeed =  0.1f;
+	if( input.IsKeyDown(Key::W) )		moveSpeed = -0.5f;
+	if( input.IsKeyDown(Key::S) )		moveSpeed =  0.5;
 
 	float strafeSpeed = 0.f;
-	if( input.IsKeyDown(Key::A) )		strafeSpeed =  0.1f;
-	if( input.IsKeyDown(Key::D) )		strafeSpeed = -0.1f;
+	if( input.IsKeyDown(Key::A) )		strafeSpeed =  0.4f;
+	if( input.IsKeyDown(Key::D) )		strafeSpeed = -0.4f;
 
 	move(moveSpeed,strafeSpeed);
 
-	const float y = 0.1f;
+	const float y = 0.5f;
 	if( input.IsKeyDown(Key::Q) )		moveY(-y);
 	if( input.IsKeyDown(Key::E) )		moveY(y);
 

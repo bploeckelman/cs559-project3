@@ -198,6 +198,9 @@
     <ClInclude Include="Scene\Objects.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Utility\Mesh.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Behavior.cpp">
@@ -325,6 +328,9 @@
     </ClCompile>
     <ClCompile Include="Scene\Objects.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Mesh.cpp">
+      <Filter>Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

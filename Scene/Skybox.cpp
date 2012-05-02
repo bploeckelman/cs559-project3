@@ -183,7 +183,7 @@ void Skybox::render(const Camera& camera)
 
 void Skybox::drawFace(const Face& face)
 {
-	assert(textues != nullptr);
+	assert(textures != nullptr);
 	(*textures)[face]->Bind();
 
 	glVertexPointer  (3, GL_FLOAT, 0, value_ptr( vertices[0]));

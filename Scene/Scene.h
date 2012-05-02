@@ -9,12 +9,16 @@
 #include "HeightMap.h"
 #include "SceneObject.h"
 #include "../Core/Common.h"
+#include "../Utility/Mesh.h"
 #include "../Utility/Plane.h"
 #include "../Particles/Particles.h"
 
 #include <glm/glm.hpp>
 
+#include <vector>
+
 class Fluid;
+
 
 namespace sf
 {
@@ -23,17 +27,21 @@ namespace sf
 	class Event;
 }
 
+typedef std::vector<SceneObject*> SceneObjects;
+typedef std::vector<Mesh*> Meshes;
 
 class Scene
 {
 protected:
-	Camera						*camera;	// the current camera
-	CameraVector				cameras;	// all the cameras in the scene
-	Skybox						skybox;     // the current skybox
-	HeightMap					heightmap;  // a test heightmap
-	Fluid*						fluid;      // a test fluid surface
-	std::vector<SceneObject*>	objects;    // scene objects
-	ParticleManager				particleMgr;// handler for particle systems
+	Camera         *camera;      // the current camera
+	CameraVector    cameras;     // all the cameras in the scene
+	Skybox          skybox;      // the current skybox
+	Fluid          *fluid;       // a test fluid surface
+	Meshes          meshes;      // container of mesh objects
+	SceneObjects    objects;     // scene objects
+	ParticleManager particleMgr; // handler for particle systems
+
+	sf::Clock timer;
 
 public:
 	Scene();

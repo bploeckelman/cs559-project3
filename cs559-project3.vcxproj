@@ -55,6 +55,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..;$(GLM);$(SFML_1_6)\include;$(FLTKHOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -76,6 +77,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..;$(GLM);$(SFML_1_6)\include;$(FLTKHOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -135,6 +137,7 @@
     <ClInclude Include="Utility\dirent.h" />
     <ClInclude Include="Utility\Logger.h" />
     <ClInclude Include="Utility\Matrix2d.h" />
+    <ClInclude Include="Utility\Mesh.h" />
     <ClInclude Include="Utility\Plane.h" />
     <ClInclude Include="Utility\RenderUtils.h" />
   </ItemGroup>
@@ -180,6 +183,7 @@
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\Skybox.cpp" />
     <ClCompile Include="Utility\Logger.cpp" />
+    <ClCompile Include="Utility\Mesh.cpp" />
     <ClCompile Include="Utility\RenderUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
