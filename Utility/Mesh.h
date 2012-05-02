@@ -37,6 +37,7 @@ protected:
 	bool blend;
 	bool light;
 	bool fill;
+	bool normalsVis;
 
 	// TODO: vertex buffer object management
 
@@ -72,6 +73,7 @@ public:
 	void toggleBlending();
 	void toggleLighting();
 	void toggleWireframe();
+	void toggleNormalsVis();
 
 	// Mesh details accessors
 	unsigned int getWidth()        const;
@@ -128,13 +130,17 @@ private:
 	void setRenderStates()   const;
 	// Undo OpenGL state changes made in setRenderStates()
 	void resetRenderStates() const;
+
+	// Render normal vectors for visualization
+	void renderNormals() const;
 };
 
 
-inline void Mesh::toggleTexturing() { texture = !texture; }
-inline void Mesh::toggleBlending()  { blend = !blend; }
-inline void Mesh::toggleLighting()  { light = !light; }
-inline void Mesh::toggleWireframe() { fill  = !fill; }
+inline void Mesh::toggleTexturing() { texture    = !texture; }
+inline void Mesh::toggleBlending()  { blend      = !blend; }
+inline void Mesh::toggleLighting()  { light      = !light; }
+inline void Mesh::toggleWireframe() { fill       = !fill; }
+inline void Mesh::toggleNormalsVis(){ normalsVis = !normalsVis; }
 
 inline unsigned int Mesh::getWidth()        const { return width; }
 inline unsigned int Mesh::getHeight()       const { return height; }

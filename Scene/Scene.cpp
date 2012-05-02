@@ -224,6 +224,8 @@ void Scene::handle(const Event& event)
 			mesh->toggleLighting();
 		if( event.Key.Code == Key::Num5 )
 			mesh->toggleTexturing();
+		if( event.Key.Code == Key::Num6 )
+			mesh->toggleNormalsVis();
 		if( event.Key.Code == Key::RControl )
 			camera->toggleMouseLook();
 		if( event.Key.Code == Key::N)

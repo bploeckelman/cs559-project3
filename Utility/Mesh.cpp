@@ -80,6 +80,9 @@ void Mesh::render() const
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 
+	if( normalsVis )
+		renderNormals();
+
 	resetRenderStates();
 }
 
@@ -285,9 +288,11 @@ void Mesh::zeroMembers()
 	numVertices  = 0;
 	numTriangles = 0;
 	numIndices   = 0;
+	texture      = false;
 	blend        = false;
 	light        = false;
 	fill         = false;
+	normalsVis   = false;
 }
 
 void Mesh::setRenderStates() const
@@ -495,4 +500,41 @@ void Mesh::addTexture( const sf::Image *texture , glm::vec2 *texcoord )
 
 	texcoords.push_back(texcoord);
 	textures.push_back(texture);		
+}
+
+void Mesh::renderNormals() const
+{
+	if( normals == nullptr ) 
+		return;
+
+	static const unsigned int step = 1;
+	glDisable(GL_LIGHTING);
+	glDisable(GL_TEXTURE_2D);
+
+	glColor4fv(value_ptr(vec3(0.75f,0,0)));
+	glBegin(GL_LINES);
+	for(unsigned int z = 0; z < height; z += step)
+	for(unsigned int x = 0; x < width;  x += step)
+	{
+		const vec3& vertex(vertices[z * width + x]);
+		const vec3& normal( normals[z * width + x]);
+
+		glVertex3fv(value_ptr(vertex));
+		glVertex3fv(value_ptr(vertex + normal));
+	}
+	glEnd();
+
+	glColor4fv(value_ptr(vec3(1,0,0)));
+	glPointSize(4.25f);
+	glBegin(GL_POINTS);
+	for(unsigned int z = 0; z < height; z += step)
+	for(unsigned int x = 0; x < width;  x += step)
+	{
+		const vec3& vertex(vertices[z * width + x]);
+		const vec3& normal( normals[z * width + x]);
+		glVertex3fv(value_ptr(vertex + normal));
+	}
+	glEnd();
+
+	glEnable(GL_TEXTURE_2D);
 }
