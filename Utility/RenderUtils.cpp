@@ -145,7 +145,7 @@ void Render::vector( const vec3& vec, const vec3& point, const vec3& color )
 
 	glBegin(GL_LINES);
 		glVertex3fv(glm::value_ptr(point));
-		glVertex3fv(glm::value_ptr(vec));
+		glVertex3fv(glm::value_ptr(point + vec));
 	glEnd();
 
 	glBegin(GL_POINTS);
