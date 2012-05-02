@@ -19,6 +19,7 @@
 
 class Fluid;
 
+
 namespace sf
 {
 	class Clock;
@@ -27,7 +28,7 @@ namespace sf
 }
 
 typedef std::vector<SceneObject*> SceneObjects;
-
+typedef std::vector<Mesh*> Meshes;
 
 class Scene
 {
@@ -35,9 +36,8 @@ protected:
 	Camera         *camera;      // the current camera
 	CameraVector    cameras;     // all the cameras in the scene
 	Skybox          skybox;      // the current skybox
-	HeightMap       heightmap;   // a test heightmap
 	Fluid          *fluid;       // a test fluid surface
-	Mesh           *mesh;        // a test mesh 
+	Meshes          meshes;      // container of mesh objects
 	SceneObjects    objects;     // scene objects
 	ParticleManager particleMgr; // handler for particle systems
 

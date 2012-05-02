@@ -59,10 +59,10 @@ public:
 		, const unsigned int elementMode = GL_TRIANGLES );
 	
 	// Deallocate mesh resources
-	~Mesh();
+	virtual ~Mesh();
 
 	// Render this mesh to the screen in the positive quadrant of the XZ-plane
-	void render() const;
+	virtual void render() const;
 
 	// Add a new texture layer to this mesh
 	void addTexture(const sf::Image *texture

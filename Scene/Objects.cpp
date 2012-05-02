@@ -39,7 +39,7 @@ void Fish::update(const sf::Clock &clock)
 	}
 	float randz = sf::Randomizer::Random(0.f, .05f);
 	float randx = sf::Randomizer::Random(-.01f, .01f);
-
+/*
 	glm::vec3 newPos = glm::vec3(this->getPos().x + randx, this->getPos().y, this->getPos().z + randz);
 	glm::vec2 mapcoords(newPos.z / heightmap.getGroundScale(), newPos.x / heightmap.getGroundScale());
 	if( mapcoords.x >= 0 && mapcoords.y >= 0
@@ -58,6 +58,7 @@ void Fish::update(const sf::Clock &clock)
 			posNeg *= -1;
 
 	}
+*/
 	this->pos = glm::vec3(this->getPos().x + randx, this->getPos().y, this->getPos().z + (randz * posNeg));
 }
 
@@ -75,7 +76,7 @@ void Fish::draw()
 
 	glPushMatrix();
 		glTranslated(pos.x, pos.y, pos.z);
-		glRotatef(90*posNeg, 1, 0, 0);
+		glRotatef(90.f*posNeg, 1, 0, 0);
 		glPushMatrix();
 			glRotatef(180, 1, 0, 0);
 			glBegin(GL_QUADS);
