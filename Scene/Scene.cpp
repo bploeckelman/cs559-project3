@@ -82,15 +82,15 @@ void Scene::setup()
 		0.5f,  // distance between vertices
 		0.03f, // time step for evaluation
 		4.0f,  // wave velocity
-		0.4f,	// fluid viscosity
+		0.4f,  // fluid viscosity
 		0.f,
 		.75f,
 		0.f
 	);
 	
 	// generate a new mesh for testing
-//	mesh = new Mesh(64, 64, 5.f);
-	mesh = new Mesh("heightmap-island.png", 5.f);
+//	mesh = new Mesh(64, 128, 5.f);
+	mesh = new Mesh("heightmap-terrain.png", 1.f);
 
 	// add Scene objects
 	objects.push_back(new House(10, 4, 10, sf::Color(0, 255, 0)));
@@ -111,8 +111,9 @@ void Scene::setup()
 	objects.push_back(new Fountain(60.f, 1.75f, 60.f, 5, *fountain));*/
 
 	// create and position cameras
-	cameras.push_back(Camera(heightmap, vec3(-2.5, 25.0, -2.5)   // position
-							,vec3(40.0, 135.0, 0.0)));// rotation
+	cameras.push_back(Camera( heightmap
+							, vec3(-2.5, 25.0, -2.5)    // position
+							, vec3(40.0, 135.0, 0.0) ));// rotation
 	camera = &cameras[0];
 }
 
@@ -124,12 +125,12 @@ void Scene::setupLights()
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(gAmbient));
 
 	// Light 0
-	vec4 ambient(0.3f, 0.3f, 0.3f, 1.f);
+	vec4 ambient(0.2f, 0.2f, 0.2f, 1.f);
 	vec4 diffuse(0.3f, 0.3f, 0.3f, 1.f);
 	vec4 specular(1.f, 1.f, 1.f, 1.f);
 	vec4 position0(128.f, 30.f, 128.f, 1.f);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, value_ptr(ambient));
-//	glLightfv(GL_LIGHT0, GL_DIFFUSE, value_ptr(diffuse));
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, value_ptr(diffuse));
 	glLightfv(GL_LIGHT0, GL_SPECULAR, value_ptr(specular));
 	glLightfv(GL_LIGHT0, GL_POSITION, value_ptr(position0));
 	glEnable(GL_LIGHT0);
@@ -148,7 +149,7 @@ void Scene::setupLights()
 	glLightfv(GL_LIGHT2, GL_POSITION, value_ptr(position2));
 	glEnable(GL_LIGHT2);
 
-	glEnable(GL_NORMALIZE);
+//	glEnable(GL_NORMALIZE);
 }
 
 void Scene::update( const Clock& clock, const Input& input )
@@ -176,7 +177,7 @@ void Scene::render( const Clock& clock )
 	camera->apply();
 
 	skybox.render(*camera);
-	heightmap.render(camera);
+//	heightmap.render(camera);
 	mesh->render();
 
 /*
@@ -216,7 +217,7 @@ void Scene::handle(const Event& event)
 	case Event::KeyReleased:
 		break;
 	case Event::MouseButtonPressed:
-		if( event.MouseButton.Button == Mouse::Button::Left )
+		if( event.MouseButton.Button == sf::Mouse::Left )
 		{
 			vec3 position(linearRand(10.f, 40.f)
 						, linearRand(10.f, 20.f)
