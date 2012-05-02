@@ -41,6 +41,8 @@ protected:
 	SceneObjects    objects;     // scene objects
 	ParticleManager particleMgr; // handler for particle systems
 
+	sf::Clock timer;
+
 public:
 	Scene();
 	~Scene();

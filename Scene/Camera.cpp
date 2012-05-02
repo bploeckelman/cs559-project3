@@ -73,7 +73,7 @@ void Camera::lookAt(const glm::vec3& eye
 void Camera::update(const sf::Clock& clock, const sf::Input& input)
 {
 	// TODO: store these values in the Mesh
-	const float groundScale = 0.5f;
+	const float groundScale = 1.f;
 	const float heightScale = 1.f;
 
 	// TODO: there's a problem somewhere here,

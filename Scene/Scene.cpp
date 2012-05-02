@@ -16,6 +16,7 @@
 #include "../Particles/Particles.h"
 
 #include <algorithm>
+#include <sstream>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/random.hpp>
@@ -39,6 +40,7 @@ Scene::Scene()
 	, heightmap()
 	, fluid(nullptr)
 	, particleMgr()
+	, timer()
 { }
 
 Scene::~Scene()
@@ -48,6 +50,8 @@ Scene::~Scene()
 
 void Scene::setup()
 {
+	timer.Reset();
+
 	// setup opengl state
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_TEXTURE_2D);
@@ -91,7 +95,7 @@ void Scene::setup()
 	
 	// generate a new mesh for testing
 //	mesh = new Mesh(64, 128, 5.f);
-	mesh = new Mesh("heightmap-terrain.png", 0.5f);
+	mesh = new Mesh("heightmap-terrain.png", 1.f);
 
 	// Add a texture and some pre-generated texture coords to the Mesh
 	// TODO: this will eventually be done in Mesh subclasses, 
@@ -129,13 +133,19 @@ void Scene::setup()
 							, vec3(-2.5, 25.0, -2.5)    // position
 							, vec3(40.0, 135.0, 0.0) ));// rotation
 	camera = &cameras[0];
+
+	const float delta = timer.GetElapsedTime();
+	std::stringstream ss;
+	ss << "[Scene setup completed in " << delta << " seconds]";
+	Log(ss);
+	timer.Reset();
 }
 
 void Scene::setupLights()
 {
 	glEnable(GL_LIGHTING);
 
-	vec4 gAmbient(0.1f, 0.1f, 0.1f, 1.f);
+	vec4 gAmbient(0.3f, 0.2f, 0.3f, 1.f);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(gAmbient));
 
 	// Light 0
@@ -151,14 +161,14 @@ void Scene::setupLights()
 
 	// Light 1
 	vec4 orange(1.f, 0.54f, 0.f, 1.f);
-	vec4 position1(128.f, 30.f, 128.f, 1.f);
+	vec4 position1(256.f, 40.f, 256.f, 1.f);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, value_ptr(orange));
 	glLightfv(GL_LIGHT1, GL_POSITION, value_ptr(position1));
 	glEnable(GL_LIGHT1);
 
 	// Light 2
 	vec4 magenta(1.f, 0.f, 1.f, 1.f);
-	vec4 position2(256.f, 30.f, 256.f, 1.f);
+	vec4 position2(64.f, 15.f, 64.f, 1.f);
 	glLightfv(GL_LIGHT2, GL_SPECULAR, value_ptr(magenta));
 	glLightfv(GL_LIGHT2, GL_POSITION, value_ptr(position2));
 	glEnable(GL_LIGHT2);
@@ -183,6 +193,8 @@ void Scene::update( const Clock& clock, const Input& input )
 	// update other things
 	fluid->evaluate();
 	particleMgr.update(clock.GetElapsedTime());
+
+	timer.Reset();
 }
 
 void Scene::render( const Clock& clock )
@@ -192,7 +204,7 @@ void Scene::render( const Clock& clock )
 	camera->apply();
 
 	skybox.render(*camera);
-//	heightmap.render(camera);
+
 	mesh->render();
 
 /*
@@ -256,13 +268,13 @@ void Scene::handle(const Event& event)
 
 void Scene::init()
 {
-	Log("\nInitializing scene...");
+	Log("\n[Initializing scene...]");
 	setup();
 }
 
 void Scene::cleanup()
 {
-	Log("\nCleaning up scene...");
+	Log("\n[Cleaning up scene...]");
 
 	for each(auto obj in objects)
 		delete obj;

@@ -147,18 +147,29 @@ void Mesh::regenerateArrays( const unsigned int w
 	}
 
 	// Calculate normals
-	for(unsigned int j = 1; j < height - 1; ++j)
+	for(unsigned int i = 0; i < numIndices; i += 3)
 	{
-		const vec3 *next = vertices + j * width;
-		vec3 *nrml = normals  + j * width;
+		const vec3 v[3] = {
+			vertices[ indices[i+0] ],
+			vertices[ indices[i+1] ],
+			vertices[ indices[i+2] ]
+		};
+		const vec3 va = v[1] - v[0];
+		const vec3 vb = v[2] - v[0];
+		const vec3 normal = normalize( cross(va, vb) );
 
-		for(unsigned int i = 1; i < width - 1; ++i)
+		for(unsigned int j = 0; j < 3; ++j)
 		{
-			nrml[i].x = next[i - 1].z - next[i + 1].z;
-			nrml[i].y = next[i - width].z - next[i + width].z;
-			nrml[i].z = next[i + 1].z - next[i - 1].z;
-			nrml[i] = glm::normalize(nrml[i]);
+			const vec3 a = v[(j+1) % 3] - v[j];
+			const vec3 b = v[(j+2) % 3] - v[j];
+			const float weight = acos( dot(a, b) / (a.length() * b.length()) );
+			normals[ indices[i + j] ] += weight * normal;
 		}
+	}
+
+	for(unsigned int i = 0; i < numVertices; ++i)
+	{
+		normals[i] = normalize(normals[i]);
 	}
 }
 
@@ -242,7 +253,7 @@ void Mesh::initialize( const sf::Image& image
 		// TODO: expose this scaling factor
 		vertices[i]  = vec3(xx, 20.f * lum, zz);
 
-		normals[i]   = vec3(0.f, 1.f, 0.f);
+		normals[i]   = vec3(0.f, 0.f, 0.f);
 
 		if( ++x >= width )
 		{
@@ -258,19 +269,29 @@ void Mesh::initialize( const sf::Image& image
 	generateArrayIndices();
 
 	// Calculate normals
-	// TODO: not really working
-	for(unsigned int j = 1; j < height - 1; ++j)
+	for(unsigned int i = 0; i < numIndices; i += 3)
 	{
-		const vec3 *next = vertices + j * width;
-		vec3 *nrml = normals  + j * width;
+		const vec3 v[3] = {
+			vertices[ indices[i+0] ],
+			vertices[ indices[i+1] ],
+			vertices[ indices[i+2] ]
+		};
+		const vec3 va = v[1] - v[0];
+		const vec3 vb = v[2] - v[0];
+		const vec3 normal = normalize( cross(va, vb) );
 
-		for(unsigned int i = 1; i < width - 1; ++i)
+		for(unsigned int j = 0; j < 3; ++j)
 		{
-			nrml[i].x = next[i - 1].z - next[i + 1].z;
-			nrml[i].y = next[i - width].z - next[i + width].z;
-			nrml[i].z = next[i + 1].z - next[i - 1].z;
-			nrml[i] = normalize(nrml[i]);
+			const vec3 a = v[(j+1) % 3] - v[j];
+			const vec3 b = v[(j+2) % 3] - v[j];
+			const float weight = acos( dot(a, b) / (a.length() * b.length()) );
+			normals[ indices[i + j] ] += weight * normal;
 		}
+	}
+
+	for(unsigned int i = 0; i < numVertices; ++i)
+	{
+		normals[i] = normalize(normals[i]);
 	}
 }
 
