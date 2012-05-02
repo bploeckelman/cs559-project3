@@ -211,7 +211,7 @@ void Mesh::initialize( const string& imageFileName
 					 , const unsigned int elementMode )
 {
 	zeroMembers();
-	initialize(ImageManager::get().getImage(imageFileName), spread, elementMode);
+	initialize(GetImage(imageFileName), spread, elementMode);
 }
 
 void Mesh::initialize( const sf::Image& image

@@ -117,7 +117,7 @@ void Fish::draw()
 
 Fountain::Fountain(float x, float y, float z, float size, ParticleEmitter& emitter)
 	: SceneObject(x, y, z)
-	 ,texture(ImageManager::get().getImage("fountain.png"))
+	 ,texture(GetImage("fountain.png"))
 	 ,emitter(emitter)
 	 ,size(size)
 {

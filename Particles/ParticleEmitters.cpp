@@ -34,7 +34,7 @@ ExplosionEmitter::ExplosionEmitter(const vec3& position
 	setPosition(position);
 	setOneTimeEmission(true);
 	setOneTimeNumParticles(maxParticles);
-	setTexture(&ImageManager::get().getImage("particle-dot.png"));
+	setTexture(&GetImage("particle-dot.png"));
 }
 
 void ExplosionEmitter::initParticle(Particle& p)
@@ -79,7 +79,7 @@ FountainEmitter::FountainEmitter( const glm::vec3& position
 	setBlendMode(ALPHA);
 	setPosition(position);
 	setOneTimeEmission(false);
-	setTexture(&ImageManager::get().getImage("particle-droplet.png"));
+	setTexture(&GetImage("particle-droplet.png"));
 
 	// TODO: hacking around SFML's low delta value... 
 	// should probably accumulate deltas until a 

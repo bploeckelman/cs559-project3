@@ -40,7 +40,7 @@ HeightMap::HeightMap( const std::string& imageFilename
 	for(unsigned int x = 0; x < width;  ++x)
 		texcoord[i++] = glm::vec2(x * ts, z * ts);
 
-	sf::Image *tex = &ImageManager::get().getImage("grass_256x256.png");
+	sf::Image *tex = &GetImage("grass_256x256.png");
 	addTexture(tex, texcoord);
 	texture = true;
 }

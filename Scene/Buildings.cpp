@@ -17,8 +17,8 @@ House::House()
 
 House::House(float x, float y, float z, sf::Color color)
 	: SceneObject(x, y, z)
-	 ,roof(ImageManager::get().getImage("roof.png"))
-	 ,side(ImageManager::get().getImage("side.png"))
+	 ,roof(GetImage("roof.png"))
+	 ,side(GetImage("side.png"))
 	 ,color(color)
 {
 }

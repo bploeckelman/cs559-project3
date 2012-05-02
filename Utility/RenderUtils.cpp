@@ -119,7 +119,7 @@ void Render::plane( const Plane& plane, const float radius )
 	// Draw the plane
 	glDisable(GL_CULL_FACE);
 
-	const sf::Image& image(ImageManager::get().getImage("grid.png"));
+	const sf::Image& image(GetImage("grid.png"));
 	image.Bind();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
