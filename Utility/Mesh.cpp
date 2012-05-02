@@ -7,6 +7,11 @@
 #include "Logger.h"
 #include "../Core/ImageManager.h"
 
+#undef __glext_h_
+#undef __glxext_h_
+#undef __gl_h_
+#include "../Framework/Utilities/GLee.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtc/random.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -18,6 +23,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <list>
 
 using namespace std;
 using namespace glm;
@@ -119,7 +125,6 @@ void Mesh::regenerateArrays( const unsigned int w
 	colors    = new vec4[numVertices];
 	vertices  = new vec3[numVertices];
 	normals   = new vec3[numVertices];
-	texcoords = new vec2[numVertices];
 
 	for(unsigned int i = 0, x = 0, z = 0; 
 		i < numVertices; ++i)
@@ -130,7 +135,6 @@ void Mesh::regenerateArrays( const unsigned int w
 		colors[i]    = vec4(1.f, 1.f, 1.f, 1.f);
 		vertices[i]  = vec3(xx, 0.f, zz);
 		normals[i]   = vec3(0.f, 1.f, 0.f);
-		texcoords[i] = vec2(x / width, z / height);
 
 		if( ++x >= width )
 		{
@@ -150,7 +154,7 @@ void Mesh::regenerateArrays( const unsigned int w
 			nrml[i].x = next[i - 1].z - next[i + 1].z;
 			nrml[i].y = next[i - width].z - next[i + width].z;
 			nrml[i].z = next[i + 1].z - next[i - 1].z;
-//			nrml[i] = glm::normalize(nrml[i]);
+			nrml[i] = glm::normalize(nrml[i]);
 		}
 	}
 }
@@ -158,10 +162,13 @@ void Mesh::regenerateArrays( const unsigned int w
 void Mesh::dropMesh()
 {
 	if( indices   != nullptr ) delete[] indices;
-	if( texcoords != nullptr ) delete[] texcoords;
 	if( normals   != nullptr ) delete[] normals;
 	if( vertices  != nullptr ) delete[] vertices;
 	if( colors    != nullptr ) delete[] colors;
+	
+	for each(auto texcoord in texcoords)
+		delete[] texcoord;
+	texcoords.clear();
 	textures.clear();
 
 	zeroMembers();
@@ -210,7 +217,6 @@ void Mesh::initialize( const sf::Image& image
 	colors    = new vec4[numVertices];
 	vertices  = new vec3[numVertices];
 	normals   = new vec3[numVertices];
-	texcoords = new vec2[numVertices];
 
 	for(unsigned int i = 0, x = 0, z = 0; 
 		i < numVertices; ++i)
@@ -233,10 +239,7 @@ void Mesh::initialize( const sf::Image& image
 		// TODO: expose this scaling factor
 		vertices[i]  = vec3(xx, 20.f * lum, zz);
 
-		// TODO: calculate normals based on neighboring verts
 		normals[i]   = vec3(0.f, 1.f, 0.f);
-
-		texcoords[i] = vec2(x / width, z / height);
 
 		if( ++x >= width )
 		{
@@ -246,10 +249,8 @@ void Mesh::initialize( const sf::Image& image
 	}
 
 	// Smooth mesh height values
-/*
 	for(int i = 0; i < 50; ++i)
 		smoothHeights();
-*/
 
 	generateArrayIndices();
 
@@ -275,8 +276,9 @@ void Mesh::zeroMembers()
 	colors       = nullptr;
 	vertices     = nullptr;
 	normals      = nullptr;
-	texcoords    = nullptr;
 	indices      = nullptr;
+	texcoords.clear();
+	textures.clear();
 	mode         = 0;
 	width        = 0;
 	height       = 0;
@@ -294,10 +296,23 @@ void Mesh::setRenderStates() const
 	// TODO: handle multitexturing 
 	if( texture ) 
 	{
-		glEnable(GL_TEXTURE_2D);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		assert(texcoords != nullptr);
-		glTexCoordPointer(2, GL_FLOAT, 0, value_ptr(texcoords[0]));
+		if( !textures.empty() && !texcoords.empty() )
+		{
+			assert(textures.size() == texcoords.size());
+			const sf::Image *texture  = textures.front();
+			const glm::vec2 *texcoord = texcoords.front();
+
+			glEnable(GL_TEXTURE_2D);
+			glActiveTexture(GL_TEXTURE0);
+			glClientActiveTexture(GL_TEXTURE0);
+
+			texture->Bind();
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glTexCoordPointer(2, GL_FLOAT, 0, value_ptr(*texcoord));
+		}
 	}
 	else
 		glDisable(GL_TEXTURE_2D);
@@ -353,9 +368,20 @@ void Mesh::resetRenderStates() const
 	// TODO: handle multitexuring 
 	if( texture )
 	{
-		glDisable(GL_TEXTURE_2D);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glTexCoordPointer(2, GL_FLOAT, 0, nullptr);
+		if( !textures.empty() && !texcoords.empty() )
+		{
+			glDisable(GL_TEXTURE_2D);
+			glActiveTexture(GL_TEXTURE0);
+			glClientActiveTexture(GL_TEXTURE0);
+
+			textures.front()->Bind();
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glBindTexture(GL_TEXTURE_2D, 0);
+
+			glTexCoordPointer(2, GL_FLOAT, 0, nullptr); 
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		}
 	}
 	else 
 		glEnable(GL_TEXTURE_2D);
@@ -414,7 +440,7 @@ vec3& Mesh::normalAt( const unsigned int col, const unsigned int row )
 		return normals[0]; 
 	}
 }
-
+/*
 vec2& Mesh::texcoordAt( const unsigned int col, const unsigned int row )
 {
 	if( col < width && row < height )
@@ -432,7 +458,7 @@ vec2& Mesh::texcoordAt( const unsigned int col, const unsigned int row )
 		return texcoords[0]; 
 	}
 }
-
+*/
 void Mesh::smoothHeights()
 {
 	assert(vertices != nullptr);
@@ -452,7 +478,19 @@ void Mesh::smoothHeights()
 		const vec3& v8 = vertexAt(x+1, z+0);
 
 		v0.y += v1.y + v2.y + v3.y + v4.y 
-			+ v5.y + v6.y + v7.y + v8.y;
+			  + v5.y + v6.y + v7.y + v8.y;
 		v0.y /= 9.f;
 	}
+}
+
+void Mesh::addTexture( const sf::Image *texture , glm::vec2 *texcoord )
+{
+	if( texture == nullptr || texcoord == nullptr )
+	{
+		Log("Warning: tried to add texture to mesh with null pointers");
+		return;
+	}
+
+	texcoords.push_back(texcoord);
+	textures.push_back(texture);		
 }

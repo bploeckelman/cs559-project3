@@ -93,6 +93,19 @@ void Scene::setup()
 //	mesh = new Mesh(64, 128, 5.f);
 	mesh = new Mesh("heightmap-terrain.png", 0.5f);
 
+	// Add a texture and some pre-generated texture coords to the Mesh
+	// TODO: this will eventually be done in Mesh subclasses, 
+	//       not out in the open like this...
+	vec2 *texcoord = new vec2[mesh->getNumVertices()];
+
+	unsigned int i = 0;
+	for(unsigned int z = 0; z < mesh->getHeight(); ++z)
+	for(unsigned int x = 0; x < mesh->getWidth();  ++x)
+		texcoord[i++] = vec2(x * 0.1f, z * 0.1f);
+
+	Image *texture = &ImageManager::get().getImage("grass_256x256.png");
+	mesh->addTexture(texture, texcoord);
+
 	// add Scene objects
 	objects.push_back(new House(10, 4, 10, sf::Color(0, 255, 0)));
 	//objects.push_back(new Fish(40, .5, 40, sf::Color(255, 127, 0), heightmap));
@@ -209,6 +222,8 @@ void Scene::handle(const Event& event)
 			mesh->toggleWireframe();
 		if( event.Key.Code == Key::Num4 )
 			mesh->toggleLighting();
+		if( event.Key.Code == Key::Num5 )
+			mesh->toggleTexturing();
 		if( event.Key.Code == Key::RControl )
 			camera->toggleMouseLook();
 		if( event.Key.Code == Key::N)

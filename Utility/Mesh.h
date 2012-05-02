@@ -8,8 +8,8 @@
 
 #include <SFML/Graphics.hpp>
 
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace sf { class Image; }
 
@@ -17,14 +17,12 @@ namespace sf { class Image; }
 class Mesh
 {
 protected:
-	std::vector<const sf::Image*> textures;
-
 	glm::vec4 *colors;
 	glm::vec3 *vertices;
 	glm::vec3 *normals;
 
-	// TODO: store multi-texture coords
-	glm::vec2 *texcoords;
+	std::vector<glm::vec2*>       texcoords;
+	std::vector<const sf::Image*> textures;
 
 	unsigned int *indices;
 
@@ -65,9 +63,9 @@ public:
 	// Render this mesh to the screen in the positive quadrant of the XZ-plane
 	void render() const;
 
-	// TODO: add texture coordinates too?
 	// Add a new texture layer to this mesh
-	void addTexture(const sf::Image *texture);
+	void addTexture(const sf::Image *texture
+				  , glm::vec2 *texcoord);
 
 	// Render state toggles
 	void toggleTexturing();
@@ -76,11 +74,11 @@ public:
 	void toggleWireframe();
 
 	// Mesh details accessors
-	int getWidth()        const;
-	int getHeight()       const;
-	int getNumIndices()   const;
-	int getNumVertices()  const;
-	int getNumTriangles() const;
+	unsigned int getWidth()        const;
+	unsigned int getHeight()       const;
+	unsigned int getNumIndices()   const;
+	unsigned int getNumVertices()  const;
+	unsigned int getNumTriangles() const;
 	
 	// Returns a reference to the color value at the specified grid indices
 	glm::vec4& colorAt   (const unsigned int col, const unsigned int row);
@@ -89,7 +87,7 @@ public:
 	// Returns a reference to the normal value at the specified grid indices
 	glm::vec3& normalAt  (const unsigned int col, const unsigned int row);
 	// Returns a reference to the texture coord value at specified grid indices
-	glm::vec2& texcoordAt(const unsigned int col, const unsigned int row);
+//	glm::vec2& texcoordAt(const unsigned int col, const unsigned int row);
 
 private:
 	// Non-copyable
@@ -131,15 +129,13 @@ private:
 };
 
 
-inline void Mesh::addTexture(const sf::Image *texture) { textures.push_back(texture); }
-
 inline void Mesh::toggleTexturing() { texture = !texture; }
 inline void Mesh::toggleBlending()  { blend = !blend; }
 inline void Mesh::toggleLighting()  { light = !light; }
 inline void Mesh::toggleWireframe() { fill  = !fill; }
 
-inline int Mesh::getWidth()        const { return width; }
-inline int Mesh::getHeight()       const { return height; }
-inline int Mesh::getNumIndices()   const { return numIndices; }
-inline int Mesh::getNumVertices()  const { return numVertices; }
-inline int Mesh::getNumTriangles() const { return numTriangles; }
+inline unsigned int Mesh::getWidth()        const { return width; }
+inline unsigned int Mesh::getHeight()       const { return height; }
+inline unsigned int Mesh::getNumIndices()   const { return numIndices; }
+inline unsigned int Mesh::getNumVertices()  const { return numVertices; }
+inline unsigned int Mesh::getNumTriangles() const { return numTriangles; }
