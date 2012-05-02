@@ -197,7 +197,6 @@ void Scene::render( const Clock& clock )
 			camera->position(glm::vec3(campos.x, campos.y, objects[i]->getNegEdge().z - 1.5f));
 		if((campos.z < objects[i]->getPosEdge().z + 1.5f && campos.z > objects[i]->getPos().z) && campos.x > objects[i]->getNegEdge().x && campos.x < objects[i]->getPosEdge().x)
 			camera->position(glm::vec3(campos.x, campos.y, objects[i]->getPosEdge().z + 1.5f));
-
 	}*/
 
 	Render::basis();
