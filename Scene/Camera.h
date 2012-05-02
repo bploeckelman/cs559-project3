@@ -6,6 +6,7 @@
 /************************************************************************/
 #include <glm/glm.hpp>
 #include "../Utility/Mesh.h"
+#include "HeightMap.h"
 
 
 namespace sf
@@ -26,7 +27,7 @@ private:
 	bool debug;
 	bool mouseLook;
 
-	Mesh& mesh;
+	HeightMap& heightmap;
 
 	glm::vec3 _position;
 	glm::vec3 _rotation;
@@ -40,7 +41,7 @@ private:
 	void moveY(const float speed=1.f);
 
 public:
-	Camera(Mesh& mesh 
+	Camera(HeightMap& heightmap 
 		 , const glm::vec3& pos=glm::vec3(0,0,0)
 		 , const glm::vec3& rot=glm::vec3(0,0,0)
 		 , const glm::vec3& rotSpeed=glm::vec3(0.7, 1.0, 1.0)

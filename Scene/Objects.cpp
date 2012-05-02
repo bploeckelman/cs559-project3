@@ -46,39 +46,24 @@ void Fish::update(const sf::Clock &clock)
 	float randz = sf::Randomizer::Random(0.f, .05f);
 	float randx = sf::Randomizer::Random(-.02f, .02f);
 
-	glm::vec3 newPos = glm::vec3(this->getPos().x + randx, this->getPos().y, this->getPos().z + randz);
-	glm::vec2 mapcoords(newPos.z / heightmap.getGroundScale(), newPos.x / heightmap.getGroundScale());
-	if( mapcoords.x >= 0 && mapcoords.y >= 0
-		&& mapcoords.x < (heightmap.getHeights().rows() - 1) && mapcoords.y < (heightmap.getHeights().cols() - 1) )
-	{
-		const unsigned int x = static_cast<unsigned int>(mapcoords.x);
-		double influenceX = mapcoords.x - x;
-		const unsigned int y = static_cast<unsigned int>(mapcoords.y);
-		double influenceY = mapcoords.y - y;
-
-		double yHeight = (heightmap.heightAt(x, y) * (1 - influenceY) + heightmap.heightAt(x, y + 1) * influenceY);
-		double xHeight = (heightmap.heightAt(x + 1, y) * (1 - influenceY) + heightmap.heightAt(x + 1, y + 1) * influenceY);
-		const double height = (yHeight * (1 - influenceX) + xHeight * influenceX) * heightmap.getHeightScale();
-
-		if( height > this->getPos().y - .1f)		//should fix for when fish out of fluid
-		{		//need to turn
-			transform[0][0] = glm::cos(theta);
-			transform[2][0] = glm::sin(theta);
-			transform[0][2] = -glm::sin(theta);
-			transform[2][2] = glm::cos(theta);
-			transform[1][1] = 1;
-			theta += .1f * direction;
-			transform[3][0] = transform[3][0] + (randx * glm::cos(theta)) + (randz * glm::sin(theta));
-			transform[3][2] = transform[3][2] + (randz * glm::cos(theta)) + (randx * glm::sin(theta));
-		}
-		else
-		{
-			direction = sf::Randomizer::Random(0,1) * 2 - 1;
-			transform[3][0] = transform[3][0] + (randx * glm::cos(theta)) + (randz * glm::sin(theta));
-			transform[3][2] = transform[3][2] + (randz * glm::cos(theta)) + (randx * glm::sin(theta));
-		}
-
+	if( heightmap.heightAt(this->getPos().x + randx, this->getPos().z + randz)  > this->getPos().y - .1f)		//should fix for when fish out of fluid
+	{		//need to turn
+		transform[0][0] = glm::cos(theta);
+		transform[2][0] = glm::sin(theta);
+		transform[0][2] = -glm::sin(theta);
+		transform[2][2] = glm::cos(theta);
+		transform[1][1] = 1;
+		theta += .1f * direction;
+		transform[3][0] = transform[3][0] + (randx * glm::cos(theta)) + (randz * glm::sin(theta));
+		transform[3][2] = transform[3][2] + (randz * glm::cos(theta)) + (randx * glm::sin(theta));
 	}
+	else
+	{
+		direction = sf::Randomizer::Random(0,1) * 2 - 1;
+		transform[3][0] = transform[3][0] + (randx * glm::cos(theta)) + (randz * glm::sin(theta));
+		transform[3][2] = transform[3][2] + (randz * glm::cos(theta)) + (randx * glm::sin(theta));
+	}
+
 }
 
 void Fish::draw()
