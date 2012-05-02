@@ -85,6 +85,9 @@ public:
 	void setBlendMode(const BlendMode& mode);
 	void setTexture(sf::Image* image);
 
+	Particles getParticles() const;
+	glm::vec3 getPos() const;
+
 protected:
 	virtual void initParticle(Particle& p) = 0;
 	virtual void emitParticles(const float deltaTime);
@@ -92,6 +95,10 @@ protected:
 private:
 	virtual void subUpdate(const float deltaTime) { }
 };
+
+inline glm::vec3 ParticleEmitter::getPos() const { return position;}
+
+inline Particles ParticleEmitter::getParticles() const { return particles;}
 
 inline void ParticleEmitter::start() { emitting = true; }
 inline void ParticleEmitter::stop()  { emitting = false; }

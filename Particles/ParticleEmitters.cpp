@@ -74,7 +74,7 @@ FountainEmitter::FountainEmitter( const glm::vec3& position
 {
 	add(new ScaleDownAffector(this, 0.f, 10.f));
 	add(new FadeOutAffector(this, 0.f, 20.f));
-	add(new ForceAffector(this, vec3(0,-5,0)));
+	add(new ForceAffector(this, vec3(0,-5.f,0)));
 
 	setBlendMode(ALPHA);
 	setPosition(position);
@@ -109,3 +109,53 @@ void FountainEmitter::initParticle( Particle& p )
 
 	p = pp;
 }
+
+
+/************************************************************************/
+/* WaterEmitter 
+/* James's edits
+/* Affectors: FadeOut, ScaleDown, Force (gravity) 
+/************************************************************************/
+WaterEmitter::WaterEmitter( const glm::vec3& position
+								, const unsigned int maxParticles
+								, const float lifetime)
+	: ParticleEmitter(maxParticles, lifetime)
+{
+	add(new ScaleDownAffector(this, 0.f, 10.f));
+	add(new FadeOutAffector(this, 0.f, 20.f));
+	add(new ForceAffector(this, vec3(0,-1.f,0)));
+
+	setBlendMode(ALPHA);
+	setPosition(position);
+	setOneTimeEmission(false);
+	setTexture(&ImageManager::get().getImage("particle-droplet.png"));
+
+	// TODO: hacking around SFML's low delta value... 
+	// should probably accumulate deltas until a 
+	// certain threshold has been reached, then pass 
+	// the accumulated value in to ParticleManager::update()
+	setEmissionRate(10000.f);
+}
+
+void WaterEmitter::initParticle( Particle& p )
+{
+	Particle pp;
+
+	pp.position     = position;
+	pp.prevPosition = position;
+
+	pp.velocity = vec3(linearRand(-2.5f, 2.5f)
+					 , linearRand(2.5f, 2.5f)
+					 , linearRand(-2.5f, 2.5f));
+	pp.accel = vec3(0,0,0);
+
+	pp.color = vec4(0, 0.8f, 1, 1);
+
+	pp.lifespan = 1.5f;
+	pp.scale = linearRand(0.2f, 0.4f);
+
+	pp.active = true;
+
+	p = pp;
+}
+

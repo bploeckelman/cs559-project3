@@ -17,6 +17,7 @@ class Fluid
 private:
 	long width;
 	long height;
+	float dist;
 
 	glm::vec3 *buffer[2];
 	long renderBuffer;
@@ -55,6 +56,16 @@ public:
 
 	void evaluate();
 	void displace();
+	void displace(float x, float z);
+
+	float getWidth() const;
+	float getHeight() const;
+
+	float getDist() const;
 
 	
 };
+
+inline float Fluid::getDist() const { return dist; } 
+inline float Fluid::getHeight() const { return height;}
+inline float Fluid::getWidth() const { return width;}

@@ -30,6 +30,7 @@ Fluid::Fluid( long n, long m, float d, float t, float c, float mu, float posx, f
 {
 	width  = n;
 	height = m;
+	dist = d;
 
 	long count = n * m;
 
@@ -234,6 +235,16 @@ void Fluid::displace()
 	const float d = glm::linearRand(0.f, 1.f);
 	const int i = static_cast<int>(glm::linearRand(0.f, (float)width));
 	const int j = static_cast<int>(glm::linearRand(0.f, (float)height));
+	vec3& v = *(buffer[1 - renderBuffer] + j * width + i);
+	v.z -= d * scale;
+}
+
+void Fluid::displace(float x, float z)
+{
+	const float scale = 0.00000001f;
+	const float d = glm::linearRand(0.f, 1.f);
+	const int i = static_cast<int>(x);
+	const int j = static_cast<int>(z);
 	vec3& v = *(buffer[1 - renderBuffer] + j * width + i);
 	v.z -= d * scale;
 }

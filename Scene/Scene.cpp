@@ -95,22 +95,27 @@ void Scene::setup()
 	);
 	
 	// add Scene objects
-	objects.push_back(new House(10, 4, 10, sf::Color(0, 255, 0)));
-	//objects.push_back(new Fish(40, .5, 40, sf::Color(255, 127, 0), heightmap));
+	objects.push_back(new House(glm::vec3(10, 4, 10), sf::Color(0, 255, 0)));
+	objects.push_back(new Fish(glm::vec3(40, .5, 40), sf::Color(255, 127, 0), heightmap, *fluid));
+	objects.push_back(new Fish(glm::vec3(30, .5, 50), sf::Color(255, 127, 0), heightmap, *fluid));
+	objects.push_back(new Fish(glm::vec3(50, .5, 30), sf::Color(255, 127, 0), heightmap, *fluid));
+	objects.push_back(new Fish(glm::vec3(35, .5, 50), sf::Color(255, 127, 0), heightmap, *fluid));
+	objects.push_back(new Fish(glm::vec3(50, .5, 35), sf::Color(255, 127, 0), heightmap, *fluid));
 
 	// add particle systems
 	ParticleSystem *system = new ParticleSystem();
 	vec3 position1(128.f, 30.f, 128.f);
 	system->add(new FountainEmitter(position1));
 	system->start();
-	particleMgr.add(system);
+	particleMgr.add(system);*/
 
-	/*ParticleSystem *founSystem = new ParticleSystem();
-	FountainEmitter *fountain = new FountainEmitter(vec3(60.f, 1.75f, 60.f));
+	ParticleSystem *founSystem = new ParticleSystem();
+	WaterEmitter *fountain = new WaterEmitter(vec3(60.f, 5.f, 60.f), 1.f);
 	founSystem->add(fountain);
 	particleMgr.add(founSystem);
 
-	objects.push_back(new Fountain(60.f, 1.75f, 60.f, 5, *fountain));*/
+
+	objects.push_back(new Fountain(glm::vec3(60.f, 1.75f, 60.f), 5, *fountain));
 
 	// create and position cameras
 	cameras.push_back(Camera( *meshes.front() 

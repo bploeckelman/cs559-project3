@@ -18,10 +18,13 @@ private:
 	sf::Color color;
 	int posNeg;
 	HeightMap& heightmap;
+	float theta;
+	Fluid& fluid;
+	int direction;
 
 public:
 	Fish();
-	Fish(float x, float y, float z, sf::Color color, HeightMap& heightmap);
+	Fish(glm::vec3 pos, sf::Color color, HeightMap& heightmap, Fluid& fluid);
 
 	~Fish();
 
@@ -37,12 +40,12 @@ private:
 	float size;
 	ParticleEmitter& emitter;
 	Fluid* fluid;
-
+	int count;
 	sf::Image texture;
 
 public:
 	Fountain();
-	Fountain(float x, float y, float z, float size, ParticleEmitter& emitter);
+	Fountain(glm::vec3 pos, float size, ParticleEmitter& emitter);
 
 	~Fountain();
 

@@ -9,13 +9,19 @@
 #include "../Utility/RenderUtils.h"
 #include <SFML\Graphics.hpp>
 #include "../Particles/Particles.h"
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
+
 
 static float lastTime = 0.f;
 
-Fish::Fish(float x, float y, float z, sf::Color color, HeightMap& heightmap)
-	: SceneObject(x, y, z)
-	 ,posNeg(1)
+Fish::Fish(glm::vec3 pos, sf::Color color, HeightMap& heightmap, Fluid& fluid)
+	: SceneObject(pos)
 	 ,color(color)
+	 ,theta(0)
+	 ,direction(sf::Randomizer::Random(0,1) * 2 -1)
+	 ,fluid(fluid)
 	 ,heightmap(heightmap)
 {
 }
@@ -38,8 +44,8 @@ void Fish::update(const sf::Clock &clock)
 		lastTime = 0;
 	}
 	float randz = sf::Randomizer::Random(0.f, .05f);
-	float randx = sf::Randomizer::Random(-.01f, .01f);
-/*
+	float randx = sf::Randomizer::Random(-.02f, .02f);
+
 	glm::vec3 newPos = glm::vec3(this->getPos().x + randx, this->getPos().y, this->getPos().z + randz);
 	glm::vec2 mapcoords(newPos.z / heightmap.getGroundScale(), newPos.x / heightmap.getGroundScale());
 	if( mapcoords.x >= 0 && mapcoords.y >= 0
@@ -54,12 +60,25 @@ void Fish::update(const sf::Clock &clock)
 		double xHeight = (heightmap.heightAt(x + 1, y) * (1 - influenceY) + heightmap.heightAt(x + 1, y + 1) * influenceY);
 		const double height = (yHeight * (1 - influenceX) + xHeight * influenceX) * heightmap.getHeightScale();
 
-		if( height > .5f )		//need to reverse direction
-			posNeg *= -1;
+		if( height > this->getPos().y - .1f)		//should fix for when fish out of fluid
+		{		//need to turn
+			transform[0][0] = glm::cos(theta);
+			transform[2][0] = glm::sin(theta);
+			transform[0][2] = -glm::sin(theta);
+			transform[2][2] = glm::cos(theta);
+			transform[1][1] = 1;
+			theta += .1f * direction;
+			transform[3][0] = transform[3][0] + (randx * glm::cos(theta)) + (randz * glm::sin(theta));
+			transform[3][2] = transform[3][2] + (randz * glm::cos(theta)) + (randx * glm::sin(theta));
+		}
+		else
+		{
+			direction = sf::Randomizer::Random(0,1) * 2 - 1;
+			transform[3][0] = transform[3][0] + (randx * glm::cos(theta)) + (randz * glm::sin(theta));
+			transform[3][2] = transform[3][2] + (randz * glm::cos(theta)) + (randx * glm::sin(theta));
+		}
 
 	}
-*/
-	this->pos = glm::vec3(this->getPos().x + randx, this->getPos().y, this->getPos().z + (randz * posNeg));
 }
 
 void Fish::draw()
@@ -75,8 +94,8 @@ void Fish::draw()
 	glColor3ub(color.r, color.g, color.b);
 
 	glPushMatrix();
-		glTranslated(pos.x, pos.y, pos.z);
-		glRotatef(90.f*posNeg, 1, 0, 0);
+		glMultMatrixf(glm::value_ptr(transform));
+		glRotatef(90.f, 1.f, 0.f, 0.f);
 		glPushMatrix();
 			glRotatef(180, 1, 0, 0);
 			glBegin(GL_QUADS);
@@ -115,40 +134,78 @@ void Fish::draw()
 
 }
 
-Fountain::Fountain(float x, float y, float z, float size, ParticleEmitter& emitter)
-	: SceneObject(x, y, z)
+Fountain::Fountain(glm::vec3 pos, float size, ParticleEmitter& emitter)
+	: SceneObject(pos)
 	 ,texture(GetImage("fountain.png"))
 	 ,emitter(emitter)
 	 ,size(size)
+	 ,count(0)
 {
 	fluid = new Fluid(
-		size*2 + 1,   // number of vertices wide
-		size*4 + 1,   // number of vertices high
+		(size*2) + 1,   // number of vertices wide
+		(size*4) + 1,   // number of vertices high
 		0.5f,  // distance between vertices
 		0.03f, // time step for evaluation
-		4.0f,  // wave velocity
+		4.f,  // wave velocity
 		0.4f   // fluid viscosity
-		,x - (size)
-		,y + .5f
-		,z - (size/2.f)
+		,pos.x - (size)
+		,pos.y + .25f
+		,pos.z - (size/2.f)
 	);
 }
 
 Fountain::~Fountain()
 {
+	delete fluid;
 }
 
 void Fountain::update(const sf::Clock &clock)
 {
+	for each(auto particle in emitter.getParticles())
+	{
+		//std::cout << "POS:" << particle.position.z << std::endl;
+		//std::cout << "EPOS" <<  emitter.getPos().z  << std::endl;
+		//std::cout << "Flu" <<  fluid->pos.y  << std::endl;
+		//std::cout << "FluidW:" <<  fluid->getHeight() << std::endl;
+		//std::cout << "ALL:" << particle.position.z - emitter.getPos().z + (fluid->getHeight()/2.f)*fluid->getDist() << std::endl;
+		glm::vec3 translated = glm::vec3(particle.position.x - emitter.getPos().x + (fluid->getWidth()/2.f)*fluid->getDist(), particle.position.y, 
+			particle.position.z - emitter.getPos().z + (fluid->getHeight()/2.f)*fluid->getDist());
+
+		if((translated.x > fluid->getWidth()) || (translated.x < 0) || (translated.z > fluid->getHeight()) || (translated.z < 0) || !particle.active) //outside fluid
+		{
+			//std::cout << "HERE" << std::endl;
+			particle.active = false;
+		}
+		else if(particle.position.y + emitter.getPos().y <= fluid->pos.y)
+		{
+			//std::cout << "EPOS:" <<  particle.position.y + emitter.getPos().y  << std::endl;
+			//std::cout << "Flu:" <<  fluid->pos.y  << std::endl;
+			//std::cout << "X:" << translated.x << std::endl;
+			//std::cout << "Z:" << translated.z << std::endl;
+			//std::cout << "HIT" << std::endl;
+			//std::cout << translated.x << std::endl;
+			//std::cout << translated.z << std::endl;
+			if(count == 100)	//TODO: SERIEUSLY THIS NEEDS TO GET FIXED
+			{
+				fluid->displace();
+				count = 0;
+			}
+			else
+				count++;
+				
+			//fluid->displace(translated.x, translated.z);
+			particle.lifespan = 0;
+			particle.active = false;
+		}
+	}
 	fluid->evaluate();
 }
 
 void Fountain::draw()
 {
-
+	glColor3f(1.0, 1.0, 1.0);
 	glPushMatrix();
-		glTranslatef(pos.x, pos.y, pos.z);
-
+		glMultMatrixf(glm::value_ptr(transform));
 		texture.Bind();
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
