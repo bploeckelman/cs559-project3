@@ -236,11 +236,12 @@ void Scene::handle(const Event& event)
 	case Event::MouseButtonPressed:
 		if( event.MouseButton.Button == sf::Mouse::Left )
 		{
+			const vec3 campos(camera->position());
 			vec3 position(linearRand(10.f, 40.f)
-						, linearRand(10.f, 20.f)
+						, linearRand(-5.f,  5.f)
 						, linearRand(10.f, 40.f));
 			ParticleSystem *ps = new ParticleSystem();
-			ps->add(new ExplosionEmitter(position));
+			ps->add(new ExplosionEmitter(campos + position));
 			ps->start();
 			particleMgr.add(ps);
 		}

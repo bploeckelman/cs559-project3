@@ -87,7 +87,9 @@ public:
 	// Returns a reference to the normal value at the specified grid indices
 	glm::vec3& normalAt  (const unsigned int col, const unsigned int row);
 	// Returns a reference to the texture coord value at specified grid indices
-//	glm::vec2& texcoordAt(const unsigned int col, const unsigned int row);
+	glm::vec2& texcoordAt(const unsigned int col
+                        , const unsigned int row
+                        , const unsigned int layer);
 
 private:
 	// Non-copyable

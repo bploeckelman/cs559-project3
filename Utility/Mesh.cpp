@@ -440,13 +440,15 @@ vec3& Mesh::normalAt( const unsigned int col, const unsigned int row )
 		return normals[0]; 
 	}
 }
-/*
-vec2& Mesh::texcoordAt( const unsigned int col, const unsigned int row )
+
+vec2& Mesh::texcoordAt( const unsigned int col
+                      , const unsigned int row
+                      , const unsigned int layer)
 {
-	if( col < width && row < height )
+	if( col < width && row < height && layer < textures.size() )
 	{
-		assert(texcoords != nullptr);
-		return texcoords[row * width + col];
+		assert(texcoords[layer] != nullptr);
+		return texcoords[layer][row * width + col];
 	}
 	else 
 	{
@@ -454,11 +456,11 @@ vec2& Mesh::texcoordAt( const unsigned int col, const unsigned int row )
 		ss << "Bad indices: Mesh::texcoordAt(" << col << "," << row << ")";
 		Log(ss);
 
-		assert(texcoords != nullptr);
-		return texcoords[0]; 
+		assert(texcoords[0] != nullptr);
+		return texcoords[0][0]; 
 	}
 }
-*/
+
 void Mesh::smoothHeights()
 {
 	assert(vertices != nullptr);
