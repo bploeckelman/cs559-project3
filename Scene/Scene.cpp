@@ -64,6 +64,7 @@ void Scene::setup()
 	glClearDepth(1.f);
 
 	glClearColor(0.1f, 0.1f, 0.1f, 1.f);
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
 	setupLights();
 
@@ -90,7 +91,7 @@ void Scene::setup()
 	
 	// generate a new mesh for testing
 //	mesh = new Mesh(64, 128, 5.f);
-	mesh = new Mesh("heightmap-terrain.png", 1.f);
+	mesh = new Mesh("heightmap-terrain.png", 0.5f);
 
 	// add Scene objects
 	objects.push_back(new House(10, 4, 10, sf::Color(0, 255, 0)));
@@ -111,7 +112,7 @@ void Scene::setup()
 	objects.push_back(new Fountain(60.f, 1.75f, 60.f, 5, *fountain));*/
 
 	// create and position cameras
-	cameras.push_back(Camera( heightmap
+	cameras.push_back(Camera( *mesh 
 							, vec3(-2.5, 25.0, -2.5)    // position
 							, vec3(40.0, 135.0, 0.0) ));// rotation
 	camera = &cameras[0];
@@ -161,6 +162,7 @@ void Scene::update( const Clock& clock, const Input& input )
 	std::for_each(cameras.begin(), cameras.end()
 		, [&](Camera& cam){ cam.update(clock, input); }
 	);
+
 	// update scene objects
 	for each(auto object in objects)
 		object->update(clock);

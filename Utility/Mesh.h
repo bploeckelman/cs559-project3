@@ -43,7 +43,6 @@ protected:
 	// TODO: vertex buffer object management
 
 public:
-
 	// Create an uninitialized mesh
 	Mesh();
 	// Create a mesh with the specified dimension
@@ -82,6 +81,15 @@ public:
 	int getNumIndices()   const;
 	int getNumVertices()  const;
 	int getNumTriangles() const;
+	
+	// Returns a reference to the color value at the specified grid indices
+	glm::vec4& colorAt   (const unsigned int col, const unsigned int row);
+	// Returns reference to the vertex at the specified grid indices
+	glm::vec3& vertexAt  (const unsigned int col, const unsigned int row);
+	// Returns a reference to the normal value at the specified grid indices
+	glm::vec3& normalAt  (const unsigned int col, const unsigned int row);
+	// Returns a reference to the texture coord value at specified grid indices
+	glm::vec2& texcoordAt(const unsigned int col, const unsigned int row);
 
 private:
 	// Non-copyable
@@ -107,7 +115,9 @@ private:
 	void regenerateArrays( const unsigned int w
 						 , const unsigned int h
 						 , const float s );
-	
+	// Apply a box filter over the y-values of each vertex
+	void smoothHeights();
+
 	// Clean up memory and zero out all members
 	void dropMesh();
 

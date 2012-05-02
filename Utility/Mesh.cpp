@@ -4,6 +4,7 @@
 /* A simple 3d triangle mesh 
 /************************************************************************/
 #include "Mesh.h"
+#include "Logger.h"
 #include "../Core/ImageManager.h"
 
 #include <glm/glm.hpp>
@@ -14,6 +15,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Image.hpp>
 
+#include <iostream>
+#include <sstream>
 #include <string>
 
 using namespace std;
@@ -242,6 +245,12 @@ void Mesh::initialize( const sf::Image& image
 		}
 	}
 
+	// Smooth mesh height values
+/*
+	for(int i = 0; i < 50; ++i)
+		smoothHeights();
+*/
+
 	generateArrayIndices();
 
 	// Calculate normals
@@ -256,7 +265,7 @@ void Mesh::initialize( const sf::Image& image
 			nrml[i].x = next[i - 1].z - next[i + 1].z;
 			nrml[i].y = next[i - width].z - next[i + width].z;
 			nrml[i].z = next[i + 1].z - next[i - 1].z;
-			nrml[i] = glm::normalize(nrml[i]);
+			nrml[i] = normalize(nrml[i]);
 		}
 	}
 }
@@ -350,4 +359,100 @@ void Mesh::resetRenderStates() const
 	}
 	else 
 		glEnable(GL_TEXTURE_2D);
+}
+
+vec4& Mesh::colorAt( const unsigned int col, const unsigned int row )
+{
+	if( col < width && row < height )
+	{
+		assert(colors != nullptr);
+		return colors[row * width + col];
+	}
+	else 
+	{
+		stringstream ss;
+		ss << "Bad indices: Mesh::colorAt(" << col << "," << row << ")";
+		Log(ss);
+
+		assert(colors != nullptr);
+		return colors[0]; 
+	}
+}
+
+vec3& Mesh::vertexAt( const unsigned int col, const unsigned int row )
+{
+	if( col < width && row < height )
+	{
+		assert(vertices != nullptr);
+		return vertices[row * width + col];
+	}
+	else 
+	{
+		stringstream ss;
+		ss << "Bad indices: Mesh::vertexAt(" << col << "," << row << ")";
+		Log(ss);
+
+		assert(vertices != nullptr);
+		return vertices[0]; 
+	}
+}
+
+vec3& Mesh::normalAt( const unsigned int col, const unsigned int row )
+{
+	if( col < width && row < height )
+	{
+		assert(normals != nullptr);
+		return normals[row * width + col];
+	}
+	else 
+	{
+		stringstream ss;
+		ss << "Bad indices: Mesh::normalAt(" << col << "," << row << ")";
+		Log(ss);
+
+		assert(normals != nullptr);
+		return normals[0]; 
+	}
+}
+
+vec2& Mesh::texcoordAt( const unsigned int col, const unsigned int row )
+{
+	if( col < width && row < height )
+	{
+		assert(texcoords != nullptr);
+		return texcoords[row * width + col];
+	}
+	else 
+	{
+		stringstream ss;
+		ss << "Bad indices: Mesh::texcoordAt(" << col << "," << row << ")";
+		Log(ss);
+
+		assert(texcoords != nullptr);
+		return texcoords[0]; 
+	}
+}
+
+void Mesh::smoothHeights()
+{
+	assert(vertices != nullptr);
+	for(unsigned int z = 1; z < (height - 1); ++z)
+	for(unsigned int x = 1; x < (width  - 1); ++x)
+	{
+		vec3& v0 = vertexAt(x,z);
+
+		const vec3& v1 = vertexAt(x-1, z-1);
+		const vec3& v2 = vertexAt(x-1, z+1);
+		const vec3& v3 = vertexAt(x+1, z-1);
+		const vec3& v4 = vertexAt(x+1, z+1);
+
+		const vec3& v5 = vertexAt(x+0, z-1);
+		const vec3& v6 = vertexAt(x+0, z+1);
+		const vec3& v7 = vertexAt(x-1, z+0);
+		const vec3& v8 = vertexAt(x+1, z+0);
+
+		v0.y += v1.y + v2.y + v3.y + v4.y 
+			+ v5.y + v6.y + v7.y + v8.y;
+		v0.y /= 9.f;
+	}
 }
