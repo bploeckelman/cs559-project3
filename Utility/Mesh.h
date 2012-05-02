@@ -6,6 +6,8 @@
 /************************************************************************/
 #include <glm/glm.hpp>
 
+#include <SFML/Graphics.hpp>
+
 #include <vector>
 #include <string>
 
@@ -26,6 +28,7 @@ protected:
 
 	unsigned int *indices;
 
+	unsigned int mode;
 	unsigned int width;
 	unsigned int height;
 	unsigned int numVertices;
@@ -37,7 +40,6 @@ protected:
 	bool light;
 	bool fill;
 
-	// TODO: opengl draw mode, default GL_TRIANGLES
 	// TODO: vertex buffer object management
 
 public:
@@ -47,13 +49,16 @@ public:
 	// Create a mesh with the specified dimension
 	Mesh( const unsigned int width
 		, const unsigned int height
-		, const float spread = 1.f );
+		, const float spread = 1.f
+		, const unsigned int elementMode = GL_TRIANGLES );
 	// Create a mesh by loading an image with the specified filename
 	Mesh( const std::string& imageFileName
-		, const float spread = 1.f);
+		, const float spread = 1.f
+		, const unsigned int elementMode = GL_TRIANGLES );
 	// Create a mesh by loading displacement data from the specified image
 	Mesh( const sf::Image& image
-		, const float spread = 1.f );
+		, const float spread = 1.f
+		, const unsigned int elementMode = GL_TRIANGLES );
 	
 	// Deallocate mesh resources
 	~Mesh();
@@ -87,11 +92,14 @@ private:
 	void initialize();
 	void initialize(const unsigned int width
 				  , const unsigned int height
-				  , const float spread);
+				  , const float spread
+				  , const unsigned int elementMode);
 	void initialize(const std::string& imageFileName
-				  , const float spread);
+				  , const float spread
+				  , const unsigned int elementMode);
 	void initialize(const sf::Image& image
-				  , const float spread);
+				  , const float spread
+				  , const unsigned int elementMode);
 
 	// Generate indices for a planar mesh
 	void generateArrayIndices();

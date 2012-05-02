@@ -27,21 +27,24 @@ Mesh::Mesh()
 
 Mesh::Mesh( const unsigned int width
 		  , const unsigned int height
-		  , const float spread )
+		  , const float spread
+		  , const unsigned int elementMode )
 {
-	initialize(width, height, spread);
+	initialize(width, height, spread, elementMode);
 }
 
 Mesh::Mesh( const string& imageFileName
-		  , const float spread )
+		  , const float spread
+		  , const unsigned int elementMode )
 {
-	initialize(imageFileName, spread);
+	initialize(imageFileName, spread, elementMode);
 }
 
 Mesh::Mesh( const sf::Image& image
-		  , const float spread )
+		  , const float spread
+		  , const unsigned int elementMode )
 {
-	initialize(image, spread);
+	initialize(image, spread, elementMode);
 }
 
 Mesh::~Mesh()
@@ -53,7 +56,6 @@ void Mesh::render() const
 {
 	setRenderStates();
 
-
 	// Draw the mesh ------------------------------
 	glEnableClientState(GL_COLOR_ARRAY);
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -64,13 +66,12 @@ void Mesh::render() const
 	glVertexPointer(3, GL_FLOAT, 0, value_ptr(vertices[0]));
 
 	assert(indices != nullptr);
-	glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, indices);
+	glDrawElements(mode, numIndices, GL_UNSIGNED_INT, indices);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 
 	resetRenderStates();
-
 }
 
 void Mesh::generateArrayIndices()
@@ -171,24 +172,31 @@ void Mesh::initialize()
 
 void Mesh::initialize( const unsigned int width
 					 , const unsigned int height
-					 , const float spread )
+					 , const float spread
+					 , const unsigned int elementMode )
 {
+	mode = elementMode;
+
 	zeroMembers();
 	regenerateArrays(width, height, spread);
 	generateArrayIndices();
 }
 
 void Mesh::initialize( const string& imageFileName
-					 , const float spread )
+					 , const float spread
+					 , const unsigned int elementMode )
 {
 	zeroMembers();
-	initialize(ImageManager::get().getImage(imageFileName), spread);
+	initialize(ImageManager::get().getImage(imageFileName), spread, elementMode);
 }
 
 void Mesh::initialize( const sf::Image& image
-					 , const float spread )
+					 , const float spread
+					 , const unsigned int elementMode )
 {
 	zeroMembers();
+
+	mode = elementMode;
 
 	width  = image.GetWidth();
 	height = image.GetHeight();
@@ -260,6 +268,7 @@ void Mesh::zeroMembers()
 	normals      = nullptr;
 	texcoords    = nullptr;
 	indices      = nullptr;
+	mode         = 0;
 	width        = 0;
 	height       = 0;
 	numVertices  = 0;
