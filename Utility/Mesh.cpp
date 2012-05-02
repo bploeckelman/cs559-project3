@@ -51,38 +51,8 @@ Mesh::~Mesh()
 
 void Mesh::render() const
 {
-	// TODO: texture toggle
-	glDisable(GL_TEXTURE_2D);
-//	glEnable(GL_TEXTURE_2D);
-//	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-//	assert(texcoords != nullptr);
-//	glTexCoordPointer(2, GL_FLOAT, 0, value_ptr(texcoords[0]));
+	setRenderStates();
 
-	// Set lighting state -------------------------
-	if( light )
-	{
-		glEnable(GL_LIGHTING);
-		glEnableClientState(GL_NORMAL_ARRAY);
-		assert(normals != nullptr);
-		glNormalPointer(GL_FLOAT, 0, value_ptr(normals[0]));
-	}
-	else
-		glDisable(GL_LIGHTING);
-
-	// Set blending state --------------------------
-	if( blend )
-	{
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	}
-	else 
-		glDisable(GL_BLEND);
-
-	// Set polygon filling state ------------------
-	if( fill )
-		glPolygonMode(GL_FRONT, GL_FILL);
-	else
-		glPolygonMode(GL_FRONT, GL_LINE);
 
 	// Draw the mesh ------------------------------
 	glEnableClientState(GL_COLOR_ARRAY);
@@ -99,28 +69,8 @@ void Mesh::render() const
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 
-	// Reset polygon filling state -----------------
-	if( !fill )
-		glPolygonMode(GL_FRONT, GL_FILL);
+	resetRenderStates();
 
-	// Reset blending state ------------------------
-	if( blend )
-		glDisable(GL_BLEND);
-
-	// Reset lighting state ------------------------
-	if( light )
-	{
-		glDisable(GL_LIGHTING);
-		glDisableClientState(GL_NORMAL_ARRAY);
-		glNormalPointer(GL_FLOAT, 0, nullptr);
-	}
-	else
-		glEnable(GL_LIGHTING);
-
-	// TODO: texture toggle
-	glEnable(GL_TEXTURE_2D);
-//	glDisable(GL_TEXTURE_2D);
-//	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 void Mesh::generateArrayIndices()
@@ -196,6 +146,7 @@ void Mesh::regenerateArrays( const unsigned int w
 			nrml[i].x = next[i - 1].z - next[i + 1].z;
 			nrml[i].y = next[i - width].z - next[i + width].z;
 			nrml[i].z = next[i + 1].z - next[i - 1].z;
+//			nrml[i] = glm::normalize(nrml[i]);
 		}
 	}
 }
@@ -265,7 +216,8 @@ void Mesh::initialize( const sf::Image& image
 		// Use luminance value to determine height in [0,1]
 		const float xx = spread * x;
 		const float zz = spread * z;
-		const float lum = 0.299f * r + 0.587f * g + 0.114f * b; 
+//		const float lum = 0.299f * r + 0.587f * g + 0.114f * b; 
+		const float lum = (r + g + b) / 3.f; 
 
 		// TODO: expose this scaling factor
 		vertices[i]  = vec3(xx, 20.f * lum, zz);
@@ -282,7 +234,10 @@ void Mesh::initialize( const sf::Image& image
 		}
 	}
 
+	generateArrayIndices();
+
 	// Calculate normals
+	// TODO: not really working
 	for(unsigned int j = 1; j < height - 1; ++j)
 	{
 		const vec3 *next = vertices + j * width;
@@ -293,10 +248,9 @@ void Mesh::initialize( const sf::Image& image
 			nrml[i].x = next[i - 1].z - next[i + 1].z;
 			nrml[i].y = next[i - width].z - next[i + width].z;
 			nrml[i].z = next[i + 1].z - next[i - 1].z;
+			nrml[i] = glm::normalize(nrml[i]);
 		}
 	}
-
-	generateArrayIndices();
 }
 
 void Mesh::zeroMembers()
@@ -314,4 +268,77 @@ void Mesh::zeroMembers()
 	blend        = false;
 	light        = false;
 	fill         = false;
+}
+
+void Mesh::setRenderStates() const
+{
+	// Set texturing state ----------------------
+	// TODO: handle multitexturing 
+	if( texture ) 
+	{
+		glEnable(GL_TEXTURE_2D);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		assert(texcoords != nullptr);
+		glTexCoordPointer(2, GL_FLOAT, 0, value_ptr(texcoords[0]));
+	}
+	else
+		glDisable(GL_TEXTURE_2D);
+
+	// Set lighting state -------------------------
+	if( light )
+	{
+		glEnable(GL_LIGHTING);
+		glEnableClientState(GL_NORMAL_ARRAY);
+		assert(normals != nullptr);
+		glNormalPointer(GL_FLOAT, 0, value_ptr(normals[0]));
+	}
+	else
+		glDisable(GL_LIGHTING);
+
+	// Set blending state --------------------------
+	if( blend )
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+	else 
+		glDisable(GL_BLEND);
+
+	// Set polygon filling state ------------------
+	if( fill )
+		glPolygonMode(GL_FRONT, GL_FILL);
+	else
+		glPolygonMode(GL_FRONT, GL_LINE);
+}
+
+void Mesh::resetRenderStates() const
+{
+	// Reset polygon filling state -----------------
+	if( !fill )
+		glPolygonMode(GL_FRONT, GL_FILL);
+
+	// Reset blending state ------------------------
+	if( blend )
+		glDisable(GL_BLEND);
+
+	// Reset lighting state ------------------------
+	if( light )
+	{
+		glDisable(GL_LIGHTING);
+		glDisableClientState(GL_NORMAL_ARRAY);
+		glNormalPointer(GL_FLOAT, 0, nullptr);
+	}
+	else
+		glEnable(GL_LIGHTING);
+
+	// Reset texturing state -----------------------
+	// TODO: handle multitexuring 
+	if( texture )
+	{
+		glDisable(GL_TEXTURE_2D);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glTexCoordPointer(2, GL_FLOAT, 0, nullptr);
+	}
+	else 
+		glEnable(GL_TEXTURE_2D);
 }

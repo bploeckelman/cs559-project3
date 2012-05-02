@@ -32,6 +32,7 @@ protected:
 	unsigned int numTriangles;
 	unsigned int numIndices;
 
+	bool texture;
 	bool blend;
 	bool light;
 	bool fill;
@@ -64,10 +65,13 @@ public:
 	// Add a new texture layer to this mesh
 	void addTexture(const sf::Image *texture);
 
+	// Render state toggles
+	void toggleTexturing();
 	void toggleBlending();
 	void toggleLighting();
 	void toggleWireframe();
 
+	// Mesh details accessors
 	int getWidth()        const;
 	int getHeight()       const;
 	int getNumIndices()   const;
@@ -99,18 +103,25 @@ private:
 	// Clean up memory and zero out all members
 	void dropMesh();
 
+	// Set all member data to some known zero value
 	void zeroMembers();
 
+	// Enable or disable OpenGL states based on state flags
+	void setRenderStates()   const;
+	// Undo OpenGL state changes made in setRenderStates()
+	void resetRenderStates() const;
 };
 
+
 inline void Mesh::addTexture(const sf::Image *texture) { textures.push_back(texture); }
+
+inline void Mesh::toggleTexturing() { texture = !texture; }
+inline void Mesh::toggleBlending()  { blend = !blend; }
+inline void Mesh::toggleLighting()  { light = !light; }
+inline void Mesh::toggleWireframe() { fill  = !fill; }
 
 inline int Mesh::getWidth()        const { return width; }
 inline int Mesh::getHeight()       const { return height; }
 inline int Mesh::getNumIndices()   const { return numIndices; }
 inline int Mesh::getNumVertices()  const { return numVertices; }
 inline int Mesh::getNumTriangles() const { return numTriangles; }
-
-inline void Mesh::toggleBlending()  { blend = !blend; }
-inline void Mesh::toggleLighting()  { light = !light; }
-inline void Mesh::toggleWireframe() { fill  = !fill; }
