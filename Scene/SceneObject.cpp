@@ -5,6 +5,7 @@
 /************************************************************************/
 
 #include "SceneObject.h"
+#include "Camera.h"
 
 static int nextID = 0;
 
@@ -26,7 +27,7 @@ SceneObject::~SceneObject()
 {
 }
 
-void SceneObject::draw()
+void SceneObject::draw(const Camera& camera)
 {
 }
 

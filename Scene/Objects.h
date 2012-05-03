@@ -31,7 +31,7 @@ public:
 
 	void update(const sf::Clock &clock);
 
-	void draw();
+	void draw(const Camera& camera);
 
 };
 
@@ -52,7 +52,7 @@ public:
 
 	void update(const sf::Clock &clock);
 
-	void draw();
+	void draw(const Camera& camera);
 
 };
 
@@ -68,7 +68,7 @@ public:
 
 	~Bush();
 
-	void draw();
+	void draw(const Camera& camera);
 
 };
 
@@ -86,5 +86,5 @@ public:
 	~Blimp();
 
 	void update(sf::Clock &clock);
-	void draw();
+	void draw(const Camera& camera);
 };

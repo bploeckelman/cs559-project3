@@ -39,7 +39,7 @@ House::~House()
 {
 }
 
-void House::draw()
+void House::draw(const Camera& camera)
 {
 	glPushMatrix();
 		glMultMatrixf(glm::value_ptr(transform));

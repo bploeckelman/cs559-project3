@@ -100,12 +100,11 @@ void Scene::setup()
 	// add Scene objects
 	objects.push_back(new House(glm::vec3(100, heightmap->heightAt(100, 100) + 10, 100), sf::Color(0, 255, 0), stone, 10, 20, 10));
 	objects.push_back(new Bush(glm::vec3(30, heightmap->heightAt(30, 30) + 5, 30), 5));
+	objects.push_back(new Bush(glm::vec3(50, heightmap->heightAt(50, 100) + 3, 100), 3));
+	objects.push_back(new Bush(glm::vec3(37, heightmap->heightAt(37, 82) + 3, 82), 3));
+	objects.push_back(new Bush(glm::vec3(58, heightmap->heightAt(58, 15) + 7, 15), 7));
 	objects.push_back(new Blimp(glm::vec3(120, 50, 80), 10));
-	/*objects.push_back(new Fish(glm::vec3(40, .5, 40), sf::Color(255, 127, 0), *heightmap, *fluid));
-	objects.push_back(new Fish(glm::vec3(30, .5, 50), sf::Color(255, 127, 0), *heightmap, *fluid));
-	objects.push_back(new Fish(glm::vec3(50, .5, 30), sf::Color(255, 127, 0), *heightmap, *fluid));
-	objects.push_back(new Fish(glm::vec3(35, .5, 50), sf::Color(255, 127, 0), *heightmap, *fluid));
-	objects.push_back(new Fish(glm::vec3(50, .5, 35), sf::Color(255, 127, 0), *heightmap, *fluid));*/
+	/*objects.push_back(new Fish(glm::vec3(40, .5, 40), sf::Color(255, 127, 0), *heightmap, *fluid)); */
 
 	// add particle systems
 	ParticleSystem *system = new ParticleSystem();
@@ -113,13 +112,13 @@ void Scene::setup()
 	system->add(new FountainEmitter(position1));
 	FountainEmitter *fountain = new FountainEmitter(vec3(60.f, heightmap->heightAt(60, 100) + 2.f, 100.f), 20);
 	system->add(fountain);
-	system->add(new FireEmitter(glm::vec3(40, heightmap->heightAt(40, 40), 40)));
+	system->add(new FireEmitter(glm::vec3(40, heightmap->heightAt(40, 20), 20)));
 	system->start();
 	particleMgr.add(system);
 
 
 
-	objects.push_back(new Fountain(glm::vec3(60.f, heightmap->heightAt(60, 100), 100.f), 10, *fountain));
+	objects.push_back(new Fountain(glm::vec3(60.f, heightmap->heightAt(60, 100) + .5f, 100.f), 10, *fountain));
 
 	// create and position cameras
 	cameras.push_back(Camera( *heightmap 
@@ -203,7 +202,7 @@ void Scene::render( const Clock& clock )
 		mesh->render();
 
 	for each(auto object in objects)
-		object->draw();
+		object->draw(*camera);
 
 	//fluid->render();
 

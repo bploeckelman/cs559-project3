@@ -34,6 +34,6 @@ public:
 
 	~House();
 
-	void draw();
+	void draw(const Camera& camera);
 
 };

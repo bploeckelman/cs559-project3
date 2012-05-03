@@ -67,7 +67,7 @@ void Fish::update(const sf::Clock &clock)
 
 }
 
-void Fish::draw()
+void Fish::draw(const Camera& camera)
 {
 	float size = .2f;
 	
@@ -165,7 +165,7 @@ void Fountain::update(const sf::Clock &clock)
 	fluid->evaluate();
 }
 
-void Fountain::draw()
+void Fountain::draw(const Camera& camera)
 {
 	glColor3f(1.0, 1.0, 1.0);
 	glPushMatrix();
@@ -286,7 +286,7 @@ void Fountain::draw()
 
 Bush::Bush(glm::vec3 pos, float size) : 
 	 SceneObject(pos)
-	,side(GetImage("bush-side1.png"))
+	,side(GetImage("bush-side.png"))
 	,top(GetImage("bush-top.png"))
 	,size(size)
 {
@@ -297,11 +297,31 @@ Bush::~Bush()
 
 }
 
-void Bush::draw()
+void Bush::draw(const Camera& camera)
 {
-	glColor3f(1.0, 1.0, 1.0);
+
 	glPushMatrix();
-		glMultMatrixf(glm::value_ptr(transform));
+			// Move the particle into position and scale it  
+		const glm::mat4 newTransform(
+			glm::scale( glm::translate( glm::mat4(1.0), glm::vec3(transform[3][0], transform[3][1], transform[3][2]) )
+					, glm::vec3(1.f, 1.f, 1.f) )
+		);
+		glMultMatrixf(glm::value_ptr(newTransform));
+
+		// Undo the camera translation and get the inverse rotation
+		const glm::mat4 inverseCameraRotation(
+			glm::inverse( glm::translate( camera.view(), camera.position() ) )
+		);
+
+		const float halfScale = -0.5f;
+		const glm::vec3  originCentered(halfScale, halfScale, 0.f);
+		// Move the origin to the center of the particle
+		const glm::mat4 mat(	glm::translate( inverseCameraRotation, originCentered ) );
+
+		// Apply the final matrix for the billboarded particle
+		glMultMatrixf(glm::value_ptr(mat));
+
+		glColor3f(1.0, 1.0, 1.0);
 
 		side.Bind();
 		glEnable(GL_BLEND);
@@ -313,19 +333,6 @@ void Bush::draw()
 		float w =  size;
 
 		glBegin(GL_QUADS);
-			glNormal3d(-1,0,0);
-				glTexCoord2f(0.f,    0.f);glVertex3d(w,l,0);
-				glTexCoord2f(0.f, 1.f);glVertex3d(w,-l,0);
-				glTexCoord2f(1.f, 1.f);glVertex3d(-w,-l,0);
-				glTexCoord2f(1.f,   0.f);glVertex3d(-w,l,0);
-			glNormal3d(1,0,0);
-				glTexCoord2f(0.f,    0.f);glVertex3d(-w,l,0);
-				glTexCoord2f(0.f, 1.f);glVertex3d(-w,-l,0);
-				glTexCoord2f(1.f, 1.f);glVertex3d(w,-l,0);
-				glTexCoord2f(1.f,   0.f);glVertex3d(w,l,0);
-		glEnd();
-		glRotatef(90.f, 0, 1, 0);
-		glBegin(GL_QUADS);	
 			glNormal3d(-1,0,0);
 				glTexCoord2f(0.f,    0.f);glVertex3d(w,l,0);
 				glTexCoord2f(0.f, 1.f);glVertex3d(w,-l,0);
@@ -365,7 +372,7 @@ void Blimp::update(sf::Clock &clock)
 }
 	
 
-void Blimp::draw()
+void Blimp::draw(const Camera& camera)
 {
 	glEnable(GL_TEXTURE_2D);
 

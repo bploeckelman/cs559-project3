@@ -6,7 +6,7 @@
 /************************************************************************/
 #include <glm/glm.hpp>
 #include <SFML/System/Clock.hpp>
-
+#include "Camera.h"
 
 class SceneObject
 {
@@ -19,7 +19,7 @@ public:
 	SceneObject(glm::vec3 pos);
 	virtual ~SceneObject();
 
-	virtual void draw();
+	virtual void draw(const Camera& camera);
 	virtual void update(const sf::Clock &clock);
 
 	glm::vec3 getPos() const;
