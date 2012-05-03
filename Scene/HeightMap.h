@@ -5,9 +5,7 @@
 /* A basic height map mesh
 /************************************************************************/
 #include "../Utility/Mesh.h"
-
-#include <string>
-#include <limits>
+#include "../Utility/Logger.h"
 
 
 class HeightMap : public Mesh
@@ -41,14 +39,18 @@ public:
 			, const float heightScale   = 20.f);
 
 	/**
-	 * Get the height value for the given row,col vertex index
+	 * Get the height value for the given column and row 
+	 * using bilinear interpolation to get a value between 
+	 * neighboring vertices.
 	 * \param col - the column index to lookup
 	 * \param row - the row index to lookup
 	 * \return - the height value at the specified indices,
 	 *           or the smallest possible float 
 	**/
+
 	double heightAt(const double col  
                  , const double row);
+
 
 	float getHeightScale() const;
 	float getGroundScale() const;
@@ -61,25 +63,3 @@ private:
 inline float HeightMap::getHeightScale() const {return heightScale;}
 inline float HeightMap::getGroundScale() const {return groundScale;}
 
-inline double HeightMap::heightAt( const double col
-								, const double row )
-{
-	if( col < width && row < height ){
-			glm::vec2 mapcoords(col /groundScale, row / groundScale);
-			if( mapcoords.x >= 0 && mapcoords.y >= 0
-				&& mapcoords.x < (height - 1) && mapcoords.y < (width - 1) )
-			{
-				const unsigned int x = static_cast<unsigned int>(mapcoords.x);
-				double influenceX = mapcoords.x - x;
-				const unsigned int y = static_cast<unsigned int>(mapcoords.y);
-				double influenceY = mapcoords.y - y;
-
-				double yHeight = (vertexAt(x, y).y * (1 - influenceY) + vertexAt(x, y + 1).y * influenceY);
-				double xHeight = (vertexAt(x + 1, y).y * (1 - influenceY) + vertexAt(x + 1, y + 1).y * influenceY);
-				const double height = (yHeight * (1 - influenceX) + xHeight * influenceX);
-				return height;
-			}
-	}
-	return std::numeric_limits<float>::min();
-
-}

@@ -8,6 +8,8 @@
 
 #include <list>
 
+namespace sf { class Clock; }
+
 typedef std::list<ParticleSystem*>      ParticleSystems;
 typedef ParticleSystems::iterator       ParticleSystemsIter;
 typedef ParticleSystems::const_iterator ParticleSystemsConstIter;
@@ -17,9 +19,10 @@ class ParticleManager
 {
 private:
 	ParticleSystems systems;
+	sf::Clock       timer;
 
 public:
-	ParticleManager() : systems() {}
+	ParticleManager();
 	~ParticleManager();
 
 	// Add a new particle system 

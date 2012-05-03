@@ -27,8 +27,8 @@ ExplosionEmitter::ExplosionEmitter(const vec3& position
 	: ParticleEmitter(maxParticles, lifetime)
 {
 	add(new ScaleDownAffector(this, 0.f, 10.f));
-	add(new FadeOutAffector(this, 0.f, 20.f));
-	add(new ForceAffector(this, vec3(0,-10,0)));
+	add(new FadeOutAffector(this, 0.f, 10.f));
+	add(new ForceAffector(this, vec3(0,-25,0)));
 
 	setBlendMode(ALPHA);
 	setPosition(position);
@@ -44,7 +44,7 @@ void ExplosionEmitter::initParticle(Particle& p)
 	pp.position     = position;
 	pp.prevPosition = position;
 
-	pp.velocity = sphericalRand(30.f);
+	pp.velocity = sphericalRand(60.f);
 	pp.accel    = -0.1f * pp.velocity;
 
 	pp.color = vec4(linearRand(0.3f, 1.f)
@@ -73,18 +73,14 @@ FountainEmitter::FountainEmitter( const glm::vec3& position
 	: ParticleEmitter(maxParticles, lifetime)
 {
 	add(new ScaleDownAffector(this, 0.f, 10.f));
-	add(new FadeOutAffector(this, 0.f, 20.f));
-	add(new ForceAffector(this, vec3(0,-5.f,0)));
+	add(new FadeOutAffector(this, 0.f, 1.f));
+	add(new ForceAffector(this, vec3(0,-20.f,0)));
 
 	setBlendMode(ALPHA);
 	setPosition(position);
 	setOneTimeEmission(false);
 	setTexture(&GetImage("particle-droplet.png"));
 
-	// TODO: hacking around SFML's low delta value... 
-	// should probably accumulate deltas until a 
-	// certain threshold has been reached, then pass 
-	// the accumulated value in to ParticleManager::update()
 	setEmissionRate(10000.f);
 }
 
@@ -95,15 +91,15 @@ void FountainEmitter::initParticle( Particle& p )
 	pp.position     = position;
 	pp.prevPosition = position;
 
-	pp.velocity = vec3(linearRand(-10.f, 10.f)
-					 , linearRand(30.f, 40.f)
-					 , linearRand(-10.f, 10.f));
+	pp.velocity = vec3(linearRand(-7.f, 7.f)
+					 , linearRand(40.f, 80.f)
+					 , linearRand(-7.f, 7.f));
 	pp.accel = vec3(0,0,0);
 
-	pp.color = vec4(0, 0.8f, 1, 1);
+	pp.color = vec4(0, linearRand(0.6f, 0.9f), 1, 1);
 
-	pp.lifespan = 0.4f;
-	pp.scale = linearRand(0.2f, 0.4f);
+	pp.lifespan = 0.5f;
+	pp.scale = linearRand(0.3f, 0.5f);
 
 	pp.active = true;
 
@@ -130,10 +126,6 @@ WaterEmitter::WaterEmitter( const glm::vec3& position
 	setOneTimeEmission(false);
 	setTexture(&ImageManager::get().getImage("particle-droplet.png"));
 
-	// TODO: hacking around SFML's low delta value... 
-	// should probably accumulate deltas until a 
-	// certain threshold has been reached, then pass 
-	// the accumulated value in to ParticleManager::update()
 	setEmissionRate(10000.f);
 }
 

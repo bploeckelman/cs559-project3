@@ -72,14 +72,12 @@ void Camera::lookAt(const glm::vec3& eye
 
 void Camera::update(const sf::Clock& clock, const sf::Input& input)
 {
-	// keep the current camera above the mesh
-	const vec3 campos(_position);
 
-	const float height = heightmap.heightAt(campos.x, campos.z);
-		
-	static const float above = 5.f;
-	if( campos.y < height + above )
-		moveY(height - campos.y + above);
+	// Keep the camera above the heightmap
+	const float height = heightmap.heightAt(_position.x, _position.z);
+	if( _position.y < height )
+		moveY(height - _position.y);
+
 
 	// Apply the current transformations to the camera view
 	_view = glm::mat4(1.0);
