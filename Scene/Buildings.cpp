@@ -51,6 +51,8 @@ void House::draw(const Camera& camera)
 		float l = length;
 		float w = width;
 
+		glColor4f(1.f, 1.f, 1.f, 1.f);
+
 		//sides
 		glBegin(GL_QUADS);
 			glNormal3d(0,0,1);

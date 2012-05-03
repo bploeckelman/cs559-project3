@@ -96,7 +96,10 @@ void FountainEmitter::initParticle( Particle& p )
 					 , linearRand(-7.f, 7.f));
 	pp.accel = vec3(0,0,0);
 
-	pp.color = vec4(0, linearRand(0.6f, 0.9f), 1, 1);
+	pp.color = vec4(0
+				  , linearRand(0.4f, 0.9f)
+				  , linearRand(0.8f, 1.f)
+				  , 1);
 
 	pp.lifespan = 0.5f;
 	pp.scale = linearRand(0.3f, 0.5f);

@@ -145,7 +145,6 @@ Fountain::~Fountain()
 
 void Fountain::update(const sf::Clock &clock)
 {
-
 	std::for_each(emitter.getParticles().begin(), emitter.getParticles().end(),
 			[&](Particle& particle)
 	{
@@ -299,6 +298,7 @@ Bush::~Bush()
 
 void Bush::draw(const Camera& camera)
 {
+	glDepthMask(GL_FALSE);
 
 	glPushMatrix();
 			// Move the particle into position and scale it  
@@ -325,6 +325,7 @@ void Bush::draw(const Camera& camera)
 
 		side.Bind();
 		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
@@ -350,6 +351,8 @@ void Bush::draw(const Camera& camera)
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 	glPopMatrix();
+
+	glDepthMask(GL_TRUE);
 }
 
 
