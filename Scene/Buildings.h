@@ -13,11 +13,12 @@ private:
 	sf::Color color;
 	sf::Image roof; 
 	sf::Image side;
-	float size;
+	float length;
+	float width;
 
 public:
 	House();
-	House(glm::vec3 pos, sf::Color color, float size);
+	House(glm::vec3 pos, sf::Color color, float length, float width);
 
 	~House();
 

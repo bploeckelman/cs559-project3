@@ -98,7 +98,7 @@ void Scene::setup()
 
 	
 	// add Scene objects
-	//objects.push_back(new House(glm::vec3(100, 40, 100), sf::Color(0, 255, 0), 10));
+	objects.push_back(new House(glm::vec3(100, 40, 100), sf::Color(0, 255, 0), 10, 20));
 	objects.push_back(new Bush(glm::vec3(30, heightmap->heightAt(30, 30) + 5, 30), 5));
 	/*objects.push_back(new Fish(glm::vec3(40, .5, 40), sf::Color(255, 127, 0), *heightmap, *fluid));
 	objects.push_back(new Fish(glm::vec3(30, .5, 50), sf::Color(255, 127, 0), *heightmap, *fluid));
@@ -110,7 +110,7 @@ void Scene::setup()
 	ParticleSystem *system = new ParticleSystem();
 	vec3 position1(128.f, 30.f, 128.f);
 	system->add(new FountainEmitter(position1));
-	FountainEmitter *fountain = new FountainEmitter(vec3(60.f, 35.f, 60.f), 20);
+	FountainEmitter *fountain = new FountainEmitter(vec3(60.f, heightmap->heightAt(60, 100) + 2.f, 100.f), 20);
 	system->add(fountain);
 	system->add(new FireEmitter(glm::vec3(40, heightmap->heightAt(40, 40), 40)));
 	system->start();
@@ -118,7 +118,7 @@ void Scene::setup()
 
 
 
-	objects.push_back(new Fountain(glm::vec3(60.f, 31.75f, 60.f), 10, *fountain));
+	objects.push_back(new Fountain(glm::vec3(60.f, heightmap->heightAt(60, 100), 100.f), 10, *fountain));
 
 	// create and position cameras
 	cameras.push_back(Camera( *heightmap 

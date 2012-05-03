@@ -13,16 +13,16 @@ House::House()
 	: color()
 	 ,roof()
 	 ,side()
-	 ,size()
 {
 }
 
-House::House(glm::vec3 pos, sf::Color color, float size)
+House::House(glm::vec3 pos, sf::Color color, float length, float width)
 	: SceneObject(pos)
 	 ,roof(GetImage("roof.png"))
-	 ,side(GetImage("side.png"))
+	 ,side(GetImage("Bricks.png"))
 	 ,color(color)
-	 ,size(size)
+	 ,length(length)
+	 ,width(width)
 {
 }
 
@@ -39,31 +39,54 @@ void House::draw()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-		const float nl = -0.5f * size;
-		const float pl =  0.5f * size;
+		float l = length;
+		float w = width;
+		float height = 10.f;
 
 		//sides
 		glBegin(GL_QUADS);
-			glNormal3d( 0,0,1);
-				glTexCoord2f(0.f,    0.f);glVertex3d(pl,pl,pl);
-				glTexCoord2f(size,    0.f);glVertex3d(nl,pl,pl);
-				glTexCoord2f(0.f,    size);glVertex3d(nl,nl,pl);
-				glTexCoord2f(size,   size);glVertex3d(pl,nl,pl);
-			glNormal3d( 0, 0, -1);
-				glTexCoord2f(0.f,    0.f);glVertex3d(pl,pl, nl);
-				glTexCoord2f(size,    size);glVertex3d(pl,nl, nl);
-				glTexCoord2f(0.f,    size);glVertex3d(nl,nl, nl);
-				glTexCoord2f(size,    0.f);glVertex3d(nl,pl, nl);
-			glNormal3d( 1,0,0);
-				glTexCoord2f(0.f,    0.f);glVertex3d(pl,pl,pl);
-				glTexCoord2f(size,   size);glVertex3d(pl,nl,pl);
-				glTexCoord2f(0.f,    size);glVertex3d(pl,nl,nl);
-				glTexCoord2f(size,   0.f);glVertex3d(pl,pl,nl);
-			glNormal3d(-1,0,0);
-				glTexCoord2f(0.f,    0.f);glVertex3d(nl,pl,pl);
-				glTexCoord2f(size,    0.f);glVertex3d(nl,pl,nl);
-				glTexCoord2f(0.f,    size);glVertex3d(nl,nl,nl);
-				glTexCoord2f(size,    size);glVertex3d(nl,nl,pl);
+			glNormal3d(0,0,1);
+				glTexCoord2f(0.f,    0.f);glVertex3d(-w,-height,l);
+				glTexCoord2f(w, 0.f);glVertex3d(w,-height,l);
+				glTexCoord2f(w, height);glVertex3d(w,height,l);
+				glTexCoord2f(0.f,   height);glVertex3d(-w,height,l);
+
+			glNormal3d( 0,0,-1);
+				glTexCoord2f(0.f,    0.f);glVertex3d(-w,-height,-l);
+				glTexCoord2f(0.f,  height);glVertex3d(-w,height,-l);
+				glTexCoord2f(w, height);glVertex3d(w,height,-l);
+				glTexCoord2f(w,   0.f);glVertex3d(w,-height,-l);
+
+			glNormal3d( 1, 0, 0);
+				glTexCoord2f(l,    0.f);glVertex3d(w,-height, -l);
+				glTexCoord2f(l,    height);glVertex3d(w,height, -l);
+				glTexCoord2f(0.f,    height);glVertex3d(w,height, l);
+				glTexCoord2f(0.f,   0.f);glVertex3d(w,-height,l);
+
+
+			glNormal3d( -1,0,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(-w,-height,-l);
+				glTexCoord2f(l,    0.f);glVertex3d(-w,-height,l);
+				glTexCoord2f(l,    height);glVertex3d(-w,height,l);
+				glTexCoord2f(0.f,   height);glVertex3d(-w,height,-l);
+
+			//bottom
+			glNormal3d( 0,1,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(-w,-height,-l);
+				glTexCoord2f(0.f,    l);glVertex3d(-w,-height,l);
+				glTexCoord2f(w,    l);glVertex3d(w,-height,l);
+				glTexCoord2f(w,  0.f);glVertex3d(w,-height,-l);
+
+			glNormal3d( 0,-1,0);
+				glTexCoord2f(w,    l);glVertex3d(-w,-height,-l);
+				glTexCoord2f(0.f,   l);glVertex3d(w,-height,-l);
+				glTexCoord2f(0.f,    0.f);glVertex3d(w,-height,l);
+				glTexCoord2f(w,    0.f);glVertex3d(-w,-height,l);
+				
+				
+		
+			
+			
 		glEnd();
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -73,11 +96,11 @@ void House::draw()
 	glPopMatrix();
 
 	glm::vec3 tmp(transform[3]);
-	tmp.y += size/2.f;
-	
-	float radius = size/2.f + 1;
-	float height = size/2.f;
+	tmp.y += height;
 
+	l += 1;
+	w += 1;
+	
 	roof.Bind();
 
 	//roof
@@ -89,10 +112,10 @@ void House::draw()
 			glRotatef(180, 1, 0, 0);
 			glBegin(GL_QUADS);
 				glNormal3d(0, 1, 0);
-				glVertex3d(-radius, 0, -radius);
-				glVertex3d(-radius, 0, radius);
-				glVertex3d(radius, 0, radius);
-				glVertex3d(radius, 0, -radius);
+				glVertex3d(-w, 0, -l);
+				glVertex3d(-w, 0, l);
+				glVertex3d(w, 0, l);
+				glVertex3d(w, 0, -l);
 			glEnd();
 		glPopMatrix();
 		glEnable(GL_TEXTURE_2D);
@@ -101,11 +124,11 @@ void House::draw()
 
 		glBegin(GL_TRIANGLE_FAN);
 			glTexCoord2f(0.5f,    1.f);glVertex3d(0, height, 0);
-			glTexCoord2f(1.f,    0.f);glVertex3d(-radius, 0, -radius);
-			glTexCoord2f(0.f,    0.f);glVertex3d(-radius, 0, radius);
-			glTexCoord2f(1.f,    0.f);glVertex3d(radius, 0, radius);
-			glTexCoord2f(0.f,    0.f);glVertex3d(radius, 0, -radius);
-			glTexCoord2f(1.f,    0.f);glVertex3d(-radius, 0, -radius);
+			glTexCoord2f(1.f,    0.f);glVertex3d(-w, 0, -l);
+			glTexCoord2f(0.f,    0.f);glVertex3d(-w, 0, l);
+			glTexCoord2f(1.f,    0.f);glVertex3d(w, 0, l);
+			glTexCoord2f(0.f,    0.f);glVertex3d(w, 0, -l);
+			glTexCoord2f(1.f,    0.f);glVertex3d(-w, 0, -l);
 		glEnd();
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
