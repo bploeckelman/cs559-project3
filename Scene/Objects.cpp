@@ -299,7 +299,7 @@ Bush::~Bush()
 
 void Bush::draw()
 {
-
+	glColor3f(1.0, 1.0, 1.0);
 	glPushMatrix();
 		glMultMatrixf(glm::value_ptr(transform));
 
@@ -343,4 +343,54 @@ void Bush::draw()
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 	glPopMatrix();
+}
+
+
+Blimp::Blimp(glm::vec3 pos, float size):
+	SceneObject(pos)
+	,size(size)
+	,btext(GetImage("blimp2.png"))
+{
+	quadric = gluNewQuadric();
+}
+
+
+Blimp::~Blimp()
+{
+	gluDeleteQuadric(quadric);
+}
+
+void Blimp::update(sf::Clock &clock)
+{
+}
+	
+
+void Blimp::draw()
+{
+	glEnable(GL_TEXTURE_2D);
+
+
+	glPushMatrix();
+		btext.Bind();	
+		glMultMatrixf(glm::value_ptr(transform));
+		glRotatef(90, 1, 0, 0);
+		glRotatef(90, 0, 0, 1);
+	    gluQuadricDrawStyle( quadric, GLU_FILL);
+	    gluQuadricNormals( quadric, GLU_SMOOTH);
+	    gluQuadricOrientation( quadric, GLU_OUTSIDE);
+	    gluQuadricTexture( quadric, GL_TRUE);
+	    glColor3f(1.0, 1.0, 1.0);
+	    glScalef(size, size*2, size);
+		gluSphere(quadric, 1.f, 20, 20);
+		glTranslatef(0, 0, size/16);
+		gluQuadricTexture( quadric, GL_FALSE);
+		glDisable(GL_BLEND);
+		glColor4ub(128, 128, 128, 1.f);
+		gluQuadricNormals( quadric, GLU_SMOOTH);
+		gluCylinder(quadric, size/16, size/16, size/16, 20, 20);
+		glTranslatef(0, 0, size/16);
+		gluQuadricNormals( quadric, GLU_SMOOTH);
+		gluDisk(quadric, 0, size/16, 20, 20);
+	glPopMatrix();
+	glEnable(GL_BLEND);
 }

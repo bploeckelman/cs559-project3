@@ -8,6 +8,17 @@
 #include "SceneObject.h"
 #include "../Core/ImageManager.h"
 
+
+enum HouseType {
+	brick = 0,
+	stone,
+	wood,
+	cement
+};
+
+extern std::string HouseTypeNames[];
+
+
 class House : public SceneObject{
 private:
 	sf::Color color;
@@ -15,10 +26,11 @@ private:
 	sf::Image side;
 	float length;
 	float width;
+	float height;
 
 public:
 	House();
-	House(glm::vec3 pos, sf::Color color, float length, float width);
+	House(glm::vec3 pos, sf::Color color, HouseType type, float length, float width, float height);
 
 	~House();
 

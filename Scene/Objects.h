@@ -71,3 +71,20 @@ public:
 	void draw();
 
 };
+
+class Blimp : public SceneObject{
+private:
+	sf::Image btext;
+	float size;
+	GLUquadricObj* quadric;
+	//maybe add curve for flight path
+
+public:
+	Blimp();
+	Blimp(glm::vec3 pos, float size);
+
+	~Blimp();
+
+	void update(sf::Clock &clock);
+	void draw();
+};

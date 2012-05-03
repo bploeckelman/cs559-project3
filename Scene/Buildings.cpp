@@ -9,6 +9,14 @@
 #include "../Utility/RenderUtils.h"
 #include <glm\gtc\type_ptr.hpp>
 
+std::string HouseTypeNames[] =
+{
+	"brick",
+	"stone",
+	"wood",
+	"cement"
+};
+
 House::House()
 	: color()
 	 ,roof()
@@ -16,13 +24,14 @@ House::House()
 {
 }
 
-House::House(glm::vec3 pos, sf::Color color, float length, float width)
+House::House(glm::vec3 pos, sf::Color color, HouseType type, float length, float width, float height = 10.f)
 	: SceneObject(pos)
 	 ,roof(GetImage("roof.png"))
-	 ,side(GetImage("Bricks.png"))
+	 ,side(GetImage( std::string(HouseTypeNames[type]) + ".png"))
 	 ,color(color)
 	 ,length(length)
 	 ,width(width)
+	 ,height(height)
 {
 }
 
@@ -41,7 +50,6 @@ void House::draw()
 
 		float l = length;
 		float w = width;
-		float height = 10.f;
 
 		//sides
 		glBegin(GL_QUADS);
@@ -120,15 +128,17 @@ void House::draw()
 		glPopMatrix();
 		glEnable(GL_TEXTURE_2D);
 
-
+		/*glm::vec3 norm = glm::vec3((glm::vec3(-w, 0, -l).z - glm::vec3(0, height, 0).z)*(glm::vec3(-w, 0, l).x - glm::vec3(0, height, 0).x)
+			- (glm::vec3(-w, 0, -l).x - glm::vec3(0, height, 0).x)*(glm::vec3(-w, 0, l).z - glm::vec3(0, height, 0).z));*/
 
 		glBegin(GL_TRIANGLE_FAN);
-			glTexCoord2f(0.5f,    1.f);glVertex3d(0, height, 0);
-			glTexCoord2f(1.f,    0.f);glVertex3d(-w, 0, -l);
-			glTexCoord2f(0.f,    0.f);glVertex3d(-w, 0, l);
-			glTexCoord2f(1.f,    0.f);glVertex3d(w, 0, l);
-			glTexCoord2f(0.f,    0.f);glVertex3d(w, 0, -l);
-			glTexCoord2f(1.f,    0.f);glVertex3d(-w, 0, -l);
+			//glNormal3f(norm.x, norm.y, norm.z);
+				glTexCoord2f(0.5f,    1.f);glVertex3d(0, height, 0);
+				glTexCoord2f(1.f,    0.f);glVertex3d(-w, 0, -l);
+				glTexCoord2f(0.f,    0.f);glVertex3d(-w, 0, l);
+				glTexCoord2f(1.f,    0.f);glVertex3d(w, 0, l);
+				glTexCoord2f(0.f,    0.f);glVertex3d(w, 0, -l);
+				glTexCoord2f(1.f,    0.f);glVertex3d(-w, 0, -l);
 		glEnd();
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
