@@ -75,8 +75,8 @@ void Camera::update(const sf::Clock& clock, const sf::Input& input)
 
 	// Keep the camera above the heightmap
 	const float height = heightmap.heightAt(_position.x, _position.z);
-	if( _position.y < height )
-		moveY(height - _position.y);
+	if( _position.y < height + 5)
+		moveY(height - _position.y + 5);
 
 
 	// Apply the current transformations to the camera view

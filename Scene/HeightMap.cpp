@@ -87,7 +87,7 @@ float HeightMap::heightAt( const float col, const float row )
 
 			// Interpolate the height value between the 
 			// previously interpolated values
-			return heightScale * (h1 + dx * (h2 - h1));
+			return (h1 + dx * (h2 - h1));
 		}
 	}
 

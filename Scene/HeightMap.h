@@ -48,8 +48,8 @@ public:
 	 *           or the smallest possible float 
 	**/
 
-	double heightAt(const double col  
-                 , const double row);
+	float heightAt(const float col  
+                 , const float row);
 
 
 	float getHeightScale() const;
