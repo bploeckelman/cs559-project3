@@ -22,6 +22,7 @@ HeightMap::HeightMap( const unsigned int width
 					, const unsigned int height
 					, const float groundScale
 					, const float heightScale )
+	// TODO: update Mesh ctor to accept heightScale
 	: Mesh(width, height, groundScale)
 	, groundScale(groundScale)
 	, heightScale(heightScale)

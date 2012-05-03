@@ -3,11 +3,19 @@
 /* ------
 /* A class that contains all buildings
 /************************************************************************/
-
 #include "Buildings.h"
-#include <glm\glm.hpp>
 #include "../Utility/RenderUtils.h"
+
+#undef __glext_h_
+#undef __glxext_h_
+#undef __gl_h_
+#include "../Framework/Utilities/GLee.h"
+
+#include <SFML/Graphics.hpp>
+
+#include <glm\glm.hpp>
 #include <glm\gtc\type_ptr.hpp>
+
 
 std::string HouseTypeNames[] =
 {
@@ -47,6 +55,7 @@ void House::draw(const Camera& camera)
 		side.Bind();
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 		float l = length;
 		float w = width;
@@ -92,15 +101,11 @@ void House::draw(const Camera& camera)
 				glTexCoord2f(0.f,   l);glVertex3d(w,-height,-l);
 				glTexCoord2f(0.f,    0.f);glVertex3d(w,-height,l);
 				glTexCoord2f(w,    0.f);glVertex3d(-w,-height,l);
-				
-				
-		
-			
-			
 		glEnd();
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 	glPopMatrix();
@@ -117,7 +122,7 @@ void House::draw(const Camera& camera)
 	glPushMatrix();
 		glTranslatef(tmp.x, tmp.y, tmp.z);
 		glDisable(GL_TEXTURE_2D);
-		glColor3f(0.f, 0.f, 0.f);
+		glColor3f(1.f, 1.f, 1.f);
 		glPushMatrix();
 			glRotatef(180, 1, 0, 0);
 			glBegin(GL_QUADS);
@@ -142,8 +147,9 @@ void House::draw(const Camera& camera)
 				glTexCoord2f(0.f,    0.f);glVertex3d(w, 0, -l);
 				glTexCoord2f(1.f,    0.f);glVertex3d(-w, 0, -l);
 		glEnd();
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 	glPopMatrix();

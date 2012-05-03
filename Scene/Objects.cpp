@@ -125,9 +125,10 @@ Fountain::Fountain(glm::vec3 pos, float size, ParticleEmitter& emitter)
 	 ,size(size)
 	 ,count(0)
 {
+	const unsigned int sz = static_cast<unsigned int>(size);
 	fluid = new Fluid(
-		2*(size*2) + 1,   // number of vertices wide
-		2*(size*4) + 1,   // number of vertices high
+		2*(sz*2) + 1,   // number of vertices wide
+		2*(sz*4) + 1,   // number of vertices high
 		0.25f,  // distance between vertices
 		0.03f, // time step for evaluation
 		4.f,  // wave velocity
@@ -395,7 +396,7 @@ void Blimp::draw(const Camera& camera)
 		glTranslatef(0, 0, size/16);
 		gluQuadricTexture( quadric, GL_FALSE);
 		glDisable(GL_BLEND);
-		glColor4ub(128, 128, 128, 1.f);
+		glColor4ub(128, 128, 128, 255);
 		gluQuadricNormals( quadric, GLU_SMOOTH);
 		gluCylinder(quadric, size/16, size/16, size/16, 20, 20);
 		glTranslatef(0, 0, size/16);
