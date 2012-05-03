@@ -110,16 +110,15 @@ void Scene::setup()
 	ParticleSystem *system = new ParticleSystem();
 	vec3 position1(128.f, 30.f, 128.f);
 	system->add(new FountainEmitter(position1));
+	FountainEmitter *fountain = new FountainEmitter(vec3(60.f, 35.f, 60.f), 20);
+	system->add(fountain);
+	system->add(new FireEmitter(glm::vec3(40, heightmap->heightAt(40, 40), 40)));
 	system->start();
 	particleMgr.add(system);
 
-	/*ParticleSystem *founSystem = new ParticleSystem();
-	FountainEmitter *fountain = new FountainEmitter(vec3(60.f, 35.f, 60.f), 100.f);
-	founSystem->add(fountain);
-	particleMgr.add(founSystem);
 
 
-	objects.push_back(new Fountain(glm::vec3(60.f, 31.75f, 60.f), 5, *fountain));*/
+	objects.push_back(new Fountain(glm::vec3(60.f, 31.75f, 60.f), 10, *fountain));
 
 	// create and position cameras
 	cameras.push_back(Camera( *heightmap 
@@ -185,7 +184,7 @@ void Scene::update( const Clock& clock, const Input& input )
 		object->update(clock);
 
 	// update other things
-	fluid->evaluate();
+	//fluid->evaluate();
 	particleMgr.update(clock.GetElapsedTime());
 
 	timer.Reset();
@@ -205,7 +204,7 @@ void Scene::render( const Clock& clock )
 	for each(auto object in objects)
 		object->draw();
 
-	fluid->render();
+	//fluid->render();
 
 	Render::basis();
 

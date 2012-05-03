@@ -140,7 +140,7 @@ void Fluid::render()
 	glNormalPointer(GL_FLOAT, 0, normalArray);
 
 	glPushMatrix();
-		glTranslatef(pos.z, pos.y, pos.x); 
+		glTranslatef(pos.x, pos.y, pos.z); 
 		glRotatef(90.f, 1.f, 0.f, 0.f);
 
 		glColor4f(0.0f, 0.8f, 1.0f, 0.5f);
@@ -239,10 +239,9 @@ void Fluid::displace()
 	v.z -= d * scale;
 }
 
-void Fluid::displace(float x, float z)
+void Fluid::displace(float x, float z, float scale = 1.f, float velocity = 1.f)
 {
-	const float scale = 0.00000001f;
-	const float d = glm::linearRand(0.f, 1.f);
+	const float d = velocity;
 	const int i = static_cast<int>(x);
 	const int j = static_cast<int>(z);
 	vec3& v = *(buffer[1 - renderBuffer] + j * width + i);

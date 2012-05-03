@@ -74,7 +74,7 @@ FountainEmitter::FountainEmitter( const glm::vec3& position
 {
 	add(new ScaleDownAffector(this, 0.f, 10.f));
 	add(new FadeOutAffector(this, 0.f, 1.f));
-	add(new ForceAffector(this, vec3(0,-20.f,0)));
+	add(new ForceAffector(this, vec3(0,-10.f,0)));
 
 	setBlendMode(ALPHA);
 	setPosition(position);
@@ -108,43 +108,43 @@ void FountainEmitter::initParticle( Particle& p )
 
 
 /************************************************************************/
-/* WaterEmitter 
-/* James's edits
-/* Affectors: FadeOut, ScaleDown, Force (gravity) 
+/* FireEmitter 
+/* Meant to look more like a campfire
+/* Affectors: FadeOut, ScaleDown
 /************************************************************************/
-WaterEmitter::WaterEmitter( const glm::vec3& position
+FireEmitter::FireEmitter( const glm::vec3& position
 								, const unsigned int maxParticles
 								, const float lifetime)
 	: ParticleEmitter(maxParticles, lifetime)
 {
-	add(new ScaleDownAffector(this, 0.f, 10.f));
-	add(new FadeOutAffector(this, 0.f, 20.f));
-	add(new ForceAffector(this, vec3(0,-1.f,0)));
+	add(new ScaleDownAffector(this, 0.f, 50.f));
+	add(new FadeOutAffector(this, 0.f, 10.f));
+	//add(new ForceAffector(this, vec3(0,-1.f,0)));
 
 	setBlendMode(ALPHA);
 	setPosition(position);
 	setOneTimeEmission(false);
-	setTexture(&ImageManager::get().getImage("particle-droplet.png"));
+	setTexture(&GetImage("particle-flame.png"));
 
 	setEmissionRate(10000.f);
 }
 
-void WaterEmitter::initParticle( Particle& p )
+void FireEmitter::initParticle( Particle& p )
 {
 	Particle pp;
 
 	pp.position     = position;
 	pp.prevPosition = position;
 
-	pp.velocity = vec3(linearRand(-2.5f, 2.5f)
-					 , linearRand(2.5f, 2.5f)
-					 , linearRand(-2.5f, 2.5f));
+	pp.velocity = vec3(linearRand(-5.f, 5.f)
+					 , linearRand(0.f, 10.f)
+					 , linearRand(-5.f, 5.f));
 	pp.accel = vec3(0,0,0);
 
-	pp.color = vec4(0, 0.8f, 1, 1);
+	pp.color = vec4(1.f, linearRand(0.f, 1.f), 0, 1);
 
-	pp.lifespan = 1.5f;
-	pp.scale = linearRand(0.2f, 0.4f);
+	pp.lifespan = 10.f;
+	pp.scale = linearRand(0.4f, 1.f);
 
 	pp.active = true;
 

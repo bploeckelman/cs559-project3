@@ -45,16 +45,17 @@ protected:
 };
 
 
+
 /************************************************************************/
-/* WaterEmitter 
-/* James's edits
-/* Affectors: FadeOut, ScaleDown, Force (gravity) 
+/* FireEmitter 
+/* Meant to look like a campfire
+/* Affectors: FadeOut, ScaleDown
 /************************************************************************/
-class WaterEmitter : public ParticleEmitter
+class FireEmitter : public ParticleEmitter
 {
 public:
-	WaterEmitter( const glm::vec3& position
-		, const unsigned int maxParticles = 500
+	FireEmitter( const glm::vec3& position
+		, const unsigned int maxParticles = 5000
 		, const float lifetime            = -1.f);
 
 protected:

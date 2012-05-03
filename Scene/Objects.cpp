@@ -11,7 +11,6 @@
 #include "../Particles/Particles.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <iostream>
 
 
 static float lastTime = 0.f;
@@ -24,10 +23,12 @@ Fish::Fish(glm::vec3 pos, sf::Color color, HeightMap& heightmap, Fluid& fluid)
 	 ,fluid(fluid)
 	 ,heightmap(heightmap)
 {
+	quadric = gluNewQuadric();
 }
 
 Fish::~Fish()
 {
+	gluDeleteQuadric(quadric);
 }
 
 
@@ -105,11 +106,9 @@ void Fish::draw()
 		float zscale = .35f;
 
 		glPushMatrix();
-			glTranslatef(0.f, height + zscale, 0.f);
-			GLUquadricObj* obj = gluNewQuadric();
+			glTranslatef(0.f, height + zscale, 0.f);			
 			glScalef(xscale, zscale, yscale);
-			gluSphere(obj, 1.f, 10, 10);
-			gluDeleteQuadric(obj);
+			gluSphere(quadric, 1.f, 10, 10);
 		glPopMatrix();
 
 	glPopMatrix();
@@ -127,15 +126,15 @@ Fountain::Fountain(glm::vec3 pos, float size, ParticleEmitter& emitter)
 	 ,count(0)
 {
 	fluid = new Fluid(
-		(size*2) + 1,   // number of vertices wide
-		(size*4) + 1,   // number of vertices high
-		0.5f,  // distance between vertices
+		2*(size*2) + 1,   // number of vertices wide
+		2*(size*4) + 1,   // number of vertices high
+		0.25f,  // distance between vertices
 		0.03f, // time step for evaluation
 		4.f,  // wave velocity
 		0.4f   // fluid viscosity
-		,pos.x - (size)
+		,pos.x - (size/2.f)
 		,pos.y + .25f
-		,pos.z - (size/2.f)
+		,pos.z - (size)
 	);
 }
 
@@ -146,43 +145,23 @@ Fountain::~Fountain()
 
 void Fountain::update(const sf::Clock &clock)
 {
-	for each(auto particle in emitter.getParticles())
-	{
-		//std::cout << "POS:" << particle.position.z << std::endl;
-		//std::cout << "EPOS" <<  emitter.getPos().z  << std::endl;
-		//std::cout << "Flu" <<  fluid->pos.y  << std::endl;
-		//std::cout << "FluidW:" <<  fluid->getHeight() << std::endl;
-		//std::cout << "ALL:" << particle.position.z - emitter.getPos().z + (fluid->getHeight()/2.f)*fluid->getDist() << std::endl;
-		glm::vec3 translated = glm::vec3(particle.position.x - emitter.getPos().x + (fluid->getWidth()/2.f)*fluid->getDist(), particle.position.y, 
-			particle.position.z - emitter.getPos().z + (fluid->getHeight()/2.f)*fluid->getDist());
 
-		if((translated.x > fluid->getWidth()) || (translated.x < 0) || (translated.z > fluid->getHeight()) || (translated.z < 0) || !particle.active) //outside fluid
+	std::for_each(emitter.getParticles().begin(), emitter.getParticles().end(),
+			[&](Particle& particle)
+	{
+		glm::vec3 translated = glm::vec3((particle.position.x - fluid->pos.x)/fluid->getDist(), particle.position.y, 
+			(particle.position.z - fluid->pos.z)/fluid->getDist());
+			
+		if((translated.x > fluid->getWidth()) || (translated.x < 0) || (translated.z > fluid->getHeight()) || (translated.z < 0)) //outside fluid
 		{
-			//std::cout << "HERE" << std::endl;
 			particle.active = false;
 		}
-		else if(particle.position.y + emitter.getPos().y <= fluid->pos.y)
+		if(particle.position.y <= fluid->pos.y)
 		{
-			//std::cout << "EPOS:" <<  particle.position.y + emitter.getPos().y  << std::endl;
-			//std::cout << "Flu:" <<  fluid->pos.y  << std::endl;
-			//std::cout << "X:" << translated.x << std::endl;
-			//std::cout << "Z:" << translated.z << std::endl;
-			//std::cout << "HIT" << std::endl;
-			//std::cout << translated.x << std::endl;
-			//std::cout << translated.z << std::endl;
-			if(count == 100)	//TODO: SERIEUSLY THIS NEEDS TO GET FIXED
-			{
-				fluid->displace();
-				count = 0;
-			}
-			else
-				count++;
-				
-			//fluid->displace(translated.x, translated.z);
-			particle.lifespan = 0;
+			fluid->displace(translated.x, translated.z, 1.f/(emitter.getMaxParticles()*100), particle.velocity.y);
 			particle.active = false;
 		}
-	}
+	});
 	fluid->evaluate();
 }
 

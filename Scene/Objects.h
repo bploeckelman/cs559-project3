@@ -21,6 +21,7 @@ private:
 	float theta;
 	Fluid& fluid;
 	int direction;
+	GLUquadricObj* quadric;
 
 public:
 	Fish();

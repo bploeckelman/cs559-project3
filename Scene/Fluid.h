@@ -56,7 +56,7 @@ public:
 
 	void evaluate();
 	void displace();
-	void displace(float x, float z);
+	void displace(float x, float z, float scale, float velocity);
 
 	const long getWidth() const;
 	const long getHeight() const;
