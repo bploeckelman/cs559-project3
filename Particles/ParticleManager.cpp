@@ -7,8 +7,16 @@
 #include "ParticleSystem.h"
 #include "../Scene/Camera.h"
 
+#include <SFML/System/Clock.hpp>
+
 #include <cassert>
 
+ParticleManager::ParticleManager()
+	: systems()
+	, timer()
+{
+	timer.Reset();
+}
 
 ParticleManager::~ParticleManager()
 {
@@ -29,11 +37,13 @@ void ParticleManager::remove( ParticleSystem* system )
 
 void ParticleManager::update( const float delta )
 {
+	const float dt = timer.GetElapsedTime() * 0.01f;
+
 	ParticleSystems deadSystems;
 
 	for each(auto system in systems)
 	{
-		system->update(delta);
+		system->update(dt);
 
 		if( !system->isAlive() )
 			deadSystems.push_back(system);
@@ -44,6 +54,8 @@ void ParticleManager::update( const float delta )
 		remove(dead);
 		delete dead;
 	}
+
+	timer.Reset();
 }
 
 void ParticleManager::render( const Camera& camera )
