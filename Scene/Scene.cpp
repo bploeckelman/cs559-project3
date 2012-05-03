@@ -119,10 +119,10 @@ void Scene::setup()
 	// that might solve the blending issue if they are drawn with depth mask disabled
 	// Also, if this change works, we can probably go back to using 
 	// the crossed quads instead of just simple billboards
-	objects.push_back(new Bush(glm::vec3(30, heightmap->heightAt(30, 30) + 5, 30), 5));
-	objects.push_back(new Bush(glm::vec3(50, heightmap->heightAt(50, 100) + 3, 100), 3));
-	objects.push_back(new Bush(glm::vec3(37, heightmap->heightAt(37, 82) + 3, 82), 3));
-	objects.push_back(new Bush(glm::vec3(58, heightmap->heightAt(58, 15) + 7, 15), 7));
+	alphaObjects.push_back(new Bush(glm::vec3(30, heightmap->heightAt(30, 30) + 5, 30), 5));
+	alphaObjects.push_back(new Bush(glm::vec3(50, heightmap->heightAt(50, 100) + 3, 100), 3));
+	alphaObjects.push_back(new Bush(glm::vec3(37, heightmap->heightAt(37, 82) + 3, 82), 3));
+	alphaObjects.push_back(new Bush(glm::vec3(58, heightmap->heightAt(58, 15) + 7, 15), 7));
 
 
 	// add particle systems
@@ -188,6 +188,22 @@ void Scene::update( const Clock& clock, const Input& input )
 	// update scene objects
 	for each(auto object in objects)
 		object->update(clock);
+	for each(auto object in alphaObjects)
+		object->update(clock);
+
+	// Sort alpha scene objects by distance to camera
+	std::sort(alphaObjects.begin(), alphaObjects.end()
+		, [&]( const SceneObject* obj1
+		     , const SceneObject* obj2 ) -> bool
+		{
+			const vec3& pos1 = obj1->getPos();
+			const vec3& pos2 = obj2->getPos();
+			const vec3& cpos = camera->position();
+			const float dist1 = length(pos1 - cpos);
+			const float dist2 = length(pos2 - cpos);
+			return dist1 > dist2;
+		}
+	);
 
 	// update other things
 	fluid->evaluate();
@@ -210,6 +226,9 @@ void Scene::render( const Clock& clock )
 	fluid->render();
 
 	for each(auto object in objects)
+		object->draw(*camera);
+
+	for each(auto object in alphaObjects)
 		object->draw(*camera);
 
 	Render::basis();
@@ -280,13 +299,17 @@ void Scene::cleanup()
 {
 	Log("\n[Cleaning up scene...]");
 
-	for each(auto mesh in meshes)
-		delete mesh;
-	meshes.clear();
+	for each(auto obj in alphaObjects)
+		delete obj;
+	alphaObjects.clear();
 
 	for each(auto obj in objects)
 		delete obj;
 	objects.clear();
+
+	for each(auto mesh in meshes)
+		delete mesh;
+	meshes.clear();
 
 	delete fluid;
 }

@@ -114,8 +114,6 @@ void Fish::draw(const Camera& camera)
 	glPopMatrix();
 
 	glEnable(GL_TEXTURE_2D);
-	
-
 }
 
 Fountain::Fountain(glm::vec3 pos, float size, ParticleEmitter& emitter)
@@ -149,16 +147,22 @@ void Fountain::update(const sf::Clock &clock)
 	std::for_each(emitter.getParticles().begin(), emitter.getParticles().end(),
 			[&](Particle& particle)
 	{
-		glm::vec3 translated = glm::vec3((particle.position.x - fluid->pos.x)/fluid->getDist(), particle.position.y, 
-			(particle.position.z - fluid->pos.z)/fluid->getDist());
+		glm::vec3 translated = glm::vec3((particle.position.x - fluid->pos.x) / fluid->getDist()
+										, particle.position.y
+										,(particle.position.z - fluid->pos.z) / fluid->getDist());
 			
-		if((translated.x > fluid->getWidth()) || (translated.x < 0) || (translated.z > fluid->getHeight()) || (translated.z < 0)) //outside fluid
+		if( translated.x < 0 || translated.z < 0
+		 || translated.x > fluid->getWidth() 
+		 || translated.z > fluid->getHeight() )
 		{
 			particle.active = false;
 		}
 		if(particle.position.y <= fluid->pos.y)
 		{
-			fluid->displace(translated.x, translated.z, 1.f/(emitter.getMaxParticles()*100), particle.velocity.y);
+			fluid->displace( translated.x
+						   , translated.z
+						   , 1.f / (emitter.getMaxParticles() * 100)
+						   , particle.velocity.y * 2.5f);
 			particle.active = false;
 		}
 	});
@@ -239,9 +243,6 @@ void Fountain::draw(const Camera& camera)
 				glTexCoord2f(size * 2,    0.f);glVertex3d(-w,-height,l);
 				glTexCoord2f(size * 2,    size);glVertex3d(w,-height,l);
 				glTexCoord2f(0.f,   size);glVertex3d(w,-height,-l);
-		
-			
-			
 		glEnd();
 
 		//top
@@ -270,9 +271,6 @@ void Fountain::draw(const Camera& camera)
 				glTexCoord2f(0.f,    1.f);glVertex3d(w,height,l-1);
 				glTexCoord2f(size*2,   1.f);glVertex3d(w,height,-l+1);
 				glTexCoord2f(size*2,   0.f);glVertex3d(w-1,height,-l+1);
-		
-			
-			
 		glEnd();
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -299,8 +297,6 @@ Bush::~Bush()
 
 void Bush::draw(const Camera& camera)
 {
-	glDepthMask(GL_FALSE);
-
 	glPushMatrix();
 			// Move the particle into position and scale it  
 		const glm::mat4 newTransform(
@@ -352,8 +348,6 @@ void Bush::draw(const Camera& camera)
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 	glPopMatrix();
-
-	glDepthMask(GL_TRUE);
 }
 
 
