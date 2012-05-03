@@ -199,6 +199,7 @@ void Fountain::draw()
 		float w =  0.5f * size;
 		const float height = .5f;
 
+		// Inside
 		glBegin(GL_QUADS);
 			glNormal3d( 0,0,1);
 				glTexCoord2f(0.f,    0.f);glVertex3d(-w,-height,-l);
@@ -226,6 +227,7 @@ void Fountain::draw()
 		l += 1;
 		w += 1;
 
+		//outside
 		glBegin(GL_QUADS);
 			glNormal3d(-1,0,0);
 				glTexCoord2f(size * 2,    0.f);glVertex3d(-w,-height,l);
@@ -252,6 +254,7 @@ void Fountain::draw()
 				glTexCoord2f(size * 2,    1.f);glVertex3d(-w,height,l);
 				glTexCoord2f(0.f,   1.f);glVertex3d(-w,height,-l);
 
+			//bottom
 			glNormal3d( 0,1,0);
 				glTexCoord2f(0.f,    0.f);glVertex3d(-w,-height,-l);
 				glTexCoord2f(size * 2,    0.f);glVertex3d(-w,-height,l);
@@ -262,6 +265,7 @@ void Fountain::draw()
 			
 		glEnd();
 
+		//top
 		glBegin(GL_QUADS);
 
 			glNormal3d( 0,1,0);
@@ -299,4 +303,65 @@ void Fountain::draw()
 	glPopMatrix();
 
 	fluid->render();
+}
+
+Bush::Bush(glm::vec3 pos, float size) : 
+	 SceneObject(pos)
+	,side(GetImage("bush-side1.png"))
+	,top(GetImage("bush-top.png"))
+	,size(size)
+{
+};
+
+Bush::~Bush()
+{
+
+}
+
+void Bush::draw()
+{
+
+	glPushMatrix();
+		glMultMatrixf(glm::value_ptr(transform));
+
+		side.Bind();
+		glEnable(GL_BLEND);
+
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+
+		float l =  size;
+		float w =  size;
+
+		glBegin(GL_QUADS);
+			glNormal3d(-1,0,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(w,l,0);
+				glTexCoord2f(0.f, 1.f);glVertex3d(w,-l,0);
+				glTexCoord2f(1.f, 1.f);glVertex3d(-w,-l,0);
+				glTexCoord2f(1.f,   0.f);glVertex3d(-w,l,0);
+			glNormal3d(1,0,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(-w,l,0);
+				glTexCoord2f(0.f, 1.f);glVertex3d(-w,-l,0);
+				glTexCoord2f(1.f, 1.f);glVertex3d(w,-l,0);
+				glTexCoord2f(1.f,   0.f);glVertex3d(w,l,0);
+		glEnd();
+		glRotatef(90.f, 0, 1, 0);
+		glBegin(GL_QUADS);	
+			glNormal3d(-1,0,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(w,l,0);
+				glTexCoord2f(0.f, 1.f);glVertex3d(w,-l,0);
+				glTexCoord2f(1.f, 1.f);glVertex3d(-w,-l,0);
+				glTexCoord2f(1.f,   0.f);glVertex3d(-w,l,0);
+			glNormal3d(1,0,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(-w,l,0);
+				glTexCoord2f(0.f, 1.f);glVertex3d(-w,-l,0);
+				glTexCoord2f(1.f, 1.f);glVertex3d(w,-l,0);
+				glTexCoord2f(1.f,   0.f);glVertex3d(w,l,0);
+		glEnd();
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+	glPopMatrix();
 }

@@ -52,10 +52,12 @@ public:
 	// Create a mesh by loading an image with the specified filename
 	Mesh( const std::string& imageFileName
 		, const float spread = 1.f
+		, const float heightSpread = 20.f
 		, const unsigned int elementMode = GL_TRIANGLES );
 	// Create a mesh by loading displacement data from the specified image
 	Mesh( const sf::Image& image
 		, const float spread = 1.f
+		, const float heightSpread = 20.f
 		, const unsigned int elementMode = GL_TRIANGLES );
 	
 	// Deallocate mesh resources
@@ -106,9 +108,11 @@ private:
 				  , const unsigned int elementMode);
 	void initialize(const std::string& imageFileName
 				  , const float spread
+				  , const float heightSpread
 				  , const unsigned int elementMode);
 	void initialize(const sf::Image& image
 				  , const float spread
+				  , const float heightSpread
 				  , const unsigned int elementMode);
 
 	// Generate indices for a planar mesh

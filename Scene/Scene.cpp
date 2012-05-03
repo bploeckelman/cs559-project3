@@ -98,8 +98,9 @@ void Scene::setup()
 
 	
 	// add Scene objects
-	/*objects.push_back(new House(glm::vec3(10, 4, 10), sf::Color(0, 255, 0)));
-	objects.push_back(new Fish(glm::vec3(40, .5, 40), sf::Color(255, 127, 0), *heightmap, *fluid));
+	//objects.push_back(new House(glm::vec3(100, 40, 100), sf::Color(0, 255, 0), 10));
+	objects.push_back(new Bush(glm::vec3(30, heightmap->heightAt(30, 30) + 5, 30), 5));
+	/*objects.push_back(new Fish(glm::vec3(40, .5, 40), sf::Color(255, 127, 0), *heightmap, *fluid));
 	objects.push_back(new Fish(glm::vec3(30, .5, 50), sf::Color(255, 127, 0), *heightmap, *fluid));
 	objects.push_back(new Fish(glm::vec3(50, .5, 30), sf::Color(255, 127, 0), *heightmap, *fluid));
 	objects.push_back(new Fish(glm::vec3(35, .5, 50), sf::Color(255, 127, 0), *heightmap, *fluid));

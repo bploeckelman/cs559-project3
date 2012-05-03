@@ -17,7 +17,7 @@ HeightMap::HeightMap(const unsigned int width
 					, const unsigned int height
 					, const float groundScale
 					, const float heightScale)
-	: Mesh(width, height, groundScale)
+	: Mesh(width, height, groundScale, heightScale)
 	, groundScale(groundScale)
 	, heightScale(heightScale)
 	, imageName("")
@@ -26,7 +26,7 @@ HeightMap::HeightMap(const unsigned int width
 HeightMap::HeightMap( const std::string& imageFilename
                     , const float groundScale /* = 0.5f */
 					, const float heightScale /* = 2.f */ )
-	: Mesh(imageFilename, groundScale)
+	: Mesh(imageFilename, groundScale, heightScale)
 	, groundScale(groundScale)
 	, heightScale(heightScale)
 	, imageName(imageFilename)

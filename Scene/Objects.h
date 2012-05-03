@@ -54,3 +54,19 @@ public:
 	void draw();
 
 };
+
+class Bush : public SceneObject{
+private:
+	sf::Image side;
+	sf::Image top;
+	float size;
+
+public:	
+	Bush();
+	Bush(glm::vec3 pos, float size);
+
+	~Bush();
+
+	void draw();
+
+};

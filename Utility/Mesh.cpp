@@ -44,16 +44,18 @@ Mesh::Mesh( const unsigned int width
 
 Mesh::Mesh( const string& imageFileName
 		  , const float spread
+		  , const float heightSpread
 		  , const unsigned int elementMode )
 {
-	initialize(imageFileName, spread, elementMode);
+	initialize(imageFileName, spread, heightSpread, elementMode);
 }
 
 Mesh::Mesh( const sf::Image& image
 		  , const float spread
+		  , const float heightSpread
 		  , const unsigned int elementMode )
 {
-	initialize(image, spread, elementMode);
+	initialize(image, spread, heightSpread, elementMode);
 }
 
 Mesh::~Mesh()
@@ -208,14 +210,16 @@ void Mesh::initialize( const unsigned int width
 
 void Mesh::initialize( const string& imageFileName
 					 , const float spread
+					 , const float heightSpread
 					 , const unsigned int elementMode )
 {
 	zeroMembers();
-	initialize(GetImage(imageFileName), spread, elementMode);
+	initialize(GetImage(imageFileName), spread, heightSpread, elementMode);
 }
 
 void Mesh::initialize( const sf::Image& image
 					 , const float spread
+					 , const float heightSpread
 					 , const unsigned int elementMode )
 {
 	zeroMembers();
@@ -251,7 +255,7 @@ void Mesh::initialize( const sf::Image& image
 		const float lum = (r + g + b) / 3.f; 
 
 		// TODO: expose this scaling factor
-		vertices[i]  = vec3(xx, 20.f * lum, zz);
+		vertices[i]  = vec3(xx, heightSpread * lum, zz);
 
 		normals[i]   = vec3(0.f, 0.f, 0.f);
 

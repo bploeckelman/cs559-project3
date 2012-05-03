@@ -58,8 +58,8 @@ public:
 	void displace();
 	void displace(float x, float z);
 
-	float getWidth() const;
-	float getHeight() const;
+	const long getWidth() const;
+	const long getHeight() const;
 
 	float getDist() const;
 
@@ -67,5 +67,5 @@ public:
 };
 
 inline float Fluid::getDist() const { return dist; } 
-inline float Fluid::getHeight() const { return height;}
-inline float Fluid::getWidth() const { return width;}
+inline const long Fluid::getHeight() const { return height;}
+inline const long Fluid::getWidth() const { return width;}

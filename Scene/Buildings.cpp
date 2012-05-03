@@ -7,19 +7,22 @@
 #include "Buildings.h"
 #include <glm\glm.hpp>
 #include "../Utility/RenderUtils.h"
+#include <glm\gtc\type_ptr.hpp>
 
 House::House()
 	: color()
 	 ,roof()
 	 ,side()
+	 ,size()
 {
 }
 
-House::House(glm::vec3 pos, sf::Color color)
+House::House(glm::vec3 pos, sf::Color color, float size)
 	: SceneObject(pos)
 	 ,roof(GetImage("roof.png"))
 	 ,side(GetImage("side.png"))
 	 ,color(color)
+	 ,size(size)
 {
 }
 
@@ -29,11 +32,8 @@ House::~House()
 
 void House::draw()
 {
-
-	float size = 6.f;
-
 	glPushMatrix();
-		glTranslated(transform[3][0], transform[3][1], transform[3][2]);
+		glMultMatrixf(glm::value_ptr(transform));
 
 		side.Bind();
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -42,6 +42,7 @@ void House::draw()
 		const float nl = -0.5f * size;
 		const float pl =  0.5f * size;
 
+		//sides
 		glBegin(GL_QUADS);
 			glNormal3d( 0,0,1);
 				glTexCoord2f(0.f,    0.f);glVertex3d(pl,pl,pl);
@@ -79,8 +80,9 @@ void House::draw()
 
 	roof.Bind();
 
+	//roof
 	glPushMatrix();
-		glTranslated(tmp.x, tmp.y, tmp.z);
+		glTranslatef(tmp.x, tmp.y, tmp.z);
 		glDisable(GL_TEXTURE_2D);
 		glColor3f(0.f, 0.f, 0.f);
 		glPushMatrix();
