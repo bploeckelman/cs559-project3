@@ -72,43 +72,10 @@ void Camera::lookAt(const glm::vec3& eye
 
 void Camera::update(const sf::Clock& clock, const sf::Input& input)
 {
-	// TODO: store these values in the Mesh
-	//const float groundScale = 1.f;
-	//const float heightScale = 1.f;
-
-	// TODO: there's a problem somewhere here,
-	// it's not as smooth as it should be, seems to hiccup on edges 
-
-	// keep the current camera above the mesh
-	const vec3 campos(_position);
-	//const vec2 mapcoords( campos.x / groundScale
-	///					, campos.z / groundScale );
-
-//	cout << "grid-coords(" << mapcoords.x << " , " << mapcoords.y << ")" << endl;
-
-	/*if( mapcoords.x >= 0.f && mapcoords.y >= 0.f
-	 && mapcoords.x < (mesh.getWidth()  - 1) 
-	 && mapcoords.y < (mesh.getHeight() - 1) )
-	{
-		const unsigned int x = static_cast<unsigned int>((mapcoords.x));
-		const unsigned int y = static_cast<unsigned int>((mapcoords.y));
-
-		const vec3& v0 = mesh.vertexAt(x  , y  );
-		const vec3& v1 = mesh.vertexAt(x  , y+1);
-		const vec3& v2 = mesh.vertexAt(x+1, y  );
-		const vec3& v3 = mesh.vertexAt(x+y, y+1);
-
-		const float dx = mapcoords.x - x;
-		const float dy = mapcoords.y - y;
-				
-		const float y1 = v0.y + dy * (v1.y - v0.y);
-		const float y2 = v2.y + dy * (v3.y - v2.y);
-		*/
-		const float height = heightmap.heightAt(campos.x, campos.z);//heightScale * (y1 + dx * (y2 - y1));
-		
-		static const float above = 5.f;
-		if( campos.y < height + above )
-			moveY(height - campos.y + above);
+	// Keep the camera above the heightmap
+	const float height = heightmap.heightAt(_position.x, _position.z);
+	if( _position.y < height )
+		moveY(height - _position.y);
 
 	// Apply the current transformations to the camera view
 	_view = glm::mat4(1.0);
