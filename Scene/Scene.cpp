@@ -111,9 +111,14 @@ void Scene::setup()
 
 	const vec3 position1(60.f, heightmap->heightAt(60, 100) + 2.f, 100.f);
 	FountainEmitter *fountain = new FountainEmitter(position1, 20);
+	FireEmitter *fire = new FireEmitter(vec3(30, heightmap->heightAt(30, 30), 30), 20);
+	SmokeEmitter *smoke = new SmokeEmitter(vec3(30, heightmap->heightAt(30, 30), 30), 20);
+
 	objects.push_back(new Fountain(vec3(60.f, heightmap->heightAt(60, 100) + 1.f, 100.f), 10, *fountain));
 
 	objects.push_back(new Fish(vec3(70, 3.5f, 75), sf::Color(255, 127, 0), *heightmap, *fluid));
+
+	objects.push_back(new Campfire(vec3(30, heightmap->heightAt(30, 30), 30), *fire, *smoke, 5.f));
 
 	// add transparent scene objects
 	const unsigned int numBushes = 50;

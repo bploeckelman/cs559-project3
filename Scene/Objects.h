@@ -10,7 +10,6 @@
 #include "HeightMap.h"
 #include "../Particles/Particles.h"
 #include "Fluid.h"
-#include "../Utility/Curve.h"
 
 static void setupObjects(HeightMap& map);
 
@@ -44,6 +43,7 @@ private:
 	Fluid* fluid;
 	int count;
 	sf::Image texture;
+	GLUquadricObj* quadric;
 
 public:
 	Fountain();
@@ -90,4 +90,22 @@ public:
 
 	void update(const sf::Clock &clock);
 	void draw(const Camera& camera);
+};
+
+class Campfire : public SceneObject{
+private:
+	float size;
+	ParticleEmitter& fire;
+	ParticleEmitter& smoke;
+	GLUquadricObj* quadric;
+
+public:
+	Campfire();
+	Campfire(glm::vec3 pos, ParticleEmitter& fire, ParticleEmitter& smoke, float size);
+
+	~Campfire();
+
+	void update(const sf::Clock &clock);
+	void draw(const Camera& camera);
+
 };

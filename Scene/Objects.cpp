@@ -11,8 +11,6 @@
 #include "../Particles/Particles.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "../Utility/Curve.h"
-#include "../Utility/MathUtils.h"
 #include <iostream>
 
 
@@ -306,25 +304,6 @@ void Bush::draw(const Camera& camera)
 		);
 		glMultMatrixf(glm::value_ptr(newTransform));
 
-		// Uncomment this for cylindrical billboarding
-/*
-		// Undo the camera translation and get the inverse rotation
-		const glm::mat4 inverseCameraRotation(
-			glm::inverse( glm::translate( camera.view(), camera.position() ) )
-		);
-
-		const float halfScale = -0.5f;
-		const glm::vec3  originCentered(halfScale, halfScale, 0.f);
-		// Move the origin to the center of the billboard, and reapply camera x rotation
-		// in order to get a cylindrical billboard effect, instead of spherical
-		const glm::mat4 mat(
-			glm::rotate( glm::translate( inverseCameraRotation, originCentered )
-                       , camera.rotation().x, glm::vec3(1,0,0) )
-		);
-
-		// Apply the final matrix for the billboarded particle
-		glMultMatrixf(glm::value_ptr(mat));
-*/
 		// This prevents the alpha of one cutout
 		// from clipping against another cutout
 		// TODO: ideally this should be set once for all Bushes
@@ -493,4 +472,48 @@ void Blimp::draw(const Camera& camera)
 		glPopMatrix();
 	glPopMatrix();
 	glEnable(GL_BLEND);
+}
+
+Campfire::Campfire(glm::vec3 pos, ParticleEmitter& fire, ParticleEmitter& smoke, float size = 4.f) 
+	: SceneObject(pos)
+	, size(size)
+	, fire(fire)
+	, smoke(smoke)
+{
+	quadric = gluNewQuadric();
+}
+
+Campfire::~Campfire()
+{
+}
+
+void Campfire::update(const sf::Clock &clock)
+{
+}
+
+void Campfire::draw(const Camera& camera)
+{
+	glColor4ub(150, 75, 0, 255);
+	glPushMatrix();
+		glMultMatrixf(glm::value_ptr(transform));
+		glPushMatrix();
+			glRotatef(30, 0, 1, 0);
+			gluCylinder(quadric, .5, .5, 2, 15, 15);
+		glPopMatrix();
+		glPushMatrix();
+			glRotatef(-30, 0, 1, 0);
+			gluCylinder(quadric, .5, .5, 2, 15, 15);
+		glPopMatrix();
+		glPushMatrix();
+			glRotatef(180, 1, 0, 0);
+			glPushMatrix();
+				glRotatef(30, 0, 1, 0);
+				gluCylinder(quadric, .5, .5, 2, 15, 15);
+			glPopMatrix();
+			glPushMatrix();
+				glRotatef(-30, 0, 1, 0);
+				gluCylinder(quadric, .5, .5, 2, 15, 15);
+			glPopMatrix();
+		glPopMatrix();
+	glPopMatrix();
 }
