@@ -41,6 +41,7 @@ Scene::Scene()
 	, meshes()
 	, objects()
 	, particleMgr()
+	, meshOverlay(nullptr)
 	, timer()
 { }
 
@@ -91,6 +92,8 @@ void Scene::setup()
 	HeightMap* heightmap = new HeightMap("heightmap-terrain.png"); 
 	
 	meshes.push_back(heightmap);
+
+	meshOverlay = new MeshOverlay(*heightmap);
 
 	// generate a new fluid surface
 	fluid = new Fluid(
@@ -249,6 +252,8 @@ void Scene::render( const Clock& clock )
 		mesh->render();
 
 
+	meshOverlay->render();
+
 	fluid->render();
 
 	for each(auto object in objects)
@@ -327,6 +332,8 @@ void Scene::init()
 void Scene::cleanup()
 {
 	Log("\n[Cleaning up scene...]");
+
+	delete meshOverlay;
 
 	for each(auto obj in alphaObjects)
 		delete obj;

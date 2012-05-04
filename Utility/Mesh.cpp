@@ -78,7 +78,7 @@ void Mesh::render() const
 
 	glActiveTexture(GL_TEXTURE0);
 	assert(indices != nullptr);
-	glDrawElements(mode, numIndices, GL_UNSIGNED_INT, indices);
+	glDrawElements(/*GL_TRIANGLES*/mode, numIndices, GL_UNSIGNED_INT, indices);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
@@ -149,6 +149,8 @@ void Mesh::regenerateArrays( const unsigned int w
 		}
 	}
 
+	generateArrayIndices();
+
 	// Calculate normals
 	for(unsigned int i = 0; i < numIndices; i += 3)
 	{
@@ -206,7 +208,6 @@ void Mesh::initialize( const unsigned int width
 
 	zeroMembers();
 	regenerateArrays(width, height, spread);
-	generateArrayIndices();
 }
 
 void Mesh::initialize( const string& imageFileName
@@ -308,7 +309,7 @@ void Mesh::zeroMembers()
 	indices      = nullptr;
 	texcoords.clear();
 	textures.clear();
-	mode         = 0;
+//	mode         = 0;
 	width        = 0;
 	height       = 0;
 	numVertices  = 0;

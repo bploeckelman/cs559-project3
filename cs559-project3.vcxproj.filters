@@ -201,6 +201,9 @@
     <ClInclude Include="Utility\Mesh.h">
       <Filter>Utility</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\MeshOverlay.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Behavior.cpp">
@@ -331,6 +334,9 @@
     </ClCompile>
     <ClCompile Include="Utility\Mesh.cpp">
       <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\MeshOverlay.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

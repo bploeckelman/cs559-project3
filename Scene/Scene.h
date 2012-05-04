@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "Skybox.h"
 #include "HeightMap.h"
+#include "MeshOverlay.h"
 #include "SceneObject.h"
 #include "../Core/Common.h"
 #include "../Utility/Mesh.h"
@@ -42,6 +43,7 @@ protected:
 	SceneObjects    alphaObjects;// transparent scene objects 
 	ParticleManager particleMgr; // handler for particle systems
 
+	MeshOverlay    *meshOverlay; // test mesh overlay
 	sf::Clock timer;
 
 public:

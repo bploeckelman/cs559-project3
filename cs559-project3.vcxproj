@@ -127,6 +127,7 @@
     <ClInclude Include="Framework\Utilities\Pnt3f.H" />
     <ClInclude Include="Framework\Utilities\ShaderTools.H" />
     <ClInclude Include="Framework\Utilities\Texture.H" />
+    <ClInclude Include="Scene\MeshOverlay.h" />
     <ClInclude Include="Scene\Objects.h" />
     <ClInclude Include="Scene\SceneObject.h" />
     <ClInclude Include="Scene\Camera.h" />
@@ -175,6 +176,7 @@
     <ClCompile Include="Framework\Utilities\Pnt3f.cpp" />
     <ClCompile Include="Framework\Utilities\ShaderTools.cpp" />
     <ClCompile Include="Framework\Utilities\Texture.cpp" />
+    <ClCompile Include="Scene\MeshOverlay.cpp" />
     <ClCompile Include="Scene\Objects.cpp" />
     <ClCompile Include="Scene\SceneObject.cpp" />
     <ClCompile Include="Scene\Camera.cpp" />
