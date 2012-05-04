@@ -295,12 +295,15 @@ void Scene::handle(const Event& event)
 	case Event::MouseButtonPressed:
 		if( event.MouseButton.Button == sf::Mouse::Left )
 		{
+			static const float distance = 25.f;
+
 			const vec3 campos(camera->position());
-			vec3 position(linearRand(10.f, 40.f)
-						, linearRand(-5.f,  5.f)
-						, linearRand(10.f, 40.f));
+			const vec3 viewdir(camera->getViewDir());
+			const vec3 offset(distance * viewdir);
+
+			// Spawn a particle system in front of the camera
 			ParticleSystem *ps = new ParticleSystem();
-			ps->add(new ExplosionEmitter(campos + position));
+			ps->add(new ExplosionEmitter(campos + offset));
 			ps->start();
 			particleMgr.add(ps);
 		}
