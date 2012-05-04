@@ -97,35 +97,48 @@ void Scene::setup()
 	);
 	
 	// add Scene objects
-	objects.push_back(new House(glm::vec3(100, heightmap->heightAt(100, 100) + 10, 100), sf::Color(0, 255, 0), stone, 10, 20, 10));
-	objects.push_back(new Blimp(glm::vec3(120, 50, 80), 10));
+	const vec3 housePos(100.f, heightmap->heightAt(100,100) + 10, 100.f);
+	objects.push_back(new House(housePos, sf::Color(0, 255, 0), stone, 10, 20, 10));
+	objects.push_back(new Blimp(vec3(120, 50, 80), 10));
 
-	ParticleSystem *system = new ParticleSystem();
-	vec3 position1(128.f, 30.f, 128.f);
-	system->add(new FountainEmitter(position1));
-	FountainEmitter *fountain = new FountainEmitter(vec3(60.f, heightmap->heightAt(60, 100) + 2.f, 100.f), 20);
-	system->add(fountain);
-	system->add(new FireEmitter(glm::vec3(40, heightmap->heightAt(40, 20), 20)));
-	system->start();
-	particleMgr.add(system);
-
+	const vec3 position1(60.f, heightmap->heightAt(60, 100) + 2.f, 100.f);
+	FountainEmitter *fountain = new FountainEmitter(position1, 20);
 	objects.push_back(new Fountain(glm::vec3(60.f, heightmap->heightAt(60, 100) + .5f, 100.f), 10, *fountain));
 
 	objects.push_back(new Fish(glm::vec3(70, 3.5f, 75), sf::Color(255, 127, 0), *heightmap, *fluid));
 
-	// TODO: transparent SceneObjects should be in their own list
-	// separate from opaque ones, then we can draw it last, 
-	// sorted back to front from the current viewpoint, 
-	// that might solve the blending issue if they are drawn with depth mask disabled
-	// Also, if this change works, we can probably go back to using 
-	// the crossed quads instead of just simple billboards
-	alphaObjects.push_back(new Bush(glm::vec3(30, heightmap->heightAt(30, 30) + 5, 30), 5));
-	alphaObjects.push_back(new Bush(glm::vec3(50, heightmap->heightAt(50, 100) + 3, 100), 3));
-	alphaObjects.push_back(new Bush(glm::vec3(37, heightmap->heightAt(37, 82) + 3, 82), 3));
-	alphaObjects.push_back(new Bush(glm::vec3(58, heightmap->heightAt(58, 15) + 7, 15), 7));
+	// add transparent scene objects
+	const unsigned int numBushes = 50;
+	for(unsigned int i = 0; i < numBushes; ++i)
+	{
+		// TODO: shouldn't have bushes too near each other 
+		// or there might be clipping issues
+		// TODO: randomly pick from several bush sprites
+		const float x = linearRand(0.f, 256.f); // TODO: pick in heightmap bounds
+		const float z = linearRand(0.f, 256.f); // TODO: pick in heightmap bounds
+		const float heightOffset = linearRand(1.f, 10.f);
+		const vec3 pos(x, heightmap->heightAt(x,z) + heightOffset, z);
 
+		alphaObjects.push_back(new Bush(pos, heightOffset)); 
+	}
 
 	// add particle systems
+	ParticleSystem  *system1 = new ParticleSystem();
+	system1->add(fountain);
+	system1->start();
+	particleMgr.add(system1);
+
+	ParticleSystem *system2 = new ParticleSystem();
+	vec3 fountainPos(128, heightmap->heightAt(128, 128) + 2.f, 128);
+	system2->add(new FountainEmitter(fountainPos));
+	system2->start();
+	particleMgr.add(system2);
+
+	ParticleSystem *system3 = new ParticleSystem();
+	vec3 firePos(40.f, heightmap->heightAt(40,20), 20.f);
+	system3->add(new FireEmitter(firePos));
+	particleMgr.add(system3);
+
 	// create and position cameras
 	cameras.push_back(Camera( *heightmap 
 							, vec3(-2.5, 25.0, -2.5)    // position
