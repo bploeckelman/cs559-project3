@@ -201,21 +201,6 @@
     <ClInclude Include="Utility\Mesh.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Utility\Curve.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\CurveSegments.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\CtrlPoint.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\MathUtils.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\GLUtils.h">
-      <Filter>Utility</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Behavior.cpp">
@@ -345,15 +330,6 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Utility\Mesh.cpp">
-      <Filter>Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Utility\Curve.cpp">
-      <Filter>Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Utility\CurveSegments.cpp">
-      <Filter>Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Utility\CtrlPoint.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
   </ItemGroup>

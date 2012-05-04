@@ -79,9 +79,8 @@ private:
 	float size;
 	float count;
 	GLUquadricObj* quadric;
-	//maybe add curve for flight path
-	Curve* curve;
-	glm::mat4 newTransform;
+	float theta;
+
 
 public:
 	Blimp();
