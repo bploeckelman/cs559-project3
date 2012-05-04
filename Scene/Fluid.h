@@ -49,7 +49,9 @@ public:
 	*   c - wave velocity (0 < c < [(d/2t)*sqrt(mu*t + 2)])
 	*  mu - fluid viscosity
 	**/
-	Fluid(long n, long m, float d, float t, float c, float mu, float posx, float posy, float posz);
+	Fluid( long n, long m, float d
+		 , float t, float c, float mu
+		 , const glm::vec3& pos=glm::vec3(0,0,0) );
 	~Fluid();
 
 	void render();

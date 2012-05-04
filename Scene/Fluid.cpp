@@ -25,8 +25,10 @@ using glm::vec3;
 *   c - wave velocity (0 < c < [(d/2t)*sqrt(mu*t + 2)])
 *  mu - fluid viscosity
 **/
-Fluid::Fluid( long n, long m, float d, float t, float c, float mu, float posx, float posy, float posz )
-	:pos(glm::vec3(posx, posy, posz))
+Fluid::Fluid( long n, long m, float d
+            , float t, float c, float mu
+			, const vec3& pos /* = vec3(0,0,0) */ ) 
+	: pos(pos)
 {
 	width  = n;
 	height = m;
