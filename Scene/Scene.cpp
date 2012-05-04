@@ -253,9 +253,9 @@ void Scene::render( const Clock& clock )
 	for each(auto object in alphaObjects)
 		object->draw(*camera);
 
-	Render::basis();
-
 	particleMgr.render(*camera);
+
+	Render::basis();
 }
 
 void Scene::handle(const Event& event)
