@@ -452,15 +452,19 @@ Blimp::~Blimp()
 
 void Blimp::update(const sf::Clock &clock)
 {
-	/*transform[3][0] = 100 + glm::sin(theta) * 40;
+	transform[0][0] = glm::cos(theta);
+	transform[2][0] = glm::sin(theta);
+	transform[0][2] = -glm::sin(theta);
+	transform[2][2] = glm::cos(theta);
+	transform[1][1] = 1;
+	transform[3][0] = 100 + glm::sin(theta) * 40;
 	transform[3][2] = 100 + glm::cos(theta) * 40;
-	theta += .1f;*/
+	theta -= .001f;
 }
 	
 
 void Blimp::draw(const Camera& camera)
 {
-
 	glEnable(GL_TEXTURE_2D);
 
 
