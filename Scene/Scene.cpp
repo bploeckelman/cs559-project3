@@ -136,7 +136,9 @@ void Scene::setup()
 
 	ParticleSystem *system3 = new ParticleSystem();
 	vec3 firePos(40.f, heightmap->heightAt(40,20), 20.f);
+	system3->add(new SmokeEmitter(firePos + vec3(0,0.2f,0)));
 	system3->add(new FireEmitter(firePos));
+	system3->start();
 	particleMgr.add(system3);
 
 	// create and position cameras
