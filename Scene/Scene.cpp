@@ -68,6 +68,15 @@ void Scene::setup()
 	glDepthMask(GL_TRUE);
 	glClearDepth(1.f);
 
+	const vec4 fogColor(0.1f, 0.1f, 0.1f, 1.f);
+	const float fogDensity = 0.01f;
+
+	glEnable(GL_FOG);
+	glFogi(GL_FOG_MODE, GL_EXP2);
+	glFogfv(GL_FOG_COLOR, value_ptr(fogColor));
+	glFogf(GL_FOG_DENSITY, fogDensity);
+	glHint(GL_FOG_HINT, GL_NICEST);
+
 	glClearColor(0.1f, 0.1f, 0.1f, 1.f);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
