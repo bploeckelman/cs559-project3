@@ -276,8 +276,8 @@ void Fountain::draw(const Camera& camera)
 
 Bush::Bush(glm::vec3 pos, float size) : 
 	 SceneObject(pos)
-	,side(GetImage("bush-side.png"))
-	,top(GetImage("bush-top.png"))
+	,side(GetImage("tree-beech-side.png"))//bush-side.png"))
+	,top(GetImage("tree-beech-top.png"))//bush-top.png"))
 	,size(size)
 {
 };
@@ -311,7 +311,9 @@ void Bush::draw(const Camera& camera)
 
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+//		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);		
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
 		float l =  size;
