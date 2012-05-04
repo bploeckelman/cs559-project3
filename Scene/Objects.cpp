@@ -14,7 +14,6 @@
 #include <iostream>
 
 
-static float lastTime = 0.f;
 
 Fish::Fish(glm::vec3 pos, sf::Color color, HeightMap& heightmap, Fluid& fluid)
 	: SceneObject(pos)
@@ -36,19 +35,10 @@ Fish::~Fish()
 void Fish::update(const sf::Clock &clock)
 {
 	//TODO: make this a little more flashy (all 3 axes instead of one, rotate instead of flip, fix minor visual glitch)
-	if(lastTime < .0001)
-	{
-		lastTime += clock.GetElapsedTime();
-		return;
-	}
-	else
-	{
-		lastTime = 0;
-	}
 	float randz = sf::Randomizer::Random(0.f, .05f);
 	float randx = sf::Randomizer::Random(-.02f, .02f);
 
-	if( heightmap.heightAt(this->getPos().x + randx, this->getPos().z + randz)  > this->getPos().y - .1f)		//should fix for when fish out of fluid
+	if( heightmap.heightAt(this->getPos().x + randx, this->getPos().z + randz)  > this->getPos().y - .2f)		//should fix for when fish out of fluid
 	{		//need to turn
 		transform[0][0] = glm::cos(theta);
 		transform[2][0] = glm::sin(theta);
