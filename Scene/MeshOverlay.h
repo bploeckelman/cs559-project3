@@ -21,7 +21,5 @@ public:
                , const unsigned int width   = 16
                , const unsigned int height  = 600 
                , const unsigned int offsetw = 60
-               , const unsigned int offseth = 5
-               , const float groundScale    = 0.5f
-               , const float heightScale    = 1.f);
+               , const unsigned int offseth = 5 );
 };

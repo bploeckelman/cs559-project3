@@ -204,9 +204,10 @@ void Mesh::initialize( const unsigned int width
 					 , const float spread
 					 , const unsigned int elementMode )
 {
-	mode = elementMode;
-
 	zeroMembers();
+
+	this->mode   = elementMode;
+	this->spread = spread;
 	regenerateArrays(width, height, spread);
 }
 
@@ -226,7 +227,8 @@ void Mesh::initialize( const sf::Image& image
 {
 	zeroMembers();
 
-	mode = elementMode;
+	this->mode   = elementMode;
+	this->spread = spread;
 
 	width  = image.GetWidth();
 	height = image.GetHeight();
@@ -309,12 +311,13 @@ void Mesh::zeroMembers()
 	indices      = nullptr;
 	texcoords.clear();
 	textures.clear();
-//	mode         = 0;
+	mode         = 0;
 	width        = 0;
 	height       = 0;
 	numVertices  = 0;
 	numTriangles = 0;
 	numIndices   = 0;
+	spread       = 0.f;
 	texture      = false;
 	blend        = false;
 	light        = false;

@@ -33,6 +33,8 @@ protected:
 	unsigned int numTriangles;
 	unsigned int numIndices;
 
+	float spread;
+
 	bool blend;
 	bool light;
 	bool fill;
@@ -80,6 +82,7 @@ public:
 	void toggleMultiTexturing();
 
 	// Mesh details accessors
+	float        getSpread()       const;
 	unsigned int getWidth()        const;
 	unsigned int getHeight()       const;
 	unsigned int getNumIndices()   const;
@@ -149,6 +152,7 @@ inline void Mesh::toggleNormalsVis(){ normalsVis = !normalsVis; }
 inline void Mesh::toggleTexturing() { texture    = !texture; }
 inline void Mesh::toggleMultiTexturing() { multiTexture = !multiTexture; }
 
+inline float Mesh::getSpread()              const { return spread; }
 inline unsigned int Mesh::getWidth()        const { return width; }
 inline unsigned int Mesh::getHeight()       const { return height; }
 inline unsigned int Mesh::getNumIndices()   const { return numIndices; }

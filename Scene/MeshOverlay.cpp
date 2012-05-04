@@ -16,10 +16,8 @@ MeshOverlay::MeshOverlay( Mesh& parent
                         , const unsigned int width   /* = 60  */
                         , const unsigned int height  /* = 500 */
                         , const unsigned int offsetw /* = 60  */
-                        , const unsigned int offseth /* = 5   */
-                        , const float groundScale    /* = 1.f */
-                        , const float heightScale    /* = 1.f */ )
-	: Mesh(width, height, groundScale)
+                        , const unsigned int offseth /* = 5   */ )
+	: Mesh(width, height, parent.getSpread())
 	, parent(parent)
 	, offsetw(offsetw)
 	, offseth(offseth)
@@ -38,7 +36,8 @@ MeshOverlay::MeshOverlay( Mesh& parent
 		}
 		else
 		{
-			vertex = vec3(offsetx * groundScale, 0, offsetz * groundScale);
+			const float s = parent.getSpread();
+			vertex = vec3(offsetx * s, 0, offsetz * s);
 		}
 	}
 
