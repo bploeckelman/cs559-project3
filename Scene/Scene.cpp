@@ -111,14 +111,14 @@ void Scene::setup()
 
 	const vec3 position1(60.f, heightmap->heightAt(60, 100) + 2.f, 100.f);
 	FountainEmitter *fountain = new FountainEmitter(position1, 20);
-	FireEmitter *fire = new FireEmitter(vec3(30, heightmap->heightAt(30, 30), 30), 20);
-	SmokeEmitter *smoke = new SmokeEmitter(vec3(30, heightmap->heightAt(30, 30), 30), 20);
+	FireEmitter *fire = new FireEmitter(vec3(30, heightmap->heightAt(30, 30), 30) + 1.f, 500);
+	SmokeEmitter *smoke = new SmokeEmitter(vec3(31, heightmap->heightAt(31, 31) + 1.2f, 31), 500);
 
 	objects.push_back(new Fountain(vec3(60.f, heightmap->heightAt(60, 100) + 1.f, 100.f), 10, *fountain));
 
 	objects.push_back(new Fish(vec3(70, 3.5f, 75), sf::Color(255, 127, 0), *heightmap, *fluid));
 
-	objects.push_back(new Campfire(vec3(30, heightmap->heightAt(30, 30), 30), *fire, *smoke, 5.f));
+	objects.push_back(new Campfire(vec3(31, heightmap->heightAt(31, 31) + 1.f, 31), *fire, *smoke, 5.f));
 
 	// add transparent scene objects
 	const unsigned int numBushes = 50;
@@ -146,9 +146,8 @@ void Scene::setup()
 	particleMgr.add(system2);
 
 	ParticleSystem *system3 = new ParticleSystem();
-	vec3 firePos(40.f, heightmap->heightAt(40,20), 20.f);
-	system3->add(new SmokeEmitter(firePos + vec3(0,0.2f,0)));
-	system3->add(new FireEmitter(firePos));
+	system3->add(smoke);
+	system3->add(fire);
 	system3->start();
 	particleMgr.add(system3);
 

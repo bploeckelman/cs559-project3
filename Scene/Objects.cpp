@@ -479,6 +479,7 @@ Campfire::Campfire(glm::vec3 pos, ParticleEmitter& fire, ParticleEmitter& smoke,
 	, size(size)
 	, fire(fire)
 	, smoke(smoke)
+	, wood(GetImage("cedar.png"))
 {
 	quadric = gluNewQuadric();
 }
@@ -493,26 +494,40 @@ void Campfire::update(const sf::Clock &clock)
 
 void Campfire::draw(const Camera& camera)
 {
+	glEnable(GL_TEXTURE_2D);
+	wood.Bind();
+	gluQuadricDrawStyle( quadric, GLU_FILL);
+	gluQuadricNormals( quadric, GLU_SMOOTH);
+	gluQuadricOrientation( quadric, GLU_OUTSIDE);
+	gluQuadricTexture( quadric, GL_TRUE);
 	glColor4ub(150, 75, 0, 255);
 	glPushMatrix();
 		glMultMatrixf(glm::value_ptr(transform));
 		glPushMatrix();
 			glRotatef(30, 0, 1, 0);
 			gluCylinder(quadric, .5, .5, 2, 15, 15);
+			glTranslatef(0, 0, 2);
+			gluDisk(quadric, 0, .5, 15, 15);
 		glPopMatrix();
 		glPushMatrix();
 			glRotatef(-30, 0, 1, 0);
 			gluCylinder(quadric, .5, .5, 2, 15, 15);
+			glTranslatef(0, 0, 2);
+			gluDisk(quadric, 0, .5, 15, 15);
 		glPopMatrix();
 		glPushMatrix();
 			glRotatef(180, 1, 0, 0);
 			glPushMatrix();
 				glRotatef(30, 0, 1, 0);
 				gluCylinder(quadric, .5, .5, 2, 15, 15);
+				glTranslatef(0, 0, 2);
+				gluDisk(quadric, 0, .5, 15, 15);
 			glPopMatrix();
 			glPushMatrix();
 				glRotatef(-30, 0, 1, 0);
 				gluCylinder(quadric, .5, .5, 2, 15, 15);
+				glTranslatef(0, 0, 2);
+				gluDisk(quadric, 0, .5, 15, 15);
 			glPopMatrix();
 		glPopMatrix();
 	glPopMatrix();

@@ -98,6 +98,7 @@ private:
 	ParticleEmitter& fire;
 	ParticleEmitter& smoke;
 	GLUquadricObj* quadric;
+	sf::Image wood;
 
 public:
 	Campfire();
