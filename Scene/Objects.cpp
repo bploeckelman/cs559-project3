@@ -133,10 +133,8 @@ Fountain::Fountain(glm::vec3 pos, float size, ParticleEmitter& emitter)
 		0.25f,  // distance between vertices
 		0.03f, // time step for evaluation
 		4.f,  // wave velocity
-		0.4f   // fluid viscosity
-		,pos.x - (size/2.f)
-		,pos.y + .25f
-		,pos.z - (size)
+		0.4f,  // fluid viscosity
+		glm::vec3(pos.x - (size/2.f), pos.y + .25f, pos.z - (size))
 	);
 }
 

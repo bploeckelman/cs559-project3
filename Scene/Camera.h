@@ -53,6 +53,8 @@ public:
 	void update(const sf::Clock& clock, const sf::Input& input);
 	void processInput(const sf::Input& input, const sf::Clock& clock);
 
+	glm::vec3 getViewDir() const;
+
 	void toggleDebug();
 	void toggleMouseLook();
 	bool isMouseLook() const;
@@ -76,6 +78,8 @@ public:
 	const glm::mat4& projection() const;
 };
 
+
+inline glm::vec3 Camera::getViewDir() const { return glm::vec3(-_view[0][2], -_view[1][2], -_view[2][2]);}
 
 inline void Camera::toggleDebug() { debug = !debug; }
 inline void Camera::toggleMouseLook() { mouseLook = !mouseLook; }

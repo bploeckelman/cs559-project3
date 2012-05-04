@@ -45,7 +45,6 @@ protected:
 };
 
 
-
 /************************************************************************/
 /* FireEmitter 
 /* Meant to look like a campfire
@@ -55,8 +54,24 @@ class FireEmitter : public ParticleEmitter
 {
 public:
 	FireEmitter( const glm::vec3& position
-		, const unsigned int maxParticles = 5000
+		, const unsigned int maxParticles = 500
 		, const float lifetime            = -1.f);
+
+protected:
+	virtual void initParticle(Particle& p);
+};
+
+/************************************************************************/
+/* SmokeEmitter 
+/* Meant to accompany the FireEmitter in a particle system 
+/* Affectors: FadeOut, ScaleUp 
+/************************************************************************/
+class SmokeEmitter : public ParticleEmitter
+{
+public:
+	SmokeEmitter( const glm::vec3& position
+                , const unsigned int maxParticles = 500
+                , const float lifetime            = -1.f);
 
 protected:
 	virtual void initParticle(Particle& p);

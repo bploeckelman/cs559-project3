@@ -68,6 +68,15 @@ void Scene::setup()
 	glDepthMask(GL_TRUE);
 	glClearDepth(1.f);
 
+	const vec4 fogColor(0.1f, 0.1f, 0.1f, 1.f);
+	const float fogDensity = 0.01f;
+
+	glEnable(GL_FOG);
+	glFogi(GL_FOG_MODE, GL_EXP2);
+	glFogfv(GL_FOG_COLOR, value_ptr(fogColor));
+	glFogf(GL_FOG_DENSITY, fogDensity);
+	glHint(GL_FOG_HINT, GL_NICEST);
+
 	glClearColor(0.1f, 0.1f, 0.1f, 1.f);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
@@ -91,9 +100,7 @@ void Scene::setup()
 		0.03f, // time step for evaluation
 		10.0f,  // wave velocity
 		0.1f,  // fluid viscosity
-		40.f,
-		5.f,
-		40.f
+		vec3(40.f, 5.f, 40.f)
 	);
 	
 	// add Scene objects
@@ -104,9 +111,9 @@ void Scene::setup()
 
 	const vec3 position1(60.f, heightmap->heightAt(60, 100) + 2.f, 100.f);
 	FountainEmitter *fountain = new FountainEmitter(position1, 20);
-	objects.push_back(new Fountain(glm::vec3(60.f, heightmap->heightAt(60, 100) + .5f, 100.f), 10, *fountain));
+	objects.push_back(new Fountain(vec3(60.f, heightmap->heightAt(60, 100) + 1.f, 100.f), 10, *fountain));
 
-	objects.push_back(new Fish(glm::vec3(70, 3.5f, 75), sf::Color(255, 127, 0), *heightmap, *fluid));
+	objects.push_back(new Fish(vec3(70, 3.5f, 75), sf::Color(255, 127, 0), *heightmap, *fluid));
 
 	// add transparent scene objects
 	const unsigned int numBushes = 50;
@@ -137,7 +144,9 @@ void Scene::setup()
 
 	ParticleSystem *system3 = new ParticleSystem();
 	vec3 firePos(40.f, heightmap->heightAt(40,20), 20.f);
+	system3->add(new SmokeEmitter(firePos + vec3(0,0.2f,0)));
 	system3->add(new FireEmitter(firePos));
+	system3->start();
 	particleMgr.add(system3);
 
 	// create and position cameras
@@ -246,10 +255,9 @@ void Scene::render( const Clock& clock )
 	for each(auto object in alphaObjects)
 		object->draw(*camera);
 
+	particleMgr.render(*camera);
 
 	Render::basis();
-
-	particleMgr.render(*camera);
 }
 
 void Scene::handle(const Event& event)
@@ -289,12 +297,15 @@ void Scene::handle(const Event& event)
 	case Event::MouseButtonPressed:
 		if( event.MouseButton.Button == sf::Mouse::Left )
 		{
+			static const float distance = 25.f;
+
 			const vec3 campos(camera->position());
-			vec3 position(linearRand(10.f, 40.f)
-						, linearRand(-5.f,  5.f)
-						, linearRand(10.f, 40.f));
+			const vec3 viewdir(camera->getViewDir());
+			const vec3 offset(distance * viewdir);
+
+			// Spawn a particle system in front of the camera
 			ParticleSystem *ps = new ParticleSystem();
-			ps->add(new ExplosionEmitter(campos + position));
+			ps->add(new ExplosionEmitter(campos + offset));
 			ps->start();
 			particleMgr.add(ps);
 		}

@@ -30,6 +30,26 @@ public:
 
 
 /************************************************************************/
+/* ScaleUpAffector
+/* Increases the particle's scale amount at the specified rate
+/* Note: only applies to textured quads, not points
+/************************************************************************/
+class ScaleUpAffector : public ParticleAffector
+{
+protected:
+	float max;
+	float rate;
+
+public:
+	ScaleUpAffector( ParticleEmitter* parentEmitter
+                   , const float max  = 1.f
+                   , const float rate = 1.f );
+
+	virtual void update(Particle& particle, const float delta);
+};
+
+
+/************************************************************************/
 /* FadeOutAffector
 /* Reduces the particle's alpha component at the specified rate
 /************************************************************************/

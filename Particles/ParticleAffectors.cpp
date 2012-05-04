@@ -34,6 +34,26 @@ void ScaleDownAffector::update( Particle& particle, const float delta )
 
 
 /************************************************************************/
+/* ScaleUpAffector
+/* Increases the particle's scale amount at the specified rate
+/* Note: only applies to textured quads, not points
+/************************************************************************/
+ScaleUpAffector::ScaleUpAffector( ParticleEmitter* parentEmitter
+                                , const float max  /* = 1.f */
+                                , const float rate /* = 1.f */ )
+	: ParticleAffector(parentEmitter)
+	, max(max)
+	, rate(rate)
+{ }
+
+void ScaleUpAffector::update( Particle& particle, const float delta )
+{
+	if( (particle.scale += delta * rate) > max )
+		particle.scale = max;
+}
+
+
+/************************************************************************/
 /* FadeOutAffector
 /* Reduces the particle's alpha component at the specified rate
 /************************************************************************/
