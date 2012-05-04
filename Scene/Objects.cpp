@@ -11,6 +11,9 @@
 #include "../Particles/Particles.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "../Utility/Curve.h"
+#include "../Utility/MathUtils.h"
+#include <iostream>
 
 
 static float lastTime = 0.f;
@@ -355,9 +358,24 @@ void Bush::draw(const Camera& camera)
 Blimp::Blimp(glm::vec3 pos, float size):
 	SceneObject(pos)
 	,size(size)
+	,count(0)
 	,btext(GetImage("blimp2.png"))
 {
 	quadric = gluNewQuadric();
+	curve = new Curve(bspline);
+	curve->clearPoints();
+
+
+	const float step = TWO_PI / 5.f;
+	const float radius = 30.f;
+	for(float i = 0.f; i < TWO_PI; i += step)
+	{
+		const glm::vec3     pos(cosf(i), 0.f, sinf(i));
+		const CtrlPoint point(pos * radius);
+		curve->addControlPoint(point);
+	}
+
+	curve->regenerateSegments();
 }
 
 
@@ -366,9 +384,30 @@ Blimp::~Blimp()
 	gluDeleteQuadric(quadric);
 }
 
-void Blimp::update(sf::Clock &clock)
+void Blimp::update(const sf::Clock &clock)
 {
+	//if(clock.GetElapsedTime() - count > CLOCKS_PER_SEC/30) count = clock.GetElapsedTime();
+	count += clock.GetElapsedTime() * 1000;
+	if (count >= 5) count = 0;
 	
+	curve->selectedSegment = static_cast<int>(std::floor(count));
+	const glm::vec3& p(curve->getPosition(count));
+	const glm::vec3& d(curve->getDirection(count));
+	const glm::vec3& tangent(glm::normalize(d));
+
+	glm::vec3 normal = curve->getSegment(curve->selectedSegment)->getStartPoint().pos();
+
+	const glm::vec3 binormal(glm::normalize(glm::cross(normal, tangent)));
+	normal = glm::normalize(glm::cross(tangent, binormal));
+
+	// Apply the orientation + translation matrix
+	const glm::vec3& z(tangent), y(normal), x(binormal);
+	newTransform = glm::mat4x4(
+		x.x, x.y, x.z, 0.f,
+		y.x, y.y, y.z, 0.f,
+		z.x, z.y, z.z, 0.f,
+		p.x, p.y, p.z, 1.f
+	);
 }
 	
 
@@ -380,24 +419,27 @@ void Blimp::draw(const Camera& camera)
 	glPushMatrix();
 		btext.Bind();	
 		glMultMatrixf(glm::value_ptr(transform));
-		glRotatef(90, 1, 0, 0);
-		glRotatef(90, 0, 0, 1);
-	    gluQuadricDrawStyle( quadric, GLU_FILL);
-	    gluQuadricNormals( quadric, GLU_SMOOTH);
-	    gluQuadricOrientation( quadric, GLU_OUTSIDE);
-	    gluQuadricTexture( quadric, GL_TRUE);
-	    glColor3f(1.0, 1.0, 1.0);
-	    glScalef(size, size*2, size);
-		gluSphere(quadric, 1.f, 20, 20);
-		glTranslatef(0, 0, size/16);
-		gluQuadricTexture( quadric, GL_FALSE);
-		glDisable(GL_BLEND);
-		glColor4ub(128, 128, 128, 255);
-		gluQuadricNormals( quadric, GLU_SMOOTH);
-		gluCylinder(quadric, size/16, size/16, size/16, 20, 20);
-		glTranslatef(0, 0, size/16);
-		gluQuadricNormals( quadric, GLU_SMOOTH);
-		gluDisk(quadric, 0, size/16, 20, 20);
+		glPushMatrix();
+			glMultMatrixf(glm::value_ptr(newTransform));
+			glRotatef(90, 0, 1, 0);
+			//glRotatef(90, 0, 0, 1);
+			gluQuadricDrawStyle( quadric, GLU_FILL);
+			gluQuadricNormals( quadric, GLU_SMOOTH);
+			gluQuadricOrientation( quadric, GLU_OUTSIDE);
+			gluQuadricTexture( quadric, GL_TRUE);
+			glColor3f(1.0, 1.0, 1.0);
+			glScalef(size, size*2, size);
+			gluSphere(quadric, 1.f, 20, 20);
+			glTranslatef(0, 0, size/16);
+			gluQuadricTexture( quadric, GL_FALSE);
+			glDisable(GL_BLEND);
+			glColor4ub(128, 128, 128, 255);
+			gluQuadricNormals( quadric, GLU_SMOOTH);
+			gluCylinder(quadric, size/16, size/16, size/16, 20, 20);
+			glTranslatef(0, 0, size/16);
+			gluQuadricNormals( quadric, GLU_SMOOTH);
+			gluDisk(quadric, 0, size/16, 20, 20);
+		glPopMatrix();
 	glPopMatrix();
 	glEnable(GL_BLEND);
 }

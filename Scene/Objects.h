@@ -10,6 +10,7 @@
 #include "HeightMap.h"
 #include "../Particles/Particles.h"
 #include "Fluid.h"
+#include "../Utility/Curve.h"
 
 static void setupObjects(HeightMap& map);
 
@@ -76,8 +77,11 @@ class Blimp : public SceneObject{
 private:
 	sf::Image btext;
 	float size;
+	float count;
 	GLUquadricObj* quadric;
 	//maybe add curve for flight path
+	Curve* curve;
+	glm::mat4 newTransform;
 
 public:
 	Blimp();
@@ -85,6 +89,6 @@ public:
 
 	~Blimp();
 
-	void update(sf::Clock &clock);
+	void update(const sf::Clock &clock);
 	void draw(const Camera& camera);
 };

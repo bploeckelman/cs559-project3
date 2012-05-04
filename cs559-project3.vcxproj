@@ -134,8 +134,13 @@
     <ClInclude Include="Scene\HeightMap.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\Skybox.h" />
+    <ClInclude Include="Utility\CtrlPoint.h" />
+    <ClInclude Include="Utility\Curve.h" />
+    <ClInclude Include="Utility\CurveSegments.h" />
     <ClInclude Include="Utility\dirent.h" />
+    <ClInclude Include="Utility\GLUtils.h" />
     <ClInclude Include="Utility\Logger.h" />
+    <ClInclude Include="Utility\MathUtils.h" />
     <ClInclude Include="Utility\Matrix2d.h" />
     <ClInclude Include="Utility\Mesh.h" />
     <ClInclude Include="Utility\Plane.h" />
@@ -182,6 +187,9 @@
     <ClCompile Include="Scene\HeightMap.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\Skybox.cpp" />
+    <ClCompile Include="Utility\CtrlPoint.cpp" />
+    <ClCompile Include="Utility\Curve.cpp" />
+    <ClCompile Include="Utility\CurveSegments.cpp" />
     <ClCompile Include="Utility\Logger.cpp" />
     <ClCompile Include="Utility\Mesh.cpp" />
     <ClCompile Include="Utility\RenderUtils.cpp" />
