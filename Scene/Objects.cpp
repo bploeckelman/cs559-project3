@@ -296,13 +296,15 @@ Bush::~Bush()
 void Bush::draw(const Camera& camera)
 {
 	glPushMatrix();
-			// Move the particle into position and scale it  
+		// Move the billboard into position and scale it  
 		const glm::mat4 newTransform(
 			glm::scale( glm::translate( glm::mat4(1.0), glm::vec3(transform[3][0], transform[3][1], transform[3][2]) )
 					, glm::vec3(1.f, 1.f, 1.f) )
 		);
 		glMultMatrixf(glm::value_ptr(newTransform));
 
+		// Uncomment this for cylindrical billboarding
+/*
 		// Undo the camera translation and get the inverse rotation
 		const glm::mat4 inverseCameraRotation(
 			glm::inverse( glm::translate( camera.view(), camera.position() ) )
@@ -310,11 +312,22 @@ void Bush::draw(const Camera& camera)
 
 		const float halfScale = -0.5f;
 		const glm::vec3  originCentered(halfScale, halfScale, 0.f);
-		// Move the origin to the center of the particle
-		const glm::mat4 mat(	glm::translate( inverseCameraRotation, originCentered ) );
+		// Move the origin to the center of the billboard, and reapply camera x rotation
+		// in order to get a cylindrical billboard effect, instead of spherical
+		const glm::mat4 mat(
+			glm::rotate( glm::translate( inverseCameraRotation, originCentered )
+                       , camera.rotation().x, glm::vec3(1,0,0) )
+		);
 
 		// Apply the final matrix for the billboarded particle
 		glMultMatrixf(glm::value_ptr(mat));
+*/
+		// This prevents the alpha of one cutout
+		// from clipping against another cutout
+		// TODO: ideally this should be set once for all Bushes
+		// instead of toggled on and off for each
+		glEnable(GL_ALPHA_TEST);
+		glAlphaFunc(GL_GEQUAL, 0.5f);
 
 		glColor3f(1.0, 1.0, 1.0);
 
@@ -322,8 +335,8 @@ void Bush::draw(const Camera& camera)
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
 		float l =  size;
 		float w =  size;
@@ -341,11 +354,79 @@ void Bush::draw(const Camera& camera)
 				glTexCoord2f(1.f,   0.f);glVertex3d(w,l,0);
 		glEnd();
 
+		glRotatef(45.f, 0, 1, 0);
+
+		glBegin(GL_QUADS);
+			glNormal3d(-1,0,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(w,l,0);
+				glTexCoord2f(0.f, 1.f);glVertex3d(w,-l,0);
+				glTexCoord2f(1.f, 1.f);glVertex3d(-w,-l,0);
+				glTexCoord2f(1.f,   0.f);glVertex3d(-w,l,0);
+			glNormal3d(1,0,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(-w,l,0);
+				glTexCoord2f(0.f, 1.f);glVertex3d(-w,-l,0);
+				glTexCoord2f(1.f, 1.f);glVertex3d(w,-l,0);
+				glTexCoord2f(1.f,   0.f);glVertex3d(w,l,0);
+		glEnd();
+
+		glRotatef(45.f, 0, 1, 0);
+
+		glBegin(GL_QUADS);
+			glNormal3d(-1,0,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(w,l,0);
+				glTexCoord2f(0.f, 1.f);glVertex3d(w,-l,0);
+				glTexCoord2f(1.f, 1.f);glVertex3d(-w,-l,0);
+				glTexCoord2f(1.f,   0.f);glVertex3d(-w,l,0);
+			glNormal3d(1,0,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(-w,l,0);
+				glTexCoord2f(0.f, 1.f);glVertex3d(-w,-l,0);
+				glTexCoord2f(1.f, 1.f);glVertex3d(w,-l,0);
+				glTexCoord2f(1.f,   0.f);glVertex3d(w,l,0);
+		glEnd();
+
+		glRotatef(45.f, 0, 1, 0);
+
+		glBegin(GL_QUADS);
+			glNormal3d(-1,0,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(w,l,0);
+				glTexCoord2f(0.f, 1.f);glVertex3d(w,-l,0);
+				glTexCoord2f(1.f, 1.f);glVertex3d(-w,-l,0);
+				glTexCoord2f(1.f,   0.f);glVertex3d(-w,l,0);
+			glNormal3d(1,0,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(-w,l,0);
+				glTexCoord2f(0.f, 1.f);glVertex3d(-w,-l,0);
+				glTexCoord2f(1.f, 1.f);glVertex3d(w,-l,0);
+				glTexCoord2f(1.f,   0.f);glVertex3d(w,l,0);
+		glEnd();
+
+		// Draw the top cap, not sure if we should keep this.. sorta ugly
+/*
+		glRotatef(45.f, 0, 1, 0);
+		glRotatef(90.f, 1, 0, 0);
+
+		top.Bind();
+
+		glBegin(GL_QUADS);
+			glNormal3d(-1,0,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(w,l,0);
+				glTexCoord2f(0.f, 1.f);glVertex3d(w,-l,0);
+				glTexCoord2f(1.f, 1.f);glVertex3d(-w,-l,0);
+				glTexCoord2f(1.f,   0.f);glVertex3d(-w,l,0);
+			glNormal3d(1,0,0);
+				glTexCoord2f(0.f,    0.f);glVertex3d(-w,l,0);
+				glTexCoord2f(0.f, 1.f);glVertex3d(-w,-l,0);
+				glTexCoord2f(1.f, 1.f);glVertex3d(w,-l,0);
+				glTexCoord2f(1.f,   0.f);glVertex3d(w,l,0);
+		glEnd();
+*/
+
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 	glPopMatrix();
+
+	glDisable(GL_ALPHA_TEST);
 }
 
 

@@ -118,12 +118,10 @@ void Scene::setup()
 	const unsigned int numBushes = 50;
 	for(unsigned int i = 0; i < numBushes; ++i)
 	{
-		// TODO: shouldn't have bushes too near each other 
-		// or there might be clipping issues
 		// TODO: randomly pick from several bush sprites
 		const float x = linearRand(0.f, 256.f); // TODO: pick in heightmap bounds
 		const float z = linearRand(0.f, 256.f); // TODO: pick in heightmap bounds
-		const float heightOffset = linearRand(1.f, 10.f);
+		const float heightOffset = linearRand(2.f, 4.f);
 		const vec3 pos(x, heightmap->heightAt(x,z) + heightOffset, z);
 
 		alphaObjects.push_back(new Bush(pos, heightOffset)); 
