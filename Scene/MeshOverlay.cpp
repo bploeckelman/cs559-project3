@@ -29,8 +29,17 @@ MeshOverlay::MeshOverlay( Mesh& parent
 	for(unsigned int x = 0; x < width;  ++x)
 	{
 		vec3& vertex = vertexAt(x,z);
-		vertex = parent.vertexAt(x + offsetw,z + offseth);
-		vertex.y += 0.01f;
+		const unsigned int offsetx = x + offsetw;
+		const unsigned int offsetz = z + offseth;
+		if( offsetx < parent.getWidth() && offsetz < parent.getHeight() )
+		{
+			vertex = parent.vertexAt(offsetx, offsetz);
+			vertex.y += 0.01f;
+		}
+		else
+		{
+			vertex = vec3(offsetx * groundScale, 0, offsetz * groundScale);
+		}
 	}
 
 	// initialize texture
