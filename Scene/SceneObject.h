@@ -23,6 +23,7 @@ public:
 	virtual void update(const sf::Clock &clock);
 
 	glm::vec3 getPos() const;
+
 };
 
 inline glm::vec3 SceneObject::getPos() const	{ return glm::vec3(transform[3][0], transform[3][1], transform[3][2]) ;}

@@ -41,6 +41,7 @@ House::~House()
 
 void House::draw(const Camera& camera)
 {
+	glColor3f(1.0, 1.0, 1.0);
 	glPushMatrix();
 		glMultMatrixf(glm::value_ptr(transform));
 

@@ -299,7 +299,6 @@ Bush::~Bush()
 
 void Bush::draw(const Camera& camera)
 {
-
 	glPushMatrix();
 			// Move the particle into position and scale it  
 		const glm::mat4 newTransform(
@@ -325,6 +324,7 @@ void Bush::draw(const Camera& camera)
 
 		side.Bind();
 		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA ) ;
 
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
@@ -369,6 +369,7 @@ Blimp::~Blimp()
 
 void Blimp::update(sf::Clock &clock)
 {
+	
 }
 	
 
@@ -392,7 +393,7 @@ void Blimp::draw(const Camera& camera)
 		glTranslatef(0, 0, size/16);
 		gluQuadricTexture( quadric, GL_FALSE);
 		glDisable(GL_BLEND);
-		glColor4ub(128, 128, 128, 1.f);
+		glColor4ub(40, 40, 40, 1.f);
 		gluQuadricNormals( quadric, GLU_SMOOTH);
 		gluCylinder(quadric, size/16, size/16, size/16, 20, 20);
 		glTranslatef(0, 0, size/16);
