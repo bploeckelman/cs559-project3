@@ -39,6 +39,7 @@ protected:
 	Fluid          *fluid;       // a test fluid surface
 	Meshes          meshes;      // container of mesh objects
 	SceneObjects    objects;     // scene objects
+	SceneObjects    alphaObjects;// transparent scene objects 
 	ParticleManager particleMgr; // handler for particle systems
 
 	sf::Clock timer;

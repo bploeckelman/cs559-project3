@@ -18,11 +18,12 @@
 using namespace glm;
 
 
-HeightMap::HeightMap(const unsigned int width
+HeightMap::HeightMap( const unsigned int width
 					, const unsigned int height
 					, const float groundScale
-					, const float heightScale)
-	: Mesh(width, height, groundScale, heightScale)
+					, const float heightScale )
+	// TODO: update Mesh ctor to accept heightScale
+	: Mesh(width, height, groundScale)
 	, groundScale(groundScale)
 	, heightScale(heightScale)
 	, imageName("")
@@ -36,18 +37,37 @@ HeightMap::HeightMap( const std::string& imageFilename
 	, heightScale(heightScale)
 	, imageName(imageFilename)
 {
-	const float ts = 0.1f;
+	float        ts = 0.1f;
+	unsigned int i  = 0;
 
+	// Load first texture
 	glm::vec2 *texcoord = new glm::vec2[numVertices];
-	unsigned int i = 0;
 
+	i  = 0;
+	ts = 0.05f;
 	for(unsigned int z = 0; z < height; ++z)
 	for(unsigned int x = 0; x < width;  ++x)
 		texcoord[i++] = glm::vec2(x * ts, z * ts);
 
 	sf::Image *tex = &GetImage("grass_256x256.png");
 	addTexture(tex, texcoord);
-	texture = true;
+
+	// Load second texture
+	glm::vec2 *detailTexCoord = new glm::vec2[numVertices];
+
+	i  = 0;
+	ts = 0.1f;//01f;
+	for(unsigned int z = 0; z < height; ++z)
+	for(unsigned int x = 0; x < width;  ++x)
+		detailTexCoord[i++] = glm::vec2(x * ts, z * ts);
+
+	sf::Image *detailTex = &GetImage("grass-detail.png");
+	addTexture(detailTex, detailTexCoord);
+
+	// Setup default render states
+	fill         = true;
+	texture      = true;
+	multiTexture = true;
 }
 
 void HeightMap::randomizeGaussian()

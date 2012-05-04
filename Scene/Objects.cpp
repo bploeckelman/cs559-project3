@@ -114,8 +114,6 @@ void Fish::draw(const Camera& camera)
 	glPopMatrix();
 
 	glEnable(GL_TEXTURE_2D);
-	
-
 }
 
 Fountain::Fountain(glm::vec3 pos, float size, ParticleEmitter& emitter)
@@ -125,9 +123,10 @@ Fountain::Fountain(glm::vec3 pos, float size, ParticleEmitter& emitter)
 	 ,size(size)
 	 ,count(0)
 {
+	const unsigned int sz = static_cast<unsigned int>(size);
 	fluid = new Fluid(
-		2*(size*2) + 1,   // number of vertices wide
-		2*(size*4) + 1,   // number of vertices high
+		2*(sz*2) + 1,   // number of vertices wide
+		2*(sz*4) + 1,   // number of vertices high
 		0.25f,  // distance between vertices
 		0.03f, // time step for evaluation
 		4.f,  // wave velocity
@@ -145,20 +144,25 @@ Fountain::~Fountain()
 
 void Fountain::update(const sf::Clock &clock)
 {
-
 	std::for_each(emitter.getParticles().begin(), emitter.getParticles().end(),
 			[&](Particle& particle)
 	{
-		glm::vec3 translated = glm::vec3((particle.position.x - fluid->pos.x)/fluid->getDist(), particle.position.y, 
-			(particle.position.z - fluid->pos.z)/fluid->getDist());
+		glm::vec3 translated = glm::vec3((particle.position.x - fluid->pos.x) / fluid->getDist()
+										, particle.position.y
+										,(particle.position.z - fluid->pos.z) / fluid->getDist());
 			
-		if((translated.x > fluid->getWidth()) || (translated.x < 0) || (translated.z > fluid->getHeight()) || (translated.z < 0)) //outside fluid
+		if( translated.x < 0 || translated.z < 0
+		 || translated.x > fluid->getWidth() 
+		 || translated.z > fluid->getHeight() )
 		{
 			particle.active = false;
 		}
 		if(particle.position.y <= fluid->pos.y)
 		{
-			fluid->displace(translated.x, translated.z, 1.f/(emitter.getMaxParticles()*100), particle.velocity.y);
+			fluid->displace( translated.x
+						   , translated.z
+						   , 1.f / (emitter.getMaxParticles() * 100)
+						   , particle.velocity.y * 2.5f);
 			particle.active = false;
 		}
 	});
@@ -239,9 +243,6 @@ void Fountain::draw(const Camera& camera)
 				glTexCoord2f(size * 2,    0.f);glVertex3d(-w,-height,l);
 				glTexCoord2f(size * 2,    size);glVertex3d(w,-height,l);
 				glTexCoord2f(0.f,   size);glVertex3d(w,-height,-l);
-		
-			
-			
 		glEnd();
 
 		//top
@@ -270,9 +271,6 @@ void Fountain::draw(const Camera& camera)
 				glTexCoord2f(0.f,    1.f);glVertex3d(w,height,l-1);
 				glTexCoord2f(size*2,   1.f);glVertex3d(w,height,-l+1);
 				glTexCoord2f(size*2,   0.f);glVertex3d(w-1,height,-l+1);
-		
-			
-			
 		glEnd();
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -324,7 +322,8 @@ void Bush::draw(const Camera& camera)
 
 		side.Bind();
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA ) ;
+
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
@@ -393,7 +392,7 @@ void Blimp::draw(const Camera& camera)
 		glTranslatef(0, 0, size/16);
 		gluQuadricTexture( quadric, GL_FALSE);
 		glDisable(GL_BLEND);
-		glColor4ub(40, 40, 40, 1.f);
+		glColor4ub(128, 128, 128, 255);
 		gluQuadricNormals( quadric, GLU_SMOOTH);
 		gluCylinder(quadric, size/16, size/16, size/16, 20, 20);
 		glTranslatef(0, 0, size/16);

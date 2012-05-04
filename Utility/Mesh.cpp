@@ -76,16 +76,17 @@ void Mesh::render() const
 	glColorPointer (4, GL_FLOAT, 0, value_ptr(colors[0]));
 	glVertexPointer(3, GL_FLOAT, 0, value_ptr(vertices[0]));
 
+	glActiveTexture(GL_TEXTURE0);
 	assert(indices != nullptr);
 	glDrawElements(mode, numIndices, GL_UNSIGNED_INT, indices);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 
+	resetRenderStates();
+
 	if( normalsVis )
 		renderNormals();
-
-	resetRenderStates();
 }
 
 void Mesh::generateArrayIndices()
@@ -323,7 +324,6 @@ void Mesh::zeroMembers()
 void Mesh::setRenderStates() const
 {
 	// Set texturing state ----------------------
-	// TODO: handle multitexturing 
 	if( texture ) 
 	{
 		if( !textures.empty() && !texcoords.empty() )
@@ -332,16 +332,55 @@ void Mesh::setRenderStates() const
 			const sf::Image *texture  = textures.front();
 			const glm::vec2 *texcoord = texcoords.front();
 
-			glEnable(GL_TEXTURE_2D);
+			// Enable texture unit 0
 			glActiveTexture(GL_TEXTURE0);
 			glClientActiveTexture(GL_TEXTURE0);
+			glEnable(GL_TEXTURE_2D);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 			texture->Bind();
+
+			// Set texture to wrap in both dimensions
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			// Set the texture environment to modulate
+			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
 			glTexCoordPointer(2, GL_FLOAT, 0, value_ptr(*texcoord));
+
+			// Handle multitexturing
+			if( textures.size() > 1 && multiTexture )
+			{
+				// Just one more for now...
+				const sf::Image *mtexture  = textures[1];
+				const glm::vec2 *mtexcoord = texcoords[1];
+
+				glActiveTexture(GL_TEXTURE1); // GL_TETXTURE0 + ith_texture
+				glClientActiveTexture(GL_TEXTURE1);
+				glEnable(GL_TEXTURE_2D);
+				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+				mtexture->Bind();
+				
+				// Generate minification mipmaps
+				glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+
+				// Set texture to wrap in both dimensions
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+				// Combine the texture with the previous texture colors 
+				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+				glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);   //Modulate RGB with RGB
+				glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_PREVIOUS);
+				glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE1_RGB, GL_TEXTURE);
+				glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_SRC_COLOR);
+				glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND1_RGB, GL_SRC_COLOR);
+
+				glTexCoordPointer(2, GL_FLOAT, 0, value_ptr(*mtexcoord));
+			}
 		}
 	}
 	else
@@ -400,17 +439,31 @@ void Mesh::resetRenderStates() const
 	{
 		if( !textures.empty() && !texcoords.empty() )
 		{
-			glDisable(GL_TEXTURE_2D);
 			glActiveTexture(GL_TEXTURE0);
 			glClientActiveTexture(GL_TEXTURE0);
+			glDisable(GL_TEXTURE_2D);
 
 			textures.front()->Bind();
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			glBindTexture(GL_TEXTURE_2D, 0);
+			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
+			glBindTexture(GL_TEXTURE_2D, 0);
 			glTexCoordPointer(2, GL_FLOAT, 0, nullptr); 
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+			//Switch off the TU 1
+			if( multiTexture )
+			{
+				glActiveTexture(GL_TEXTURE1);
+				glClientActiveTexture(GL_TEXTURE1);
+
+				glDisable(GL_TEXTURE_2D);
+				glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+				glActiveTexture(GL_TEXTURE0);
+				glClientActiveTexture(GL_TEXTURE0);
+			}
 		}
 	}
 	else 

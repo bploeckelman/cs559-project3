@@ -84,10 +84,10 @@ public:
 	void setEmissionRate(const float rate);
 	void setBlendMode(const BlendMode& mode);
 	void setTexture(sf::Image* image);
-	float getMaxParticles();
 
-	Particles& getParticles();
 	glm::vec3 getPos() const;
+	Particles& getParticles();
+	unsigned int getMaxParticles() const;
 
 protected:
 	virtual void initParticle(Particle& p) = 0;
@@ -97,11 +97,10 @@ private:
 	virtual void subUpdate(const float deltaTime) { }
 };
 
-inline float ParticleEmitter::getMaxParticles() {return maxParticles;}
 
 inline glm::vec3 ParticleEmitter::getPos() const { return position;}
-
 inline Particles& ParticleEmitter::getParticles() { return particles;}
+inline unsigned int ParticleEmitter::getMaxParticles() const { return maxParticles; }
 
 inline void ParticleEmitter::start() { emitting = true; }
 inline void ParticleEmitter::stop()  { emitting = false; }

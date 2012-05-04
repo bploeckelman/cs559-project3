@@ -33,11 +33,12 @@ protected:
 	unsigned int numTriangles;
 	unsigned int numIndices;
 
-	bool texture;
 	bool blend;
 	bool light;
 	bool fill;
 	bool normalsVis;
+	bool texture;
+	bool multiTexture;
 
 	// TODO: vertex buffer object management
 
@@ -71,11 +72,12 @@ public:
 				  , glm::vec2 *texcoord);
 
 	// Render state toggles
-	void toggleTexturing();
 	void toggleBlending();
 	void toggleLighting();
 	void toggleWireframe();
 	void toggleNormalsVis();
+	void toggleTexturing();
+	void toggleMultiTexturing();
 
 	// Mesh details accessors
 	unsigned int getWidth()        const;
@@ -140,11 +142,12 @@ private:
 };
 
 
-inline void Mesh::toggleTexturing() { texture    = !texture; }
 inline void Mesh::toggleBlending()  { blend      = !blend; }
 inline void Mesh::toggleLighting()  { light      = !light; }
 inline void Mesh::toggleWireframe() { fill       = !fill; }
 inline void Mesh::toggleNormalsVis(){ normalsVis = !normalsVis; }
+inline void Mesh::toggleTexturing() { texture    = !texture; }
+inline void Mesh::toggleMultiTexturing() { multiTexture = !multiTexture; }
 
 inline unsigned int Mesh::getWidth()        const { return width; }
 inline unsigned int Mesh::getHeight()       const { return height; }
