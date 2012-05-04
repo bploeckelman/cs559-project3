@@ -12,7 +12,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
-
+#undef __glext_h_
+#undef __glxext_h_
+#undef __gl_h_
+#include "../Framework/Utilities/GLee.h"
 
 
 Fish::Fish(glm::vec3 pos, sf::Color color, HeightMap& heightmap, Fluid& fluid)
@@ -486,11 +489,14 @@ void Campfire::draw(const Camera& camera)
 {
 	glEnable(GL_TEXTURE_2D);
 	wood.Bind();
+	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 	gluQuadricDrawStyle( quadric, GLU_FILL);
 	gluQuadricNormals( quadric, GLU_SMOOTH);
 	gluQuadricOrientation( quadric, GLU_OUTSIDE);
 	gluQuadricTexture( quadric, GL_TRUE);
-	glColor4ub(150, 75, 0, 255);
+//	glColor4ub(150, 75, 0, 255);
+	glColor3f(0.7f, 0.7f, 0.7f);
 	glPushMatrix();
 		glMultMatrixf(glm::value_ptr(transform));
 		glPushMatrix();
@@ -521,4 +527,6 @@ void Campfire::draw(const Camera& camera)
 			glPopMatrix();
 		glPopMatrix();
 	glPopMatrix();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
