@@ -20,23 +20,34 @@ using namespace glm;
 
 HeightMap::HeightMap( const unsigned int width
 					, const unsigned int height
+					, const float offsetWidth
+					, const float offsetHeight
 					, const float groundScale
 					, const float heightScale )
 	// TODO: update Mesh ctor to accept heightScale
 	: Mesh(width, height, groundScale)
+	, offset(offsetWidth, offsetHeight)
 	, groundScale(groundScale)
 	, heightScale(heightScale)
 	, imageName("")
 { }
 
 HeightMap::HeightMap( const std::string& imageFilename
+					, const float offsetWidth
+					, const float offsetHeight
                     , const float groundScale /* = 0.5f */
 					, const float heightScale /* = 2.f */ )
 	: Mesh(imageFilename, groundScale, heightScale)
+	, offset(offsetWidth, offsetHeight)
 	, groundScale(groundScale)
 	, heightScale(heightScale)
 	, imageName(imageFilename)
 {
+	// update vertices based on offsets
+	for(unsigned int z = 0; z < height; ++z)
+	for(unsigned int x = 0; x < width;  ++x)
+		vertexAt(x,z) += vec3(offset.x, 0.f, offset.y);
+
 	float        ts = 0.1f;
 	unsigned int i  = 0;
 
