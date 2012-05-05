@@ -66,8 +66,8 @@ void Scene::setup()
 	glLineWidth(1.f);
 
 	glShadeModel(GL_SMOOTH);
-//	glEnable(GL_COLOR_MATERIAL);
-//	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+	glEnable(GL_COLOR_MATERIAL);
+	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
@@ -193,7 +193,7 @@ void Scene::setupLights()
 {
 	// setup and enable lights
 	Light *light0 = new Light(
-		vec4(128.f , 20.f, 128.f, 1.f),        // position
+		vec4(128.f , 40.f, 128.f, 0.f),        // position
 		vec4(0.1f, 0.1f, 0.1f, 1.f),  // ambient
 		vec4(1.f, 1.f, 1.f, 1.f),  // diffuse
 		vec4(1.f, 1.f, 1.f, 1.f)      // specular 
@@ -227,18 +227,19 @@ void Scene::setupLights()
 
 	// setup and enable materials
 	vec4 ambient(0.1f, 0.1f, 0.1f, 1.f);
-	vec4 diffuse(1.f, 1.f, 1.f, 1.f);
-	vec4 specular(1.f, 1.f, 1.f, 1.f);
+//	vec4 diffuse(1.f, 1.f, 1.f, 1.f);
+	vec4 specular(0.f, 0.f, 1.f, 1.f);
 	float shininess[1] = { 50.f };
 
-	glMaterialfv(GL_FRONT, GL_AMBIENT, value_ptr(ambient));
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, value_ptr(diffuse));
-//	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(specular));
-//	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
+//	glMaterialfv(GL_FRONT, GL_AMBIENT, value_ptr(ambient));
+//	glMaterialfv(GL_FRONT, GL_DIFFUSE, value_ptr(diffuse));
+	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(specular));
+	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
 
-	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+//	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
 
 //	glEnable(GL_NORMALIZE);
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(ambient));
 	glEnable(GL_LIGHTING);
 }
 
@@ -276,15 +277,36 @@ void Scene::update( const Clock& clock, const Input& input )
 	fluid->evaluate();
 	particleMgr.update(clock.GetElapsedTime());
 
-	static float angle = 0.f;
-	angle += timer.GetElapsedTime();
-	if( angle > constants::two_pi )
-		angle = 0.f;
-//*
+	static const float timeLimit = 10.f; // in seconds
+	static float delta = 0.f;
+	static bool toggle = true;
+	if( toggle )
+	{
+		delta += timer.GetElapsedTime();
+		if( delta > timeLimit )
+		{
+			toggle = !toggle;
+			delta  = timeLimit;
+		}
+	}
+	else
+	{
+		delta -= timer.GetElapsedTime();
+		if( delta < 0.f )
+		{
+			toggle = !toggle;
+			delta  = 0.f;
+		}
+	}
+
+	static const float step = 0.1f;
+	vec4 ambient(step * delta, step * delta, step * delta, 1.f);
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(ambient));
+/*
 	Light *light0 = lights.front();
 	assert( light0 != nullptr );
 	const vec4& position = light0->position();
-	light0->position(position + vec4(-cos(angle), 0.f, sin(angle), 0.f));
+	light0->position(position + vec4(-cos(delta), 0.f, sin(delta), 0.f));
 //*/
 	timer.Reset();
 }
@@ -419,6 +441,10 @@ void Scene::cleanup()
 	for each(auto model in models)
 		delete model;
 	models.clear();
+	
+	for each(auto light in lights)
+		delete light;
+	lights.clear();	
 
 	delete fluid;
 }
