@@ -85,8 +85,12 @@ void Scene::setup()
 
 	// setup textures
 	ImageManager::get().addResourceDir("Resources/images/");
+	ImageManager::get().addResourceDir("Resources/images/plants/");
+	ImageManager::get().addResourceDir("Resources/images/particles/");
 	ImageManager::get().addResourceDir("../");
 	ImageManager::get().addResourceDir("../../Resources/images/");
+	ImageManager::get().addResourceDir("../../Resources/images/plants/");
+	ImageManager::get().addResourceDir("../../Resources/images/particles/");
 
 	// setup meshes
 	HeightMap* heightmap = new HeightMap("heightmap-terrain.png"); 
