@@ -3,28 +3,35 @@
 /* ------
 /* A class that contains all objects in the scene
 /************************************************************************/
+#include "SceneObject.h"
+#include "Fluid.h"
+#include "Camera.h"
+#include "HeightMap.h"
+#include "../Core/ImageManager.h"
+#include "../Particles/Particles.h"
 
 #include <SFML\Graphics.hpp>
-#include "SceneObject.h"
-#include "../Core/ImageManager.h"
-#include "HeightMap.h"
-#include "../Particles/Particles.h"
-#include "Fluid.h"
 
-static void setupObjects(HeightMap& map);
+// ???
+//static void setupObjects(HeightMap& map);
 
+
+/************************************************************************/
+/* Fish
+/* ----
+/* A fish
+/************************************************************************/
 class Fish : public SceneObject{
 private:
-	sf::Color color;
 	int posNeg;
-	HeightMap& heightmap;
+	int direction;
 	float theta;
 	Fluid& fluid;
-	int direction;
+	HeightMap& heightmap;
 	GLUquadricObj* quadric;
+	sf::Color color;
 
 public:
-	Fish();
 	Fish(glm::vec3 pos, sf::Color color, HeightMap& heightmap, Fluid& fluid);
 
 	~Fish();
@@ -32,58 +39,69 @@ public:
 	void update(const sf::Clock &clock);
 
 	void draw(const Camera& camera);
-
 };
 
 
+/************************************************************************/
+/* Fountain
+/* --------
+/* A fountain consisting of a fluid surface, a particle emitter that 
+/* disturbs the fluid surface, and some containing geometry
+/************************************************************************/
 class Fountain : public SceneObject{
 private:
-	float size;
-	ParticleEmitter& emitter;
-	Fluid* fluid;
 	int count;
+	float size;
+	Fluid* fluid;
 	sf::Image texture;
 	GLUquadricObj* quadric;
+	ParticleEmitter& emitter;
 
 public:
-	Fountain();
-	Fountain(glm::vec3 pos, float size, ParticleEmitter& emitter);
+	Fountain( glm::vec3 pos
+			, float size
+			, ParticleEmitter& emitter );
 
 	~Fountain();
 
 	void update(const sf::Clock &clock);
 
 	void draw(const Camera& camera);
-
 };
 
-class Bush : public SceneObject{
+
+/************************************************************************/
+/* Plant
+/* -----
+/* A single plant that is drawn using 4 crossed planes 
+/* with a random plant texture applied
+/************************************************************************/
+class Plant : public SceneObject{
 private:
 	sf::Image side;
-	sf::Image top;
 	float size;
 
 public:	
-	Bush();
-	Bush(glm::vec3 pos, float size);
-
-	~Bush();
+	Plant(glm::vec3 pos, float size);
 
 	void draw(const Camera& camera);
-
 };
 
+
+/************************************************************************/
+/* Blimp
+/* -----
+/* A Goodyear invasion! 
+/************************************************************************/
 class Blimp : public SceneObject{
 private:
-	sf::Image btext;
 	float size;
 	float count;
-	GLUquadricObj* quadric;
 	float theta;
-
+	sf::Image btext;
+	GLUquadricObj* quadric;
 
 public:
-	Blimp();
 	Blimp(glm::vec3 pos, float size);
 
 	~Blimp();
@@ -92,6 +110,13 @@ public:
 	void draw(const Camera& camera);
 };
 
+
+/************************************************************************/
+/* Campfire
+/* --------
+/* A cozy little campfire, with some logs 
+/* and some particles for atmosphere
+/************************************************************************/
 class Campfire : public SceneObject{
 private:
 	float size;
@@ -101,12 +126,12 @@ private:
 	sf::Image wood;
 
 public:
-	Campfire();
-	Campfire(glm::vec3 pos, ParticleEmitter& fire, ParticleEmitter& smoke, float size);
+	Campfire( glm::vec3 pos
+			, ParticleEmitter& fire
+			, ParticleEmitter& smoke
+			, float size );
 
 	~Campfire();
 
-	void update(const sf::Clock &clock);
 	void draw(const Camera& camera);
-
 };

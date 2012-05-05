@@ -137,7 +137,7 @@ void Scene::setup()
 		const float heightOffset = linearRand(2.f, 4.f);
 		const vec3 pos(x, heightmap->heightAt(x,z) + heightOffset, z);
 
-		alphaObjects.push_back(new Bush(pos, heightOffset)); 
+		alphaObjects.push_back(new Plant(pos, heightOffset)); 
 	}
 
 	// add particle systems
