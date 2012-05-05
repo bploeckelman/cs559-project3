@@ -4,6 +4,7 @@
 /* -----
 /* A scene consisting of a camera and a number of game objects
 /************************************************************************/
+#include "Light.h"
 #include "Camera.h"
 #include "Skybox.h"
 #include "HeightMap.h"
@@ -29,9 +30,11 @@ namespace sf
 	class Event;
 }
 
-typedef std::vector<SceneObject*> SceneObjects;
 typedef std::vector<ObjModel*>    Models;
 typedef std::vector<Mesh*>        Meshes;
+typedef std::vector<Light*>       Lights;
+typedef std::vector<SceneObject*> SceneObjects;
+
 
 
 class Scene
@@ -41,6 +44,7 @@ protected:
 	CameraVector    cameras;     // all the cameras in the scene
 	Skybox          skybox;      // the current skybox
 	Fluid          *fluid;       // a test fluid surface
+	Lights          lihts;       // a container of lights
 	Models          models;      // container of 3d models
 	Meshes          meshes;      // container of mesh objects
 	SceneObjects    objects;     // scene objects

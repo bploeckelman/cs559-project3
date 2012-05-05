@@ -55,5 +55,6 @@ MeshOverlay::MeshOverlay( Mesh& parent
 
 	fill = true;
 	texture = true;
+	light = true;
 //	normalsVis = true;
 }

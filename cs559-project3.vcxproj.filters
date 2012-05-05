@@ -210,6 +210,9 @@
     <ClInclude Include="Scene\MeshOverlay.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\Light.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
     <ClInclude Include="Lib\glm-obj\glm.h">
       <Filter>Lib\glm-obj</Filter>
     </ClInclude>
@@ -351,6 +354,9 @@
       <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="Scene\MeshOverlay.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Light.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Lib\glm-obj\glm.cpp">

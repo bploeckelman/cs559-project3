@@ -4,6 +4,7 @@
 /* A scene consisting of a camera and a number of game objects
 /************************************************************************/
 #include "Scene.h"
+#include "Light.h"
 #include "Camera.h"
 #include "Skybox.h"
 #include "Fluid.h"
@@ -16,6 +17,7 @@
 #include "../Core/ImageManager.h"
 #include "../Particles/Particles.h"
 
+#include <functional>
 #include <algorithm>
 #include <sstream>
 
@@ -39,7 +41,7 @@ Scene::Scene()
 	, cameras()
 	, skybox()
 	, fluid(nullptr)
-	, models()
+        , lights()
 	, meshes()
 	, objects()
 	, particleMgr()
@@ -64,22 +66,21 @@ void Scene::setup()
 	glLineWidth(1.f);
 
 	glShadeModel(GL_SMOOTH);
-	glEnable(GL_COLOR_MATERIAL);
-	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+//	glEnable(GL_COLOR_MATERIAL);
+//	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
 	glClearDepth(1.f);
-
+/*
 	const vec4 fogColor(0.1f, 0.1f, 0.1f, 1.f);
 	const float fogDensity = 0.01f;
-
 	glEnable(GL_FOG);
 	glFogi(GL_FOG_MODE, GL_EXP2);
 	glFogfv(GL_FOG_COLOR, value_ptr(fogColor));
 	glFogf(GL_FOG_DENSITY, fogDensity);
 	glHint(GL_FOG_HINT, GL_NICEST);
-
+*/
 	glClearColor(0.1f, 0.1f, 0.1f, 1.f);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
@@ -126,8 +127,8 @@ void Scene::setup()
 	fluid->setSkybox(&skybox);
 	
 	// add Scene objects
-	const vec3 housePos(100.f, heightmap->heightAt(100,100) + 10, 100.f);
-	objects.push_back(new House(housePos, sf::Color(0, 255, 0), stone, 10, 20, 10));
+//	const vec3 housePos(100.f, heightmap->heightAt(100,100) + 10, 100.f);
+//	objects.push_back(new House(housePos, sf::Color(0, 255, 0), stone, 10, 20, 10));
 	objects.push_back(new Blimp(vec3(120, 50, 80), 10));
 	objects.push_back(new ModelObject(vec3(15, heightmap->heightAt(15, 20) + 3.5, 20), "./Resources/models/house/house.obj", 7.f));
 
@@ -190,37 +191,55 @@ void Scene::setup()
 
 void Scene::setupLights()
 {
-	glEnable(GL_LIGHTING);
+	// setup and enable lights
+	Light *light0 = new Light(
+		vec4(128.f , 20.f, 128.f, 1.f),        // position
+		vec4(0.1f, 0.1f, 0.1f, 1.f),  // ambient
+		vec4(1.f, 1.f, 1.f, 1.f),  // diffuse
+		vec4(1.f, 1.f, 1.f, 1.f)      // specular 
+	);
+	light0->enableAmbient();
+	light0->enableDiffuse();
+	light0->enableSpecular();
+	light0->enable();
+/*
+	Light *light1 = new Light(
+		vec4(100.f , 40.f, 50.f, 1.f),     // position
+		vec4(1.f, 0.5f, 0.f, 1.f),    // ambient
+		vec4(0.3f, 0.3f, 0.3f, 1.f),  // diffuse
+		vec4(1.f, 0.f, 0.f, 1.f)      // specular 
+	);
+	light1->disable();
+//	light1->enable();
 
-	vec4 gAmbient(0.3f, 0.2f, 0.3f, 1.f);
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(gAmbient));
+	Light *light2 = new Light(
+		vec4(50.f, 40.f, 100.f, 1.f),      // position
+		vec4(0.1f, 0.1f, 0.1f, 1.f),  // ambient
+		vec4(0.f, 1.f, 0.3f, 1.f),    // diffuse
+		vec4(0.f, 1.f, 0.f, 1.f)      // specular 
+	);
+	light2->disable();
+//	light2->enable();
+*/
+	lights.push_back(light0);
+//	lights.push_back(light1);
+//	lights.push_back(light2);
 
-	// Light 0
-	vec4 ambient(0.2f, 0.2f, 0.2f, 1.f);
-	vec4 diffuse(0.3f, 0.3f, 0.3f, 1.f);
+	// setup and enable materials
+	vec4 ambient(0.1f, 0.1f, 0.1f, 1.f);
+	vec4 diffuse(1.f, 1.f, 1.f, 1.f);
 	vec4 specular(1.f, 1.f, 1.f, 1.f);
-	vec4 position0(128.f, 30.f, 128.f, 1.f);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, value_ptr(ambient));
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, value_ptr(diffuse));
-	glLightfv(GL_LIGHT0, GL_SPECULAR, value_ptr(specular));
-	glLightfv(GL_LIGHT0, GL_POSITION, value_ptr(position0));
-	glEnable(GL_LIGHT0);
+	float shininess[1] = { 50.f };
 
-	// Light 1
-	vec4 orange(1.f, 0.54f, 0.f, 1.f);
-	vec4 position1(256.f, 40.f, 256.f, 1.f);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, value_ptr(orange));
-	glLightfv(GL_LIGHT1, GL_POSITION, value_ptr(position1));
-	glEnable(GL_LIGHT1);
+	glMaterialfv(GL_FRONT, GL_AMBIENT, value_ptr(ambient));
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, value_ptr(diffuse));
+//	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(specular));
+//	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
 
-	// Light 2
-	vec4 magenta(1.f, 0.f, 1.f, 1.f);
-	vec4 position2(64.f, 15.f, 64.f, 1.f);
-	glLightfv(GL_LIGHT2, GL_SPECULAR, value_ptr(magenta));
-	glLightfv(GL_LIGHT2, GL_POSITION, value_ptr(position2));
-	glEnable(GL_LIGHT2);
+	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
 
 //	glEnable(GL_NORMALIZE);
+	glEnable(GL_LIGHTING);
 }
 
 void Scene::update( const Clock& clock, const Input& input )
@@ -257,6 +276,16 @@ void Scene::update( const Clock& clock, const Input& input )
 	fluid->evaluate();
 	particleMgr.update(clock.GetElapsedTime());
 
+	static float angle = 0.f;
+	angle += timer.GetElapsedTime();
+	if( angle > constants::two_pi )
+		angle = 0.f;
+//*
+	Light *light0 = lights.front();
+	assert( light0 != nullptr );
+	const vec4& position = light0->position();
+	light0->position(position + vec4(-cos(angle), 0.f, sin(angle), 0.f));
+//*/
 	timer.Reset();
 }
 
@@ -275,8 +304,10 @@ void Scene::render( const Clock& clock )
 	meshOverlay->render();
 	fluid->render();
 
+	glEnable(GL_LIGHTING);
 	for each(auto object in objects)
 		object->draw(*camera);
+	glDisable(GL_LIGHTING);
 
 	// TODO: ObjModel should be a part of a SceneObject
 	// so that it has its own transform
@@ -296,6 +327,11 @@ void Scene::render( const Clock& clock )
 		object->draw(*camera);
 
 	particleMgr.render(*camera);
+
+	glDisable(GL_LIGHTING);
+	for each(auto light in lights)
+		light->render();
+	glEnable(GL_LIGHTING);
 
 	Render::basis();
 }
