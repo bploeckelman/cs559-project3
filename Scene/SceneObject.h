@@ -4,15 +4,19 @@
 /* ------
 /* A simple 3d SceneObject
 /************************************************************************/
-#include <glm/glm.hpp>
-#include <SFML/System/Clock.hpp>
 #include "Camera.h"
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <SFML/System/Clock.hpp>
+
 
 class SceneObject
 {
 protected:
-	int				ID;
-	glm::mat4x4		transform;
+	int       ID;
+	glm::mat4 transform;
 
 public:
 	SceneObject();
@@ -22,8 +26,18 @@ public:
 	virtual void draw(const Camera& camera);
 	virtual void update(const sf::Clock &clock);
 
+	void setPos(const glm::vec3& pos);
 	glm::vec3 getPos() const;
-
 };
 
-inline glm::vec3 SceneObject::getPos() const	{ return glm::vec3(transform[3][0], transform[3][1], transform[3][2]) ;}
+inline void SceneObject::setPos(const glm::vec3& pos) 
+{
+	transform = glm::translate(transform, -getPos());
+	transform = glm::translate(transform, pos);
+}
+
+inline glm::vec3 SceneObject::getPos() const
+{ 
+	return glm::vec3(transform[3][0], transform[3][1], transform[3][2]);
+}
+

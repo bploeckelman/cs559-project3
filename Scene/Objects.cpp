@@ -12,9 +12,10 @@
 #undef __gl_h_
 #include "../Framework/Utilities/GLee.h"
 
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
-#include <glm\glm.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/random.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -299,12 +300,48 @@ void Fountain::draw(const Camera& camera)
 /* A single plant that is drawn using 4 crossed planes 
 /* with a random plant texture applied
 /************************************************************************/
-Plant::Plant(vec3 pos, float size)
-	: SceneObject(pos)
-	, side(GetImage("tree-beech-side.png"))
-	, size(size)
+const unsigned int NumPlantNames = 17;
+const std::string PlantTextureNames[NumPlantNames] =
 {
-	// TODO: pick a random plant image
+	"bush-banana.png",
+	"bush-bougainvillier.png",
+	"bush-cornus.png",
+	"bush-dracena.png",
+	"bush-dypsis.png",
+	"bush-ginger.png",
+	"tree-basic.png",
+	"tree-beech.png",
+	"tree-benjamina.png",
+	"tree-ficus.png",
+	"tree-lime1.png",
+	"tree-lime2.png",
+	"tree-oak.png",
+	"tree-palm.png",
+	"tree-pine.png",
+	"tree-plane.png",
+	"tree-sophora.png"
+};
+
+Plant::Plant(const vec3& pos)
+	: SceneObject(pos)
+{
+	// Get a random plant texture
+	const unsigned int r = Randomizer::Random(0, NumPlantNames - 1);
+	const std::string name(PlantTextureNames[r]);
+	texture = GetImage(name);
+
+	// This is all a little hacky...
+	static const float treeModifier = 2.f;
+	static const float bushModifier = 0.5f;
+
+	// Size trees differently than bushes
+	if( name.compare(0, 4, "tree") == 0 )
+		size = linearRand(7.f, 10.f);
+	else
+		size = linearRand(2.f, 4.f);
+
+	// Offset the height by the random size
+	setPos(vec3(pos) + vec3(0,size,0));
 }
 
 void Plant::draw(const Camera& camera)
@@ -318,7 +355,7 @@ void Plant::draw(const Camera& camera)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	side.Bind();
+	texture.Bind();
 	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);		
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);

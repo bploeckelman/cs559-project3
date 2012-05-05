@@ -12,9 +12,6 @@
 
 #include <SFML\Graphics.hpp>
 
-// ???
-//static void setupObjects(HeightMap& map);
-
 
 /************************************************************************/
 /* Fish
@@ -78,11 +75,11 @@ public:
 /************************************************************************/
 class Plant : public SceneObject{
 private:
-	sf::Image side;
+	sf::Image texture;
 	float size;
 
 public:	
-	Plant(glm::vec3 pos, float size);
+	Plant(const glm::vec3& pos);
 
 	void draw(const Camera& camera);
 };

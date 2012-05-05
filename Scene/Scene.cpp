@@ -131,13 +131,10 @@ void Scene::setup()
 	const unsigned int numBushes = 50;
 	for(unsigned int i = 0; i < numBushes; ++i)
 	{
-		// TODO: randomly pick from several bush sprites
-		const float x = linearRand(0.f, 256.f); // TODO: pick in heightmap bounds
-		const float z = linearRand(0.f, 256.f); // TODO: pick in heightmap bounds
-		const float heightOffset = linearRand(2.f, 4.f);
-		const vec3 pos(x, heightmap->heightAt(x,z) + heightOffset, z);
-
-		alphaObjects.push_back(new Plant(pos, heightOffset)); 
+		const float x = linearRand(5.f, 250.f); // TODO: pick in heightmap bounds
+		const float z = linearRand(5.f, 250.f); // TODO: pick in heightmap bounds
+		const vec3 pos(x, heightmap->heightAt(x,z), z);
+		alphaObjects.push_back(new Plant(pos)); 
 	}
 
 	// add particle systems
