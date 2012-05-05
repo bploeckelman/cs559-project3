@@ -83,3 +83,23 @@ public:
 
 	virtual void update(Particle& particle, const float delta);
 };
+
+/************************************************************************/
+/* HeightMapWalkAffector 
+/* ---------------------
+/* Moves an emitter around above a HeightMap
+/************************************************************************/
+class HeightMapWalkAffector : public ParticleAffector
+{
+protected:
+	glm::vec2 direction;
+	glm::vec3 position;
+	HeightMap& heightmap;
+
+public:
+	HeightMapWalkAffector(ParticleEmitter* parentEmitter
+						, HeightMap& heightmap
+						, const glm::vec3& initialPosition=glm::vec3(0,0,0));
+
+	virtual void update(Particle& particle, const float delta);
+};

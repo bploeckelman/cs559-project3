@@ -7,6 +7,7 @@
 #include "ParticleEmitter.h"
 #include "ParticleAffectors.h"
 #include "Particle.h"
+#include "../Scene/HeightMap.h"
 #include "../Core/ImageManager.h"
 
 #include <glm/glm.hpp>
@@ -195,6 +196,56 @@ void SmokeEmitter::initParticle( Particle& p )
 
 	pp.lifespan = 1.f;
 	pp.scale = linearRand(0.2f, 0.5f);
+
+	pp.active = true;
+
+	p = pp;
+}
+
+/************************************************************************/
+/* TestEmitter
+/* -----------
+/* For experiments... wear goggles.
+/************************************************************************/
+TestEmitter::TestEmitter( HeightMap& heightmap
+                        , const glm::vec3& position
+                        , const unsigned int maxParticles /*= 500 */
+                        , const float lifetime /*= -1.f */ )
+	: ParticleEmitter(maxParticles, lifetime)
+{
+	add(new FadeOutAffector(this, 0.f, 40.f));
+	add(new ScaleUpAffector(this, 40.f, 30.f));
+	add(new HeightMapWalkAffector(this, heightmap, position));
+
+	setBlendMode(ALPHA);
+	setPosition(position);
+	setOneTimeEmission(false);
+	setTexture(&GetImage("particle-sphere.png"));
+
+	setEmissionRate(10000.f);
+}
+
+void TestEmitter::initParticle(Particle& p)
+{
+	Particle pp;
+
+	pp.position     = position;
+	pp.prevPosition = position;
+
+	pp.velocity = vec3( linearRand(-15.f, 15.f)
+                      , linearRand(30.f, 60.f)
+                      , linearRand(-15.f, 15.f) );
+	pp.accel = vec3( linearRand(-2.f, 2.f)
+                   , linearRand(20.f, 40.f)
+                   , linearRand(-2.f, 2.f) );
+
+	pp.color = vec4(linearRand(0.2f, 1.f)
+                  , linearRand(0.2f, 1.f)
+                  , linearRand(0.2f, 1.f)
+                  , linearRand(0.5f, 0.9f));
+
+	pp.lifespan = 1.f;
+	pp.scale = linearRand(0.1f, 0.5f);
 
 	pp.active = true;
 

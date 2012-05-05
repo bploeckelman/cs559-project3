@@ -9,6 +9,8 @@
 
 #include <glm/glm.hpp>
 
+class HeighMap;
+
 
 /************************************************************************/
 /* ExplosionEmitter
@@ -72,6 +74,24 @@ public:
 	SmokeEmitter( const glm::vec3& position
                 , const unsigned int maxParticles = 500
                 , const float lifetime            = -1.f);
+
+protected:
+	virtual void initParticle(Particle& p);
+};
+
+
+/************************************************************************/
+/* TestEmitter
+/* -----------
+/* For experiments... wear goggles.
+/************************************************************************/
+class TestEmitter : public ParticleEmitter 
+{
+public:
+	TestEmitter( HeightMap& heightmap
+               , const glm::vec3& position
+               , const unsigned int maxParticles = 1000
+               , const float lifetime            = -1.f );
 
 protected:
 	virtual void initParticle(Particle& p);

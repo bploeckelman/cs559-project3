@@ -155,6 +155,11 @@ void Scene::setup()
 	system3->start();
 	particleMgr.add(system3);
 
+	ParticleSystem *system4 = new ParticleSystem();
+	system4->add(new TestEmitter(*heightmap, vec3(64.f, 0.f, 64.f)));
+	system4->start();
+	particleMgr.add(system4);
+
 	// create and position cameras
 	cameras.push_back(Camera( *heightmap 
 							, vec3(-2.5, 25.0, -2.5)    // position
