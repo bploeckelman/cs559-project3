@@ -11,6 +11,8 @@
 
 #include <glm/glm.hpp>
 
+class Skybox;
+
 
 class Fluid
 {
@@ -31,6 +33,8 @@ private:
 	float t_step;
 
 	sf::Clock evalTimer;
+	Skybox *skybox;
+	unsigned int skyboxEnvTexture;
 
 	float* getVertexBufferPtr();
 	float* getNormalBufferPtr();
@@ -64,8 +68,7 @@ public:
 	const long getHeight() const;
 
 	float getDist() const;
-
-	
+	void setSkybox(Skybox *box);
 };
 
 inline float Fluid::getDist() const { return dist; } 

@@ -9,6 +9,11 @@
 #include "../Core/Common.h"
 #include "../Utility/dirent.h"
 
+#undef __glext_h_
+#undef __glxext_h_
+#undef __gl_h_
+#include "../Framework/Utilities/GLee.h"
+
 #include <SFML/Graphics.hpp>
 
 #include <glm/glm.hpp>
@@ -388,4 +393,9 @@ bool Skybox::getFaceImageMap(const vector<string>& filenames
 		return false;
 	}
 	return true;
+}
+
+sf::Image& Skybox::getTexture(const Face& face)
+{
+	return *(*textures)[face];
 }

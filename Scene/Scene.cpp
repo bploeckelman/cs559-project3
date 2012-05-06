@@ -124,19 +124,18 @@ void Scene::setup()
 		0.1f,  // fluid viscosity
 		vec3(40.f, 5.f, 40.f)
 	);
+	fluid->setSkybox(&skybox);
 	
 	// add Scene objects
 	const vec3 housePos(100.f, heightmap->heightAt(100,100) + 10, 100.f);
 	objects.push_back(new House(housePos, sf::Color(0, 255, 0), stone, 10, 20, 10));
 	objects.push_back(new Blimp(vec3(120, 50, 80), 10));
 
-
 	const vec3 position1(60.f, heightmap->heightAt(60, 100) + 2.f, 100.f);
 	FountainEmitter *fountain = new FountainEmitter(position1, 20);
 	FireEmitter *fire = new FireEmitter(vec3(30, heightmap->heightAt(30, 30), 30) + 1.f, 500);
 	SmokeEmitter *smoke = new SmokeEmitter(vec3(31, heightmap->heightAt(31, 31) + 1.2f, 31), 500);
-
-	objects.push_back(new Fountain(vec3(60.f, heightmap->heightAt(60, 100) + 1.f, 100.f), 10, *fountain));
+	objects.push_back(new Fountain(vec3(60.f, heightmap->heightAt(60, 100) + 1.f, 100.f), 10, *fountain, &skybox));
 
 	objects.push_back(new Fish(vec3(70, 3.5f, 75), sf::Color(255, 127, 0), *heightmap, *fluid));
 

@@ -7,6 +7,12 @@
 /* "Mathematics for 3D Game Programming and Computer Graphics 3rd Ed."
 /************************************************************************/
 #include "Fluid.h"
+#include "Skybox.h"
+
+#undef __glext_h_
+#undef __glxext_h_
+#undef __gl_h_
+#include "../Framework/Utilities/GLee.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
@@ -29,6 +35,7 @@ Fluid::Fluid( long n, long m, float d
             , float t, float c, float mu
 			, const vec3& pos /* = vec3(0,0,0) */ ) 
 	: pos(pos)
+	, skybox(nullptr)
 {
 	width  = n;
 	height = m;
@@ -97,6 +104,8 @@ Fluid::Fluid( long n, long m, float d
 
 	blend = true;
 	light = true;
+
+	skyboxEnvTexture = 0;
 }
 
 Fluid::~Fluid()
@@ -106,11 +115,29 @@ Fluid::~Fluid()
 	delete[] indices;
 	delete[] buffer[1];
 	delete[] buffer[0];
+
+	if( skyboxEnvTexture != 0 )
+		glDeleteTextures(1, &skyboxEnvTexture);
 }
 
 void Fluid::render()
 {
-	glDisable(GL_TEXTURE_2D);
+	// Setup environment mapping
+	if( skybox != nullptr )
+	{
+		glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxEnvTexture);
+		glEnable(GL_TEXTURE_CUBE_MAP);
+			
+		glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP);
+		glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP);
+		glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP);
+
+		glEnable(GL_TEXTURE_GEN_S);
+		glEnable(GL_TEXTURE_GEN_T);
+		glEnable(GL_TEXTURE_GEN_R);
+	}
+	else
+		glDisable(GL_TEXTURE_2D);
 
 	if( light )
 	{
@@ -145,7 +172,8 @@ void Fluid::render()
 		glTranslatef(pos.x, pos.y, pos.z); 
 		glRotatef(90.f, 1.f, 0.f, 0.f);
 
-		glColor4f(0.0f, 0.8f, 1.0f, 0.5f);
+//		glColor4f(0.0f, 0.8f, 1.0f, 0.5f);
+		glColor4f(0.1f, 1.f, 1.f, 0.7f);
 		glDrawElements(GL_TRIANGLES
 					 , numIndices
 					 , GL_UNSIGNED_INT
@@ -166,7 +194,17 @@ void Fluid::render()
 		glDisable(GL_LIGHTING);
 	}
 
-	glEnable(GL_TEXTURE_2D);
+	if( skybox != nullptr )
+	{
+		glDisable(GL_TEXTURE_GEN_S);
+		glDisable(GL_TEXTURE_GEN_T);
+		glDisable(GL_TEXTURE_GEN_R);
+
+		glDisable(GL_TEXTURE_CUBE_MAP);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+	}
+	else
+		glEnable(GL_TEXTURE_2D);
 }
 
 void Fluid::evaluate()
@@ -258,4 +296,50 @@ float* Fluid::getVertexBufferPtr()
 float* Fluid::getNormalBufferPtr()
 {
 	return glm::value_ptr(*normal);
+}
+
+void Fluid::setSkybox( Skybox *box )
+{
+	if( box != nullptr )
+	{
+		skybox = box;
+
+		// Generate cube map textures based on skybox textures
+		// Note: this is sort of hacky because we can't directly 
+		// control how SFML generates its textures and 
+		// in order to use as cube maps, we have to gen textures 
+		// with GL_TEXTURE_CUBE_MAP_dir_axis as a target 
+		// instead of GL_TEXTURE_2D
+		// So we need to generate a new texture just for this
+		// using the pixel data from each skybox texture
+
+		// TODO: figure out how to blend between night/day textures
+
+		glGenTextures(1, &skyboxEnvTexture);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxEnvTexture);
+
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+		sf::Image& tFront  = skybox->getTexture(Skybox::front);
+		sf::Image& tBack   = skybox->getTexture(Skybox::back);
+		sf::Image& tLeft   = skybox->getTexture(Skybox::left);
+		sf::Image& tRight  = skybox->getTexture(Skybox::right);
+		sf::Image& tBottom = skybox->getTexture(Skybox::bottom);
+		sf::Image& tTop    = skybox->getTexture(Skybox::top);
+
+		// Textures have uniform size, so can just grab this once
+		const unsigned int width  = tFront.GetWidth();
+		const unsigned int height = tFront.GetHeight();
+
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tRight.GetPixelsPtr());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tLeft.GetPixelsPtr());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tTop.GetPixelsPtr());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tBottom.GetPixelsPtr());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tFront.GetPixelsPtr());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tBack.GetPixelsPtr());
+	}
 }

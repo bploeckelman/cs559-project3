@@ -4,6 +4,7 @@
 /* A class that contains all objects in the scene
 /************************************************************************/
 #include "Objects.h"
+#include "Skybox.h"
 #include "../Particles/Particles.h"
 #include "../Utility/RenderUtils.h"
 
@@ -126,7 +127,7 @@ void Fish::draw(const Camera& camera)
 /* A fountain consisting of a fluid surface, a particle emitter that 
 /* disturbs the fluid surface, and some containing geometry
 /************************************************************************/
-Fountain::Fountain(vec3 pos, float size, ParticleEmitter& emitter)
+Fountain::Fountain(vec3 pos, float size, ParticleEmitter& emitter, Skybox *skybox)
 	: SceneObject(pos)
 	, count(0)
 	, size(size)
@@ -144,6 +145,7 @@ Fountain::Fountain(vec3 pos, float size, ParticleEmitter& emitter)
 		0.4f,  // fluid viscosity
 		vec3(pos.x - (size/2.f), pos.y + .25f, pos.z - (size))
 	);
+	fluid->setSkybox(skybox);
 }
 
 Fountain::~Fountain()

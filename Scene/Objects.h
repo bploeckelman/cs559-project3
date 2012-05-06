@@ -12,6 +12,8 @@
 
 #include <SFML\Graphics.hpp>
 
+class Skybox;
+
 
 /************************************************************************/
 /* Fish
@@ -57,7 +59,8 @@ private:
 public:
 	Fountain( glm::vec3 pos
 			, float size
-			, ParticleEmitter& emitter );
+			, ParticleEmitter& emitter
+			, Skybox* skybox );
 
 	~Fountain();
 

@@ -34,6 +34,8 @@ public:
 	void setDay();
 	void setNight();
 
+	sf::Image& getTexture(const Face& face);
+
 private:
 	static const std::string dayDir;
 	static const std::string nightDir;
