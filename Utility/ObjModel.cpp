@@ -34,8 +34,8 @@ ObjModel::ObjModel( const std::string& filename
 			glmUnitize(model);
 
 		// Calculate normals
-//		glmFacetNormals(model);
-//		glmVertexNormals(model, 90.f);
+		glmFacetNormals(model);
+		glmVertexNormals(model, 90.f);
 	}
 }
 
