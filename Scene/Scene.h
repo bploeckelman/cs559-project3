@@ -12,6 +12,7 @@
 #include "../Core/Common.h"
 #include "../Utility/Mesh.h"
 #include "../Utility/Plane.h"
+#include "../Utility/ObjModel.h"
 #include "../Particles/Particles.h"
 
 #include <glm/glm.hpp>
@@ -29,7 +30,9 @@ namespace sf
 }
 
 typedef std::vector<SceneObject*> SceneObjects;
-typedef std::vector<Mesh*> Meshes;
+typedef std::vector<ObjModel*>    Models;
+typedef std::vector<Mesh*>        Meshes;
+
 
 class Scene
 {
@@ -38,6 +41,7 @@ protected:
 	CameraVector    cameras;     // all the cameras in the scene
 	Skybox          skybox;      // the current skybox
 	Fluid          *fluid;       // a test fluid surface
+	Models          models;      // container of 3d models
 	Meshes          meshes;      // container of mesh objects
 	SceneObjects    objects;     // scene objects
 	SceneObjects    alphaObjects;// transparent scene objects 

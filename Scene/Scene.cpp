@@ -10,6 +10,7 @@
 #include "Buildings.h"
 #include "Objects.h"
 #include "../Utility/Plane.h"
+#include "../Utility/ObjModel.h"
 #include "../Utility/RenderUtils.h"
 #include "../Core/Common.h"
 #include "../Core/ImageManager.h"
@@ -38,6 +39,7 @@ Scene::Scene()
 	, cameras()
 	, skybox()
 	, fluid(nullptr)
+	, models()
 	, meshes()
 	, objects()
 	, particleMgr()
@@ -94,14 +96,23 @@ void Scene::setup()
 
 	// setup meshes
 	HeightMap *heightmap = new HeightMap("heightmap-terrain.png"); 
-	HeightMap *heightmap2 = new HeightMap("heightmap-terrain.png",256.f, 256.f); 
-	HeightMap *heightmap3 = new HeightMap("heightmap-terrain.png",256.f, 0.f);
+//	HeightMap *heightmap2 = new HeightMap("heightmap-terrain.png",256.f, 256.f); 
+//	HeightMap *heightmap3 = new HeightMap("heightmap-terrain.png",256.f, 0.f);
 	
 	meshes.push_back(heightmap);
-	meshes.push_back(heightmap2);
-	meshes.push_back(heightmap3);
+//	meshes.push_back(heightmap2);
+//	meshes.push_back(heightmap3);
 
 	meshOverlay = new MeshOverlay(*heightmap);
+
+	// load models
+	ObjModel *model = new ObjModel("./Resources/models/box/box.obj");
+//	ObjModel *model = new ObjModel("./Resources/models/creature/creature.obj");
+	if( model != nullptr )
+	{
+		model->setRenderMode(GLM_TEXTURE);
+		models.push_back(model);
+	}
 
 	// generate a new fluid surface
 	fluid = new Fluid(
@@ -261,13 +272,26 @@ void Scene::render( const Clock& clock )
 	for each(auto mesh in meshes)
 		mesh->render();
 
-
+	// TODO: remove these
 	meshOverlay->render();
-
 	fluid->render();
 
 	for each(auto object in objects)
 		object->draw(*camera);
+
+	// TODO: ObjModel should be a part of a SceneObject
+	// so that it has its own transform
+	glEnable(GL_LIGHTING);
+//	glPolygonMode(GL_FRONT, GL_LINE);
+//	glColor3f(1,1,1);
+	glPushMatrix();
+	glTranslatef(32, 15, 40);
+	glScalef(3,3,3);
+	for each(auto model in models)
+		model->render();
+	glPopMatrix();
+//	glPolygonMode(GL_FRONT, GL_FILL);
+	glDisable(GL_LIGHTING);
 
 	for each(auto object in alphaObjects)
 		object->draw(*camera);
@@ -356,6 +380,10 @@ void Scene::cleanup()
 	for each(auto mesh in meshes)
 		delete mesh;
 	meshes.clear();
+
+	for each(auto model in models)
+		delete model;
+	models.clear();
 
 	delete fluid;
 }

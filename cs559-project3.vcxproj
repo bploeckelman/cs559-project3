@@ -92,6 +92,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Lib\glm-obj\glm.h" />
+    <ClInclude Include="Lib\glm-obj\glmTexture.h" />
     <ClInclude Include="Particles\ParticleAffector.h" />
     <ClInclude Include="Particles\ParticleAffectors.h" />
     <ClInclude Include="Particles\Particle.h" />
@@ -139,10 +141,14 @@
     <ClInclude Include="Utility\Logger.h" />
     <ClInclude Include="Utility\Matrix2d.h" />
     <ClInclude Include="Utility\Mesh.h" />
+    <ClInclude Include="Utility\ObjModel.h" />
     <ClInclude Include="Utility\Plane.h" />
     <ClInclude Include="Utility\RenderUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Lib\glm-obj\glm.cpp" />
+    <ClCompile Include="Lib\glm-obj\glmimg.cpp" />
+    <ClCompile Include="Lib\glm-obj\glmTexture.cpp" />
     <ClCompile Include="Particles\ParticleAffectors.cpp" />
     <ClCompile Include="Particles\ParticleEmitter.cpp" />
     <ClCompile Include="Particles\ParticleEmitters.cpp" />
@@ -186,6 +192,7 @@
     <ClCompile Include="Scene\Skybox.cpp" />
     <ClCompile Include="Utility\Logger.cpp" />
     <ClCompile Include="Utility\Mesh.cpp" />
+    <ClCompile Include="Utility\ObjModel.cpp" />
     <ClCompile Include="Utility\RenderUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
