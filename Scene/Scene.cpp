@@ -106,12 +106,21 @@ void Scene::setup()
 	meshOverlay = new MeshOverlay(*heightmap);
 
 	// load models
+/*
 	ObjModel *model = new ObjModel("./Resources/models/box/box.obj");
 	if( model != nullptr )
 	{
 		model->setRenderMode(GLM_SMOOTH | GLM_TEXTURE);
 		models.push_back(model);
 	}
+*/
+	ObjModel *model = new ObjModel("./Resources/models/creature/creature.obj");
+	if( model != nullptr )
+	{
+		model->setRenderMode(GLM_SMOOTH | GLM_TEXTURE);
+		models.push_back(model);
+	}
+
 
 	// generate a new fluid surface
 	fluid = new Fluid(
@@ -278,8 +287,15 @@ void Scene::render( const Clock& clock )
 	for each(auto object in objects)
 		object->draw(*camera);
 
+	// TODO: ObjModel should be a part of a SceneObject
+	// so that it has its own transform
+	glPushMatrix();
+	glTranslatef(32, 15, 40);
+	glRotatef(-90.f, 1, 0, 0);
+	glScalef(3,3,3);
 	for each(auto model in models)
 		model->render();
+	glPopMatrix();
 
 	for each(auto object in alphaObjects)
 		object->draw(*camera);
