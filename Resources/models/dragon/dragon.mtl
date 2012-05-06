@@ -53,7 +53,7 @@ newmtl Gaurdian_Skin
 	Kd 0.690196 0.643137 0.54902
 	Ks 0.0379608 0.0353726 0.0301961
 	Ka 0.207059 0.192941 0.164706
-	map_Kd d-top-view.tga
+	map_Kd d-side-view.tga
     map_Ks d-side-view.tga
 	map_d wings-trans.tga
 	map_bump -bm 0.0416667 d-side-bump.tga
