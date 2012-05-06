@@ -121,11 +121,11 @@ float HeightMap::heightAt( const float col, const float row )
 			return (h1 + dx * (h2 - h1));
 		}
 	}
-
+/*
 	std::stringstream ss;
 	ss << "Warning: invalid bounds for HeightMap::heightAt"
        << "(" << col << " , " << row << ")";
 	Log(ss);
-
+*/
 	return std::numeric_limits<float>::min();
 }
