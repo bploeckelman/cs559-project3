@@ -92,6 +92,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Lib\glm-obj\glm.h" />
+    <ClInclude Include="Lib\glm-obj\glmTexture.h" />
     <ClInclude Include="Particles\ParticleAffector.h" />
     <ClInclude Include="Particles\ParticleAffectors.h" />
     <ClInclude Include="Particles\Particle.h" />
@@ -143,6 +145,9 @@
     <ClInclude Include="Utility\RenderUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Lib\glm-obj\glm.cpp" />
+    <ClCompile Include="Lib\glm-obj\glmimg.cpp" />
+    <ClCompile Include="Lib\glm-obj\glmTexture.cpp" />
     <ClCompile Include="Particles\ParticleAffectors.cpp" />
     <ClCompile Include="Particles\ParticleEmitter.cpp" />
     <ClCompile Include="Particles\ParticleEmitters.cpp" />

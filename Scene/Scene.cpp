@@ -10,6 +10,7 @@
 #include "Buildings.h"
 #include "Objects.h"
 #include "../Utility/Plane.h"
+#include "../Utility/ObjModel.h"     // TEST
 #include "../Utility/RenderUtils.h"
 #include "../Core/Common.h"
 #include "../Core/ImageManager.h"
@@ -32,6 +33,7 @@
 using namespace sf;
 using namespace glm; 
 
+ObjModel *objModel;
 
 Scene::Scene()
 	: camera(nullptr)
@@ -170,6 +172,9 @@ void Scene::setup()
 							, vec3(40.0, 135.0, 0.0) ));// rotation
 	camera = &cameras[0];
 
+	objModel = new ObjModel("./Resources/models/box/box.obj");
+	if( objModel != nullptr )
+		objModel->setRenderMode(GLM_SMOOTH | GLM_TEXTURE);
 	// Log setup duration
 	const float delta = timer.GetElapsedTime();
 	std::stringstream ss;
@@ -272,6 +277,16 @@ void Scene::render( const Clock& clock )
 	for each(auto object in alphaObjects)
 		object->draw(*camera);
 
+	glEnable(GL_LIGHTING);
+	glPushMatrix();
+	glTranslatef(32.f, 15.f, 32.f);
+	glScalef(2, 2, 2);
+//	glRotatef(-90.f, 1, 0, 0);	
+	if( objModel != nullptr )
+		objModel->render();	
+	glPopMatrix();
+	glDisable(GL_LIGHTING);
+
 	particleMgr.render(*camera);
 
 	Render::basis();
@@ -358,4 +373,6 @@ void Scene::cleanup()
 	meshes.clear();
 
 	delete fluid;
+	if( objModel != nullptr )
+		delete objModel;
 }

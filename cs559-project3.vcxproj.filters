@@ -55,6 +55,12 @@
     <Filter Include="Particles">
       <UniqueIdentifier>{242a26ea-0051-4ae2-99b8-52fa0bcec2f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lib">
+      <UniqueIdentifier>{0ac8ea2f-b5aa-41f4-8677-6d516af23817}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\glm-obj">
+      <UniqueIdentifier>{f9f8e828-95ab-40b0-9379-18970ab1b532}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\Behavior.H">
@@ -204,6 +210,12 @@
     <ClInclude Include="Scene\MeshOverlay.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Lib\glm-obj\glm.h">
+      <Filter>Lib\glm-obj</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-obj\glmTexture.h">
+      <Filter>Lib\glm-obj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Behavior.cpp">
@@ -337,6 +349,15 @@
     </ClCompile>
     <ClCompile Include="Scene\MeshOverlay.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\glm-obj\glm.cpp">
+      <Filter>Lib\glm-obj</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\glm-obj\glmimg.cpp">
+      <Filter>Lib\glm-obj</Filter>
+    </ClCompile>
+    <ClCompile Include="Lib\glm-obj\glmTexture.cpp">
+      <Filter>Lib\glm-obj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
