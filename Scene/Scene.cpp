@@ -96,12 +96,12 @@ void Scene::setup()
 
 	// setup meshes
 	HeightMap *heightmap = new HeightMap("heightmap-terrain.png"); 
-	HeightMap *heightmap2 = new HeightMap("heightmap-terrain.png",256.f, 256.f); 
-	HeightMap *heightmap3 = new HeightMap("heightmap-terrain.png",256.f, 0.f);
+//	HeightMap *heightmap2 = new HeightMap("heightmap-terrain.png",256.f, 256.f); 
+//	HeightMap *heightmap3 = new HeightMap("heightmap-terrain.png",256.f, 0.f);
 	
 	meshes.push_back(heightmap);
-	meshes.push_back(heightmap2);
-	meshes.push_back(heightmap3);
+//	meshes.push_back(heightmap2);
+//	meshes.push_back(heightmap3);
 
 	meshOverlay = new MeshOverlay(*heightmap);
 
