@@ -63,6 +63,4 @@ _ReSharper*/
 packages/
 
 # don't ignore .obj model files
-!Resources/models/box/box.obj
-!Resources/models/car/car_riviera.obj
-!Resources/models/house/house.obj
+!Resources/models/*/*.obj
