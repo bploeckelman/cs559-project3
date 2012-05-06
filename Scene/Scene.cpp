@@ -106,11 +106,10 @@ void Scene::setup()
 	meshOverlay = new MeshOverlay(*heightmap);
 
 	// load models
-	ObjModel *model = new ObjModel("./Resources/models/box/box.obj");
-//	ObjModel *model = new ObjModel("./Resources/models/creature/creature.obj");
+	ObjModel *model = new ObjModel("./Resources/models/car/car.obj");
 	if( model != nullptr )
 	{
-		model->setRenderMode(GLM_TEXTURE);
+		model->setRenderMode(GLM_SMOOTH | GLM_TEXTURE);
 		models.push_back(model);
 	}
 
