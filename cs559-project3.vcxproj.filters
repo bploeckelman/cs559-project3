@@ -216,6 +216,9 @@
     <ClInclude Include="Lib\glm-obj\glmTexture.h">
       <Filter>Lib\glm-obj</Filter>
     </ClInclude>
+    <ClInclude Include="Utility\ObjModel.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Behavior.cpp">
@@ -358,6 +361,9 @@
     </ClCompile>
     <ClCompile Include="Lib\glm-obj\glmTexture.cpp">
       <Filter>Lib\glm-obj</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\ObjModel.cpp">
+      <Filter>Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -141,6 +141,7 @@
     <ClInclude Include="Utility\Logger.h" />
     <ClInclude Include="Utility\Matrix2d.h" />
     <ClInclude Include="Utility\Mesh.h" />
+    <ClInclude Include="Utility\ObjModel.h" />
     <ClInclude Include="Utility\Plane.h" />
     <ClInclude Include="Utility\RenderUtils.h" />
   </ItemGroup>
@@ -191,6 +192,7 @@
     <ClCompile Include="Scene\Skybox.cpp" />
     <ClCompile Include="Utility\Logger.cpp" />
     <ClCompile Include="Utility\Mesh.cpp" />
+    <ClCompile Include="Utility\ObjModel.cpp" />
     <ClCompile Include="Utility\RenderUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
