@@ -106,7 +106,7 @@ void Scene::setup()
 	meshOverlay = new MeshOverlay(*heightmap);
 
 	// load models
-	ObjModel *model = new ObjModel("./Resources/models/car/car.obj");
+	ObjModel *model = new ObjModel("./Resources/models/car2/car_riviera.obj");
 	if( model != nullptr )
 	{
 		model->setRenderMode(GLM_SMOOTH | GLM_TEXTURE);
