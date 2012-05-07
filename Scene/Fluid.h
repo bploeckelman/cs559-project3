@@ -35,7 +35,9 @@ private:
 
 	sf::Clock evalTimer;
 	Skybox *skybox;
-	unsigned int skyboxEnvTexture;
+	
+	unsigned int skyboxEnvTextureDay;
+	unsigned int skyboxEnvTextureNight;
 
 	float* getVertexBufferPtr();
 	float* getNormalBufferPtr();

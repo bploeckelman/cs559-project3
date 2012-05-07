@@ -392,7 +392,7 @@ bool Skybox::getFaceImageMap(const vector<string>& filenames
 	return true;
 }
 
-sf::Image& Skybox::getTexture(const Face& face)
+const sf::Image& Skybox::getTexture(const Face& face, const bool day)
 {
-	return *(*textures)[face];
+	return *(day ? dayTextures[face] : nightTextures[face]);
 }

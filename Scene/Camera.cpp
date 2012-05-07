@@ -49,7 +49,7 @@ Camera::Camera(HeightMap& heightmap
 					   / static_cast<float>(videoMode.Height);
 	const float fov    = 70.f;
 	const float _near  = 1.f;
-	const float _far   = 500.f;
+	const float _far   = 1000.f;
 
 	_projection = glm::perspective(fov, aspect, _near, _far);
 }

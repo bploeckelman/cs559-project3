@@ -105,7 +105,8 @@ Fluid::Fluid( long n, long m, float d
 	blend = true;
 	light = true;
 
-	skyboxEnvTexture = 0;
+	skyboxEnvTextureDay   = 0;
+	skyboxEnvTextureNight = 0;
 }
 
 Fluid::~Fluid()
@@ -116,8 +117,10 @@ Fluid::~Fluid()
 	delete[] buffer[1];
 	delete[] buffer[0];
 
-	if( skyboxEnvTexture != 0 )
-		glDeleteTextures(1, &skyboxEnvTexture);
+	if( skyboxEnvTextureDay != 0 )
+		glDeleteTextures(1, &skyboxEnvTextureDay);
+	if( skyboxEnvTextureNight != 0 )
+		glDeleteTextures(1, &skyboxEnvTextureNight);
 }
 
 void Fluid::render(const Camera& camera)
@@ -125,7 +128,7 @@ void Fluid::render(const Camera& camera)
 	// Setup environment mapping
 	if( skybox != nullptr )
 	{
-		glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxEnvTexture);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxEnvTextureDay);
 		glEnable(GL_TEXTURE_CUBE_MAP);
 			
 		glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP);
@@ -324,10 +327,9 @@ void Fluid::setSkybox( Skybox *box )
 		// So we need to generate a new texture just for this
 		// using the pixel data from each skybox texture
 
-		// TODO: figure out how to blend between night/day textures
-
-		glGenTextures(1, &skyboxEnvTexture);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxEnvTexture);
+		// Generate day environment map
+		glGenTextures(1, &skyboxEnvTextureDay);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxEnvTextureDay);
 
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -335,22 +337,54 @@ void Fluid::setSkybox( Skybox *box )
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-		sf::Image& tFront  = skybox->getTexture(Skybox::front);
-		sf::Image& tBack   = skybox->getTexture(Skybox::back);
-		sf::Image& tLeft   = skybox->getTexture(Skybox::left);
-		sf::Image& tRight  = skybox->getTexture(Skybox::right);
-		sf::Image& tBottom = skybox->getTexture(Skybox::bottom);
-		sf::Image& tTop    = skybox->getTexture(Skybox::top);
+		const sf::Image& tFrontD  = skybox->getTexture(Skybox::front, true);
+		const sf::Image& tBackD   = skybox->getTexture(Skybox::back, true);
+		const sf::Image& tLeftD   = skybox->getTexture(Skybox::left, true);
+		const sf::Image& tRightD  = skybox->getTexture(Skybox::right, true);
+		const sf::Image& tBottomD = skybox->getTexture(Skybox::bottom, true);
+		const sf::Image& tTopD    = skybox->getTexture(Skybox::top, true);
 
 		// Textures have uniform size, so can just grab this once
-		const unsigned int width  = tFront.GetWidth();
-		const unsigned int height = tFront.GetHeight();
+		unsigned int width  = tFrontD.GetWidth();
+		unsigned int height = tFrontD.GetHeight();
 
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tRight.GetPixelsPtr());
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tLeft.GetPixelsPtr());
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tTop.GetPixelsPtr());
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tBottom.GetPixelsPtr());
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tFront.GetPixelsPtr());
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tBack.GetPixelsPtr());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tRightD.GetPixelsPtr());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tLeftD.GetPixelsPtr());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tTopD.GetPixelsPtr());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tBottomD.GetPixelsPtr());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tFrontD.GetPixelsPtr());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tBackD.GetPixelsPtr());
+
+
+		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
+
+		// Generate night environment map
+		glGenTextures(1, &skyboxEnvTextureNight);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxEnvTextureNight);
+
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+		const sf::Image& tFrontN  = skybox->getTexture(Skybox::front, false);
+		const sf::Image& tBackN   = skybox->getTexture(Skybox::back, false);
+		const sf::Image& tLeftN   = skybox->getTexture(Skybox::left, false);
+		const sf::Image& tRightN  = skybox->getTexture(Skybox::right, false);
+		const sf::Image& tBottomN = skybox->getTexture(Skybox::bottom, false);
+		const sf::Image& tTopN    = skybox->getTexture(Skybox::top, false);
+
+		// Textures have uniform size, so can just grab this once
+		width  = tFrontN.GetWidth();
+		height = tFrontN.GetHeight();
+
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tRightN.GetPixelsPtr());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tLeftN.GetPixelsPtr());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tTopN.GetPixelsPtr());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tBottomN.GetPixelsPtr());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tFrontN.GetPixelsPtr());
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tBackN.GetPixelsPtr());
 	}
 }
