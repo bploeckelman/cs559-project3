@@ -222,6 +222,9 @@
     <ClInclude Include="Utility\ObjModel.h">
       <Filter>Utility</Filter>
     </ClInclude>
+    <ClInclude Include="Utility\BoundingBox.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\Behavior.cpp">
@@ -369,6 +372,9 @@
       <Filter>Lib\glm-obj</Filter>
     </ClCompile>
     <ClCompile Include="Utility\ObjModel.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\BoundingBox.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
   </ItemGroup>

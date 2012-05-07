@@ -138,6 +138,7 @@
     <ClInclude Include="Scene\HeightMap.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Scene\Skybox.h" />
+    <ClInclude Include="Utility\BoundingBox.h" />
     <ClInclude Include="Utility\dirent.h" />
     <ClInclude Include="Utility\Logger.h" />
     <ClInclude Include="Utility\Matrix2d.h" />
@@ -192,6 +193,7 @@
     <ClCompile Include="Scene\HeightMap.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Scene\Skybox.cpp" />
+    <ClCompile Include="Utility\BoundingBox.cpp" />
     <ClCompile Include="Utility\Logger.cpp" />
     <ClCompile Include="Utility\Mesh.cpp" />
     <ClCompile Include="Utility\ObjModel.cpp" />
