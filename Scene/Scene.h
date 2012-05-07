@@ -44,7 +44,7 @@ protected:
 	CameraVector    cameras;     // all the cameras in the scene
 	Skybox          skybox;      // the current skybox
 	Fluid          *fluid;       // a test fluid surface
-	Lights          lihts;       // a container of lights
+	Lights          lights;      // a container of lights
 	Models          models;      // container of 3d models
 	Meshes          meshes;      // container of mesh objects
 	SceneObjects    objects;     // scene objects

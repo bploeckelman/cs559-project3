@@ -67,8 +67,11 @@ public:
 	glm::vec4 ambient()  const;
 	glm::vec4 diffuse()  const;
 	glm::vec4 specular() const;
+
+	unsigned int getGLId() const;
 };
 
+inline unsigned int Light::getGLId() const { return glId; }
 
 inline void Light::enable()
 {
