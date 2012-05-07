@@ -25,6 +25,8 @@ private:
 
 	unsigned int glId;
 
+	void reset();
+
 public:
 	static unsigned int maxLights;
 	static unsigned int nextGLId;
@@ -42,7 +44,9 @@ public:
 		, useDiffuse(false)
 		, useSpecular(false)
 		, glId(nextGLId++)
-	{ }
+	{
+		reset();
+	}
 
 	void render();
 
@@ -70,6 +74,14 @@ public:
 
 	unsigned int getGLId() const;
 };
+
+inline void Light::reset()
+{
+	position(_position);
+	if( useAmbient )  ambient(_ambient);
+	if( useDiffuse )  diffuse(_diffuse);
+	if( useSpecular ) specular(_specular);
+}
 
 inline unsigned int Light::getGLId() const { return glId; }
 

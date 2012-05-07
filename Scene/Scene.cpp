@@ -193,31 +193,19 @@ void Scene::setup()
 void Scene::setupLights()
 {
 	// setup and enable lights
-	Light *light0 = new Light(
-		// position
-		vec4(128.f , 18.f, 128.f, 1.f),
-		// ambient
-		vec4(0.2f, 0.2f, 0.2f, 1.f),
-		// diffuse
-		vec4(1.f, 1.f, 1.f, 1.f)
-	);
-	light0->enableAmbient();
-	light0->enableDiffuse();
+	Light *light0 = new Light();
+	light0->position(vec4(128.f , 15.f, 128.f, 1.f));
+	light0->ambient(vec4(1.f, 1.f, 1.f, 1.f));
+	light0->diffuse(vec4(1.f, 1.f, 1.f, 1.f));
 	light0->enable();
 //	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.75f);
 
 	// MOAR HACK !!!
 	HeightMap *h = reinterpret_cast<HeightMap*>(meshes.front());
-	Light *light1 = new Light(
-		// position
-		vec4(32.f , h->heightAt(32,32) + 8.f, 32.f, 1.f),
-		// ambient
-		vec4(1.f, 1.f, 1.f, 1.f),
-		// diffuse 
-		vec4(1.f, 1.f, 1.f, 1.f)
-	);
-	light1->enableAmbient();
-	light1->enableDiffuse();
+	Light *light1 = new Light();
+	light1->position(vec4(32.f , h->heightAt(32,32) + 8.f, 32.f, 1.f));
+	light1->ambient(vec4(1.f, 1.f, 1.f, 1.f));
+	light1->diffuse(vec4(1.f, 1.f, 1.f, 1.f));
 	light1->enable();
 /*
 	Light *light2 = new Light(
@@ -244,7 +232,6 @@ void Scene::setupLights()
 //	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(specular));
 //	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
 
-//	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(ambient));
 
 	glEnable(GL_LIGHTING);
@@ -321,11 +308,6 @@ void Scene::update( const Clock& clock, const Input& input )
 	const vec4& pos1 = lights[1]->position();
 	lights[0]->position(pos0 + 0.5f * vec4(cos(delta), 0.f, sin(delta), 0.f));
 	lights[1]->position(pos1 + 0.1f * vec4(0.f, sin(delta), 0.f, 0.f));
-
-	// TEST
-	// this shouldn't be necessary
-	for each(auto light in lights)
-		light->position(light->position());
 
 	timer.Reset();
 }
