@@ -92,7 +92,7 @@ void Scene::setup()
 	ImageManager::get().addResourceDir("../../Resources/images/particles/");
 
 	// setup meshes ----------------------------------------------
-	HeightMap *heightmap = new HeightMap("heightmap-terrain.png"); 
+	HeightMap *heightmap = new HeightMap("heightmap-terrain.png", 0.f, 0.f, 2.f); 
 //	HeightMap *heightmap2 = new HeightMap("heightmap-terrain.png",256.f, 256.f); 
 //	HeightMap *heightmap3 = new HeightMap("heightmap-terrain.png",256.f, 0.f);
 	

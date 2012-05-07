@@ -94,7 +94,7 @@ void HeightMap::randomizeGaussian()
 
 float HeightMap::heightAt( const float col, const float row )
 {
-	if( col < width && row < height )
+	if( col < width * groundScale && row < height * groundScale )
 	{
 		const vec2 mapcoords(col / groundScale, row / groundScale);
 
