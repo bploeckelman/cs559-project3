@@ -56,7 +56,7 @@ Camera::Camera(HeightMap& heightmap
 
 void Camera::apply()
 {
-	glm::mat4 m(_projection * _view);
+	glm::mat4 m(_view);
 	glLoadMatrixf(glm::value_ptr(m));
 }
 
@@ -66,18 +66,16 @@ void Camera::lookAt(const glm::vec3& eye
 {
 	_view = glm::lookAt(eye, center, up);
 
-	glm::mat4 m(_projection * _view);
+	glm::mat4 m(_view);
 	glLoadMatrixf(glm::value_ptr(m));
 }
 
 void Camera::update(const sf::Clock& clock, const sf::Input& input)
 {
-
 	// Keep the camera above the heightmap
 	const float height = heightmap.heightAt(_position.x, _position.z);
 	if( _position.y < height + 5)
 		moveY(height - _position.y + 5);
-
 
 	// Apply the current transformations to the camera view
 	_view = glm::mat4(1.0);

@@ -128,7 +128,7 @@ void Scene::setup()
 //	const vec3 housePos(100.f, heightmap->heightAt(100,100) + 10, 100.f);
 //	objects.push_back(new House(housePos, sf::Color(0, 255, 0), stone, 10, 20, 10));
 	objects.push_back(new Blimp(vec3(120, 50, 80), 10));
-	objects.push_back(new ModelObject(vec3(15, heightmap->heightAt(15, 20) + 3.5, 20), "./Resources/models/house/house.obj", 7.f));
+	objects.push_back(new ModelObject(vec3(15, heightmap->heightAt(15, 20) + 4.5, 20), "./Resources/models/house/house.obj", 7.f));
 
 	const vec3 position1(60.f, heightmap->heightAt(60, 100) + 2.f, 100.f);
 	FountainEmitter *fountain = new FountainEmitter(position1, 20);
@@ -181,6 +181,12 @@ void Scene::setup()
 
 	// setup lighting 
 	setupLights();
+
+	// perform perspective projection
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(value_ptr(camera->projection()));
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 
 	// Log setup duration
 	const float delta = timer.GetElapsedTime();
@@ -307,7 +313,7 @@ void Scene::update( const Clock& clock, const Input& input )
 	const vec4& pos0 = lights[0]->position();
 	const vec4& pos1 = lights[1]->position();
 	lights[0]->position(pos0 + 0.5f * vec4(cos(delta), 0.f, sin(delta), 0.f));
-	lights[1]->position(pos1 + 0.1f * vec4(0.f, sin(delta), 0.f, 0.f));
+	lights[1]->position(pos1 + 0.1f * vec4(cos(delta), 0.f, sin(delta), 0.f));
 
 	timer.Reset();
 }
@@ -323,29 +329,18 @@ void Scene::render( const Clock& clock )
 	for each(auto mesh in meshes)
 		mesh->render();
 
-	// TODO: remove these
 	meshOverlay->render();
-	fluid->render();
 
-	glEnable(GL_LIGHTING);
 	for each(auto object in objects)
 		object->draw(*camera);
+
+	fluid->render();
+
 	glDisable(GL_LIGHTING);
-
-	// TODO: ObjModel should be a part of a SceneObject
-	// so that it has its own transform
-	//glEnable(GL_LIGHTING);
-	/*glPushMatrix();
-	glTranslatef(32, 15, 40);
-	glScalef(3,3,3);
-	for each(auto model in models)
-		model->render();
-	glPopMatrix();
-	glDisable(GL_LIGHTING);*/
-
 	for each(auto object in alphaObjects)
 		object->draw(*camera);
 
+	glDisable(GL_LIGHTING);
 	particleMgr.render(*camera);
 
 	glDisable(GL_LIGHTING);
