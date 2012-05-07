@@ -54,14 +54,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..;$(GLM);$(SFML_1_6)\include;$(FLTKHOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Lib/GL;Lib/glee;Lib/glm-math;Lib/glm-obj;Lib;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SFML_1_6_LIBS);$(FLTKHOME)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-window-s-d.lib;sfml-system-s-d.lib;sfml-graphics-s-d.lib;sfml-audio-s-d.lib;fltkd.lib;fltkgld.lib;comctl32.lib;wsock32.lib;opengl32.lib;glu32.lib;fltkjpegd.lib;fltkpngd.lib;fltkimagesd.lib;fltkzlibd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\Lib\SFML;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-main.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
       <AdditionalOptions>/ignore:4042 %(AdditionalOptions)</AdditionalOptions>
@@ -76,7 +76,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..;$(GLM);$(SFML_1_6)\include;$(FLTKHOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Lib/GL;Lib/glee;Lib/glm-math;Lib/glm-obj;Lib;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
@@ -84,16 +84,201 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SFML_1_6_LIBS);$(FLTKHOME)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-window-s.lib;sfml-system-s.lib;sfml-graphics-s.lib;sfml-audio-s.lib;fltk.lib;fltkgl.lib;comctl32.lib;wsock32.lib;opengl32.lib;glu32.lib;fltkjpeg.lib;fltkimages.lib;fltkzlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-audio-s.lib;sfml-graphics-s.lib;sfml-network-s.lib;sfml-system-s.lib;sfml-window-s.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
       <AdditionalOptions>/ignore:4042 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Lib\glee\GLee.h" />
+    <ClInclude Include="Lib\glm-math\glm\core\func_common.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\func_exponential.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\func_geometric.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\func_integer.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\func_matrix.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\func_noise.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\func_packing.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\func_trigonometric.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\func_vector_relational.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\hint.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\intrinsic_common.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\intrinsic_exponential.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\intrinsic_geometric.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\intrinsic_matrix.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\intrinsic_trigonometric.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\intrinsic_vector_relational.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\setup.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_float.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_gentype.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_half.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_int.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat2x2.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat2x3.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat2x4.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat3x2.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat3x3.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat3x4.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat4x2.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat4x3.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat4x4.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_size.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_vec.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_vec1.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_vec2.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_vec3.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\type_vec4.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\_detail.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\_fixes.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\_swizzle.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\_swizzle_func.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\core\_vectorize.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\ext.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\glm.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtc\half_float.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtc\matrix_access.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtc\matrix_integer.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtc\matrix_inverse.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtc\matrix_transform.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtc\noise.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtc\quaternion.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtc\random.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtc\swizzle.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtc\type_precision.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtc\type_ptr.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\associated_min_max.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\bit.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\closest_point.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\color_cast.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\color_space.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\color_space_YCoCg.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\compatibility.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\component_wise.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\constants.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\epsilon.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\euler_angles.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\extend.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\extented_min_max.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\fast_exponential.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\fast_square_root.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\fast_trigonometry.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\gradient_paint.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\handed_coordinate_space.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\inertia.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\integer.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\intersect.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\int_10_10_10_2.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\log_base.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\matrix_cross_product.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\matrix_interpolation.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\matrix_major_storage.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\matrix_operation.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\matrix_query.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\mixed_product.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\multiple.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\noise.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\norm.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\normal.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\normalize_dot.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\number_precision.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\ocl_type.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\optimum_pow.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\orthonormalize.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\perpendicular.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\polar_coordinates.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\projection.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\quaternion.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\random.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\raw_data.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\reciprocal.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\rotate_vector.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\simd_mat4.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\simd_vec4.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\spline.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\std_based_type.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\string_cast.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\transform.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\transform2.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\ulp.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\unsigned_int.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\vec1.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\vector_access.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\vector_angle.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\vector_query.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\verbose_operator.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\gtx\wrap.hpp" />
+    <ClInclude Include="Lib\glm-math\glm\virtrev\xstream.hpp" />
     <ClInclude Include="Lib\glm-obj\glm.h" />
     <ClInclude Include="Lib\glm-obj\glmTexture.h" />
+    <ClInclude Include="Lib\GL\glut.h" />
+    <ClInclude Include="Lib\sfml-1.6\Audio.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Audio\AudioResource.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Audio\Listener.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Audio\Music.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Audio\Sound.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Audio\SoundBuffer.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Audio\SoundBufferRecorder.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Audio\SoundRecorder.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Audio\SoundStream.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Config.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Graphics.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Graphics\Color.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Graphics\Drawable.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Graphics\Font.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Graphics\Glyph.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Graphics\Image.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Graphics\Matrix3.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Graphics\PostFX.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Graphics\Rect.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Graphics\RenderTarget.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Graphics\RenderWindow.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Graphics\Shape.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Graphics\Sprite.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Graphics\String.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Graphics\View.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Network.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Network\Ftp.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Network\Http.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Network\IPAddress.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Network\Packet.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Network\Selector.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Network\SelectorBase.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Network\SocketHelper.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Network\Sockets.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Network\SocketTCP.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Network\SocketUDP.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Network\Unix\SocketHelper.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Network\Win32\SocketHelper.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\System.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\System\Clock.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\System\Lock.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\System\Mutex.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\System\NonCopyable.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\System\Randomizer.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\System\Resource.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\System\Sleep.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\System\Thread.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\System\Unicode.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\System\Unix\Mutex.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\System\Unix\Thread.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\System\Vector2.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\System\Vector3.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\System\Win32\Mutex.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\System\Win32\Thread.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Window.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Window\Context.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Window\Event.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Window\Input.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Window\OpenGL.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Window\VideoMode.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Window\Window.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Window\WindowHandle.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Window\WindowListener.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Window\WindowSettings.hpp" />
+    <ClInclude Include="Lib\sfml-1.6\Window\WindowStyle.hpp" />
     <ClInclude Include="Particles\ParticleAffector.h" />
     <ClInclude Include="Particles\ParticleAffectors.h" />
     <ClInclude Include="Particles\Particle.h" />
@@ -106,29 +291,6 @@
     <ClInclude Include="Core\Common.h" />
     <ClInclude Include="Core\ImageManager.h" />
     <ClInclude Include="Core\MainWindow.h" />
-    <ClInclude Include="Framework\Behavior.H" />
-    <ClInclude Include="Framework\DrawingState.H" />
-    <ClInclude Include="Framework\DrawUtils.H" />
-    <ClInclude Include="Framework\Examples\Cars.H" />
-    <ClInclude Include="Framework\Examples\Objects.H" />
-    <ClInclude Include="Framework\Examples\SimpleBehaviors.H" />
-    <ClInclude Include="Framework\Examples\Suburbs.H" />
-    <ClInclude Include="Framework\FlyCamera.H" />
-    <ClInclude Include="Framework\GraphicsTownUI.H" />
-    <ClInclude Include="Framework\GrObject.H" />
-    <ClInclude Include="Framework\GrTown_PCH.H" />
-    <ClInclude Include="Framework\GrWorld.H" />
-    <ClInclude Include="Framework\MMatrix.H" />
-    <ClInclude Include="Framework\Roads\Drive.H" />
-    <ClInclude Include="Framework\Roads\Roads.H" />
-    <ClInclude Include="Framework\TownViewWidget.H" />
-    <ClInclude Include="Framework\Utilities\3DUtils.h" />
-    <ClInclude Include="Framework\Utilities\ArcBallCam.H" />
-    <ClInclude Include="Framework\Utilities\GLee.h" />
-    <ClInclude Include="Framework\Utilities\libtarga.h" />
-    <ClInclude Include="Framework\Utilities\Pnt3f.H" />
-    <ClInclude Include="Framework\Utilities\ShaderTools.H" />
-    <ClInclude Include="Framework\Utilities\Texture.H" />
     <ClInclude Include="Scene\Light.h" />
     <ClInclude Include="Scene\MeshOverlay.h" />
     <ClInclude Include="Scene\Objects.h" />
@@ -148,6 +310,7 @@
     <ClInclude Include="Utility\RenderUtils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Lib\glee\GLee.c" />
     <ClCompile Include="Lib\glm-obj\glm.cpp" />
     <ClCompile Include="Lib\glm-obj\glmimg.cpp" />
     <ClCompile Include="Lib\glm-obj\glmTexture.cpp" />
@@ -160,30 +323,6 @@
     <ClCompile Include="Core\ImageManager.cpp" />
     <ClCompile Include="Core\main.cpp" />
     <ClCompile Include="Core\MainWindow.cpp" />
-    <ClCompile Include="Framework\Behavior.cpp" />
-    <ClCompile Include="Framework\DrawingState.cpp" />
-    <ClCompile Include="Framework\DrawUtils.cpp" />
-    <ClCompile Include="Framework\Examples\Cars.cpp" />
-    <ClCompile Include="Framework\Examples\Objects.cpp" />
-    <ClCompile Include="Framework\Examples\SimpleBehaviors.cpp" />
-    <ClCompile Include="Framework\Examples\Suburbs.cpp" />
-    <ClCompile Include="Framework\FlyCamera.cpp" />
-    <ClCompile Include="Framework\GraphicsTownUI.cxx" />
-    <ClCompile Include="Framework\GrObject.cpp" />
-    <ClCompile Include="Framework\GrTown_PCH.cpp" />
-    <ClCompile Include="Framework\GrWorld.cpp" />
-    <ClCompile Include="Framework\Main.cpp" />
-    <ClCompile Include="Framework\MMatrix.cpp" />
-    <ClCompile Include="Framework\Roads\Drive.cpp" />
-    <ClCompile Include="Framework\Roads\Roads.cpp" />
-    <ClCompile Include="Framework\TownViewWidget.cpp" />
-    <ClCompile Include="Framework\Utilities\3DUtils.cpp" />
-    <ClCompile Include="Framework\Utilities\ArcBallCam.cpp" />
-    <ClCompile Include="Framework\Utilities\GLee.c" />
-    <ClCompile Include="Framework\Utilities\libtarga.c" />
-    <ClCompile Include="Framework\Utilities\Pnt3f.cpp" />
-    <ClCompile Include="Framework\Utilities\ShaderTools.cpp" />
-    <ClCompile Include="Framework\Utilities\Texture.cpp" />
     <ClCompile Include="Scene\Light.cpp" />
     <ClCompile Include="Scene\MeshOverlay.cpp" />
     <ClCompile Include="Scene\Objects.cpp" />
@@ -200,7 +339,118 @@
     <ClCompile Include="Utility\RenderUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Framework\GraphicsTownUI.fl" />
+    <None Include="Lib\glm-math\glm\CMakeLists.txt" />
+    <None Include="Lib\glm-math\glm\core\func_common.inl" />
+    <None Include="Lib\glm-math\glm\core\func_exponential.inl" />
+    <None Include="Lib\glm-math\glm\core\func_geometric.inl" />
+    <None Include="Lib\glm-math\glm\core\func_integer.inl" />
+    <None Include="Lib\glm-math\glm\core\func_matrix.inl" />
+    <None Include="Lib\glm-math\glm\core\func_noise.inl" />
+    <None Include="Lib\glm-math\glm\core\func_packing.inl" />
+    <None Include="Lib\glm-math\glm\core\func_trigonometric.inl" />
+    <None Include="Lib\glm-math\glm\core\func_vector_relational.inl" />
+    <None Include="Lib\glm-math\glm\core\intrinsic_common.inl" />
+    <None Include="Lib\glm-math\glm\core\intrinsic_exponential.inl" />
+    <None Include="Lib\glm-math\glm\core\intrinsic_geometric.inl" />
+    <None Include="Lib\glm-math\glm\core\intrinsic_matrix.inl" />
+    <None Include="Lib\glm-math\glm\core\intrinsic_trigonometric.inl" />
+    <None Include="Lib\glm-math\glm\core\intrinsic_vector_relational.inl" />
+    <None Include="Lib\glm-math\glm\core\type_gentype.inl" />
+    <None Include="Lib\glm-math\glm\core\type_half.inl" />
+    <None Include="Lib\glm-math\glm\core\type_mat.inl" />
+    <None Include="Lib\glm-math\glm\core\type_mat2x2.inl" />
+    <None Include="Lib\glm-math\glm\core\type_mat2x3.inl" />
+    <None Include="Lib\glm-math\glm\core\type_mat2x4.inl" />
+    <None Include="Lib\glm-math\glm\core\type_mat3x2.inl" />
+    <None Include="Lib\glm-math\glm\core\type_mat3x3.inl" />
+    <None Include="Lib\glm-math\glm\core\type_mat3x4.inl" />
+    <None Include="Lib\glm-math\glm\core\type_mat4x2.inl" />
+    <None Include="Lib\glm-math\glm\core\type_mat4x3.inl" />
+    <None Include="Lib\glm-math\glm\core\type_mat4x4.inl" />
+    <None Include="Lib\glm-math\glm\core\type_vec.inl" />
+    <None Include="Lib\glm-math\glm\core\type_vec1.inl" />
+    <None Include="Lib\glm-math\glm\core\type_vec2.inl" />
+    <None Include="Lib\glm-math\glm\core\type_vec3.inl" />
+    <None Include="Lib\glm-math\glm\core\type_vec4.inl" />
+    <None Include="Lib\glm-math\glm\gtc\half_float.inl" />
+    <None Include="Lib\glm-math\glm\gtc\matrix_access.inl" />
+    <None Include="Lib\glm-math\glm\gtc\matrix_inverse.inl" />
+    <None Include="Lib\glm-math\glm\gtc\matrix_transform.inl" />
+    <None Include="Lib\glm-math\glm\gtc\noise.inl" />
+    <None Include="Lib\glm-math\glm\gtc\quaternion.inl" />
+    <None Include="Lib\glm-math\glm\gtc\random.inl" />
+    <None Include="Lib\glm-math\glm\gtc\swizzle.inl" />
+    <None Include="Lib\glm-math\glm\gtc\type_precision.inl" />
+    <None Include="Lib\glm-math\glm\gtc\type_ptr.inl" />
+    <None Include="Lib\glm-math\glm\gtx\associated_min_max.inl" />
+    <None Include="Lib\glm-math\glm\gtx\bit.inl" />
+    <None Include="Lib\glm-math\glm\gtx\closest_point.inl" />
+    <None Include="Lib\glm-math\glm\gtx\color_cast.inl" />
+    <None Include="Lib\glm-math\glm\gtx\color_space.inl" />
+    <None Include="Lib\glm-math\glm\gtx\color_space_YCoCg.inl" />
+    <None Include="Lib\glm-math\glm\gtx\compatibility.inl" />
+    <None Include="Lib\glm-math\glm\gtx\component_wise.inl" />
+    <None Include="Lib\glm-math\glm\gtx\constants.inl" />
+    <None Include="Lib\glm-math\glm\gtx\epsilon.inl" />
+    <None Include="Lib\glm-math\glm\gtx\euler_angles.inl" />
+    <None Include="Lib\glm-math\glm\gtx\extend.inl" />
+    <None Include="Lib\glm-math\glm\gtx\extented_min_max.inl" />
+    <None Include="Lib\glm-math\glm\gtx\fast_exponential.inl" />
+    <None Include="Lib\glm-math\glm\gtx\fast_square_root.inl" />
+    <None Include="Lib\glm-math\glm\gtx\fast_trigonometry.inl" />
+    <None Include="Lib\glm-math\glm\gtx\gradient_paint.inl" />
+    <None Include="Lib\glm-math\glm\gtx\handed_coordinate_space.inl" />
+    <None Include="Lib\glm-math\glm\gtx\inertia.inl" />
+    <None Include="Lib\glm-math\glm\gtx\integer.inl" />
+    <None Include="Lib\glm-math\glm\gtx\intersect.inl" />
+    <None Include="Lib\glm-math\glm\gtx\int_10_10_10_2.inl" />
+    <None Include="Lib\glm-math\glm\gtx\log_base.inl" />
+    <None Include="Lib\glm-math\glm\gtx\matrix_cross_product.inl" />
+    <None Include="Lib\glm-math\glm\gtx\matrix_interpolation.inl" />
+    <None Include="Lib\glm-math\glm\gtx\matrix_major_storage.inl" />
+    <None Include="Lib\glm-math\glm\gtx\matrix_operation.inl" />
+    <None Include="Lib\glm-math\glm\gtx\matrix_query.inl" />
+    <None Include="Lib\glm-math\glm\gtx\mixed_product.inl" />
+    <None Include="Lib\glm-math\glm\gtx\multiple.inl" />
+    <None Include="Lib\glm-math\glm\gtx\noise.inl" />
+    <None Include="Lib\glm-math\glm\gtx\norm.inl" />
+    <None Include="Lib\glm-math\glm\gtx\normal.inl" />
+    <None Include="Lib\glm-math\glm\gtx\normalize_dot.inl" />
+    <None Include="Lib\glm-math\glm\gtx\number_precision.inl" />
+    <None Include="Lib\glm-math\glm\gtx\ocl_type.inl" />
+    <None Include="Lib\glm-math\glm\gtx\optimum_pow.inl" />
+    <None Include="Lib\glm-math\glm\gtx\orthonormalize.inl" />
+    <None Include="Lib\glm-math\glm\gtx\perpendicular.inl" />
+    <None Include="Lib\glm-math\glm\gtx\polar_coordinates.inl" />
+    <None Include="Lib\glm-math\glm\gtx\projection.inl" />
+    <None Include="Lib\glm-math\glm\gtx\quaternion.inl" />
+    <None Include="Lib\glm-math\glm\gtx\random.inl" />
+    <None Include="Lib\glm-math\glm\gtx\raw_data.inl" />
+    <None Include="Lib\glm-math\glm\gtx\reciprocal.inl" />
+    <None Include="Lib\glm-math\glm\gtx\rotate_vector.inl" />
+    <None Include="Lib\glm-math\glm\gtx\simd_mat4.inl" />
+    <None Include="Lib\glm-math\glm\gtx\simd_vec4.inl" />
+    <None Include="Lib\glm-math\glm\gtx\spline.inl" />
+    <None Include="Lib\glm-math\glm\gtx\std_based_type.inl" />
+    <None Include="Lib\glm-math\glm\gtx\string_cast.inl" />
+    <None Include="Lib\glm-math\glm\gtx\transform.inl" />
+    <None Include="Lib\glm-math\glm\gtx\transform2.inl" />
+    <None Include="Lib\glm-math\glm\gtx\ulp.inl" />
+    <None Include="Lib\glm-math\glm\gtx\unsigned_int.inl" />
+    <None Include="Lib\glm-math\glm\gtx\vec1.inl" />
+    <None Include="Lib\glm-math\glm\gtx\vector_access.inl" />
+    <None Include="Lib\glm-math\glm\gtx\vector_angle.inl" />
+    <None Include="Lib\glm-math\glm\gtx\vector_query.inl" />
+    <None Include="Lib\glm-math\glm\gtx\verbose_operator.inl" />
+    <None Include="Lib\glm-math\glm\gtx\wrap.inl" />
+    <None Include="Lib\sfml-1.6\Graphics\Matrix3.inl" />
+    <None Include="Lib\sfml-1.6\Graphics\Rect.inl" />
+    <None Include="Lib\sfml-1.6\Network\Selector.inl" />
+    <None Include="Lib\sfml-1.6\System\Resource.inl" />
+    <None Include="Lib\sfml-1.6\System\ResourcePtr.inl" />
+    <None Include="Lib\sfml-1.6\System\Unicode.inl" />
+    <None Include="Lib\sfml-1.6\System\Vector2.inl" />
+    <None Include="Lib\sfml-1.6\System\Vector3.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

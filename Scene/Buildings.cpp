@@ -3,13 +3,10 @@
 /* ------
 /* A class that contains all buildings
 /************************************************************************/
+#include "../Lib/glee/GLee.h"
+
 #include "Buildings.h"
 #include "../Utility/RenderUtils.h"
-
-#undef __glext_h_
-#undef __glxext_h_
-#undef __gl_h_
-#include "../Framework/Utilities/GLee.h"
 
 #include <SFML/Graphics.hpp>
 

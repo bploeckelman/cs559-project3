@@ -6,14 +6,11 @@
 /* Based on example from chapter 15 in:
 /* "Mathematics for 3D Game Programming and Computer Graphics 3rd Ed."
 /************************************************************************/
+#include "../Lib/glee/GLee.h"
+
 #include "Fluid.h"
 #include "Skybox.h"
 #include "Camera.h"
-
-#undef __glext_h_
-#undef __glxext_h_
-#undef __gl_h_
-#include "../Framework/Utilities/GLee.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>

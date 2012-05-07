@@ -3,14 +3,11 @@
 /* ----
 /* A simple 3d triangle mesh 
 /************************************************************************/
+#include "../Lib/glee/GLee.h"
+
 #include "Mesh.h"
 #include "Logger.h"
 #include "../Core/ImageManager.h"
-
-#undef __glext_h_
-#undef __glxext_h_
-#undef __gl_h_
-#include "../Framework/Utilities/GLee.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/random.hpp>
@@ -366,10 +363,14 @@ void Mesh::setRenderStates() const
 				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 				mtexture->Bind();
-				
+
+				glEnable(GL_TEXTURE_2D);
+
 				// Generate minification mipmaps
-				glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+				glGenerateMipmap(GL_TEXTURE_2D);
+//				glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 
 				// Set texture to wrap in both dimensions
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

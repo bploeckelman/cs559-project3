@@ -4,15 +4,12 @@
 /* A collection of 6 textures to apply to the interior of a cube
 /* drawn around a camera to simulate a distant environment
 /************************************************************************/
+#include "../Lib/glee/GLee.h"
+
 #include "Skybox.h"
 #include "Camera.h"
 #include "../Core/Common.h"
 #include "../Utility/dirent.h"
-
-#undef __glext_h_
-#undef __glxext_h_
-#undef __gl_h_
-#include "../Framework/Utilities/GLee.h"
 
 #include <SFML/Graphics.hpp>
 

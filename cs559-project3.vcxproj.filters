@@ -1,53 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Framework">
-      <UniqueIdentifier>{24ab0da9-ed3e-498f-a832-6d031e3e9157}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{66d913d6-41da-467c-95f9-edc557d4f782}</UniqueIdentifier>
     </Filter>
     <Filter Include="Utility">
       <UniqueIdentifier>{1ff2e478-9310-4e4a-a288-20dcad061cff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Roads">
-      <UniqueIdentifier>{dcaca015-52eb-435e-9f9c-4b8e9503f37d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Utilities">
-      <UniqueIdentifier>{847e5294-5765-4816-9490-48c38aef58d7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Engine Core">
-      <UniqueIdentifier>{5a5e8975-fd1a-4a94-8f30-9bc9da49dcc2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Engine Core\Header Files">
-      <UniqueIdentifier>{baf0c43c-f8d0-4981-b8a2-33553919575d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Engine Core\Source Files">
-      <UniqueIdentifier>{21c4925a-b989-4309-9749-c2e3a8c534d6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Example Objects and Behaviors">
-      <UniqueIdentifier>{bb7ba496-f3fc-4a5b-ba6f-469c7203a700}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Example Objects and Behaviors\Header Files">
-      <UniqueIdentifier>{daad30a0-f6bf-46ff-8167-a9c28a615706}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Example Objects and Behaviors\Source Files">
-      <UniqueIdentifier>{2bead009-ee1b-42ba-a34b-d9c6deaa3a77}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Resource Files">
-      <UniqueIdentifier>{a0be4453-15cc-490e-b31c-aaa37746e523}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Utilities\Header Files">
-      <UniqueIdentifier>{57f25bee-3d10-4112-8b62-7aa85e90a850}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Utilities\Source Files">
-      <UniqueIdentifier>{ce8f6683-cb7d-411b-ae4b-1c1267146e16}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Roads\Header Files">
-      <UniqueIdentifier>{fd29fc8e-4cd5-4bda-96c3-f86744c78821}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Roads\Source Files">
-      <UniqueIdentifier>{e71ae29c-61db-4814-9396-6b732060e97e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{0fc48342-474c-49e5-a5af-d59f4bbac3b5}</UniqueIdentifier>
@@ -61,77 +19,62 @@
     <Filter Include="Lib\glm-obj">
       <UniqueIdentifier>{f9f8e828-95ab-40b0-9379-18970ab1b532}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lib\glm-math">
+      <UniqueIdentifier>{5a25dffa-95fb-4799-b59c-fe379fa0aa69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\glee">
+      <UniqueIdentifier>{a946a99e-6936-42f2-8e53-719487fb9f65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\glm-math\glm">
+      <UniqueIdentifier>{75f2e4e3-b249-4ceb-af27-fcfef20aaf92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\glm-math\glm\core">
+      <UniqueIdentifier>{460c8fcb-161e-4d09-bf17-cf1e5550c92c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\glm-math\glm\gtc">
+      <UniqueIdentifier>{a4da924d-0117-4212-a585-16d835d3b285}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\glm-math\glm\gtx">
+      <UniqueIdentifier>{febd3c50-a1ff-4434-9f01-00aa02afd54d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\glm-math\glm\virtrev">
+      <UniqueIdentifier>{ccce3da0-aecb-49e9-b8f1-373247467159}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\SFML">
+      <UniqueIdentifier>{f091aabb-90b8-48b7-b061-b4c2f1e160c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\SFML\Audio">
+      <UniqueIdentifier>{2c1c1694-0c9c-4e7a-b596-65391d8579e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\SFML\Graphics">
+      <UniqueIdentifier>{ae11a840-27e2-4b62-9346-6f60299d5e61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\SFML\Network">
+      <UniqueIdentifier>{a2f8eeec-f060-4c4c-a87b-c3436ca223c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\SFML\Network\Unix">
+      <UniqueIdentifier>{68ff38ab-ade7-4e6c-aeaf-1a2df26f7739}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\SFML\Network\Win32">
+      <UniqueIdentifier>{16243c1b-7e37-4cdc-a024-4d4715487e27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\SFML\System">
+      <UniqueIdentifier>{3a1256bc-dd46-44fe-a6cb-bb843ed536ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\SFML\System\Unix">
+      <UniqueIdentifier>{976af50a-c5a7-428e-9548-92f83addd98b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\SFML\System\Win32">
+      <UniqueIdentifier>{b81239bb-874c-45a5-8dda-218ed9066271}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\SFML\Window">
+      <UniqueIdentifier>{adaa0367-937f-4c73-a343-52d8a22f5271}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib\GL">
+      <UniqueIdentifier>{e8432fb0-1aaa-4a80-b2d9-86a2f4e6d795}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Framework\Behavior.H">
-      <Filter>Framework\Engine Core\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\DrawingState.H">
-      <Filter>Framework\Engine Core\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\DrawUtils.H">
-      <Filter>Framework\Engine Core\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\FlyCamera.H">
-      <Filter>Framework\Engine Core\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\GraphicsTownUI.H">
-      <Filter>Framework\Engine Core\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\GrObject.H">
-      <Filter>Framework\Engine Core\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\GrTown_PCH.H">
-      <Filter>Framework\Engine Core\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\GrWorld.H">
-      <Filter>Framework\Engine Core\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\MMatrix.H">
-      <Filter>Framework\Engine Core\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\TownViewWidget.H">
-      <Filter>Framework\Engine Core\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Examples\Cars.H">
-      <Filter>Framework\Example Objects and Behaviors\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Examples\Objects.H">
-      <Filter>Framework\Example Objects and Behaviors\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Examples\SimpleBehaviors.H">
-      <Filter>Framework\Example Objects and Behaviors\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Examples\Suburbs.H">
-      <Filter>Framework\Example Objects and Behaviors\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Utilities\3DUtils.h">
-      <Filter>Framework\Utilities\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Utilities\ArcBallCam.H">
-      <Filter>Framework\Utilities\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Utilities\GLee.h">
-      <Filter>Framework\Utilities\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Utilities\libtarga.h">
-      <Filter>Framework\Utilities\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Utilities\Pnt3f.H">
-      <Filter>Framework\Utilities\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Utilities\ShaderTools.H">
-      <Filter>Framework\Utilities\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Utilities\Texture.H">
-      <Filter>Framework\Utilities\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Roads\Drive.H">
-      <Filter>Framework\Roads\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Roads\Roads.H">
-      <Filter>Framework\Roads\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Common.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -225,80 +168,563 @@
     <ClInclude Include="Utility\BoundingBox.h">
       <Filter>Utility</Filter>
     </ClInclude>
+    <ClInclude Include="Lib\glee\GLee.h">
+      <Filter>Lib\glee</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\ext.hpp">
+      <Filter>Lib\glm-math\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\glm.hpp">
+      <Filter>Lib\glm-math\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\virtrev\xstream.hpp">
+      <Filter>Lib\glm-math\glm\virtrev</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\associated_min_max.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\bit.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\closest_point.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\color_cast.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\color_space.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\color_space_YCoCg.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\compatibility.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\component_wise.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\constants.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\epsilon.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\euler_angles.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\extend.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\extented_min_max.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\fast_exponential.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\fast_square_root.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\fast_trigonometry.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\gradient_paint.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\handed_coordinate_space.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\inertia.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\int_10_10_10_2.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\integer.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\intersect.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\log_base.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\matrix_cross_product.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\matrix_interpolation.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\matrix_major_storage.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\matrix_operation.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\matrix_query.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\mixed_product.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\multiple.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\noise.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\norm.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\normal.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\normalize_dot.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\number_precision.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\ocl_type.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\optimum_pow.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\orthonormalize.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\perpendicular.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\polar_coordinates.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\projection.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\quaternion.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\random.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\raw_data.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\reciprocal.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\rotate_vector.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\simd_mat4.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\simd_vec4.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\spline.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\std_based_type.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\string_cast.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\transform.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\transform2.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\ulp.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\unsigned_int.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\vec1.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\vector_access.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\vector_angle.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\vector_query.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\verbose_operator.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtx\wrap.hpp">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtc\half_float.hpp">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtc\matrix_access.hpp">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtc\matrix_integer.hpp">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtc\matrix_inverse.hpp">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtc\matrix_transform.hpp">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtc\noise.hpp">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtc\quaternion.hpp">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtc\random.hpp">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtc\swizzle.hpp">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtc\type_precision.hpp">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\gtc\type_ptr.hpp">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\_detail.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\_fixes.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\_swizzle.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\_swizzle_func.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\_vectorize.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\func_common.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\func_exponential.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\func_geometric.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\func_integer.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\func_matrix.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\func_noise.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\func_packing.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\func_trigonometric.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\func_vector_relational.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\hint.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\intrinsic_common.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\intrinsic_exponential.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\intrinsic_geometric.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\intrinsic_matrix.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\intrinsic_trigonometric.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\intrinsic_vector_relational.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\setup.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_float.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_gentype.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_half.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_int.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat2x2.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat2x3.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat2x4.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat3x2.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat3x3.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat3x4.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat4x2.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat4x3.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_mat4x4.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_size.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_vec.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_vec1.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_vec2.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_vec3.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\glm-math\glm\core\type_vec4.hpp">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Audio.hpp">
+      <Filter>Lib\SFML</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Config.hpp">
+      <Filter>Lib\SFML</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Graphics.hpp">
+      <Filter>Lib\SFML</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Network.hpp">
+      <Filter>Lib\SFML</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\System.hpp">
+      <Filter>Lib\SFML</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Window.hpp">
+      <Filter>Lib\SFML</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Audio\AudioResource.hpp">
+      <Filter>Lib\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Audio\Listener.hpp">
+      <Filter>Lib\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Audio\Music.hpp">
+      <Filter>Lib\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Audio\Sound.hpp">
+      <Filter>Lib\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Audio\SoundBuffer.hpp">
+      <Filter>Lib\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Audio\SoundBufferRecorder.hpp">
+      <Filter>Lib\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Audio\SoundRecorder.hpp">
+      <Filter>Lib\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Audio\SoundStream.hpp">
+      <Filter>Lib\SFML\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Graphics\Color.hpp">
+      <Filter>Lib\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Graphics\Drawable.hpp">
+      <Filter>Lib\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Graphics\Font.hpp">
+      <Filter>Lib\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Graphics\Glyph.hpp">
+      <Filter>Lib\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Graphics\Image.hpp">
+      <Filter>Lib\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Graphics\Matrix3.hpp">
+      <Filter>Lib\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Graphics\PostFX.hpp">
+      <Filter>Lib\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Graphics\Rect.hpp">
+      <Filter>Lib\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Graphics\RenderTarget.hpp">
+      <Filter>Lib\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Graphics\RenderWindow.hpp">
+      <Filter>Lib\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Graphics\Shape.hpp">
+      <Filter>Lib\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Graphics\Sprite.hpp">
+      <Filter>Lib\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Graphics\String.hpp">
+      <Filter>Lib\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Graphics\View.hpp">
+      <Filter>Lib\SFML\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Network\Ftp.hpp">
+      <Filter>Lib\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Network\Http.hpp">
+      <Filter>Lib\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Network\IPAddress.hpp">
+      <Filter>Lib\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Network\Packet.hpp">
+      <Filter>Lib\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Network\Selector.hpp">
+      <Filter>Lib\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Network\SelectorBase.hpp">
+      <Filter>Lib\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Network\SocketHelper.hpp">
+      <Filter>Lib\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Network\Sockets.hpp">
+      <Filter>Lib\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Network\SocketTCP.hpp">
+      <Filter>Lib\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Network\SocketUDP.hpp">
+      <Filter>Lib\SFML\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Network\Unix\SocketHelper.hpp">
+      <Filter>Lib\SFML\Network\Unix</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Network\Win32\SocketHelper.hpp">
+      <Filter>Lib\SFML\Network\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Window\Context.hpp">
+      <Filter>Lib\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Window\Event.hpp">
+      <Filter>Lib\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Window\Input.hpp">
+      <Filter>Lib\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Window\OpenGL.hpp">
+      <Filter>Lib\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Window\VideoMode.hpp">
+      <Filter>Lib\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Window\Window.hpp">
+      <Filter>Lib\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Window\WindowHandle.hpp">
+      <Filter>Lib\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Window\WindowListener.hpp">
+      <Filter>Lib\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Window\WindowSettings.hpp">
+      <Filter>Lib\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\Window\WindowStyle.hpp">
+      <Filter>Lib\SFML\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\System\Clock.hpp">
+      <Filter>Lib\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\System\Lock.hpp">
+      <Filter>Lib\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\System\Mutex.hpp">
+      <Filter>Lib\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\System\NonCopyable.hpp">
+      <Filter>Lib\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\System\Randomizer.hpp">
+      <Filter>Lib\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\System\Resource.hpp">
+      <Filter>Lib\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\System\Sleep.hpp">
+      <Filter>Lib\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\System\Thread.hpp">
+      <Filter>Lib\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\System\Unicode.hpp">
+      <Filter>Lib\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\System\Vector2.hpp">
+      <Filter>Lib\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\System\Vector3.hpp">
+      <Filter>Lib\SFML\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\System\Win32\Mutex.hpp">
+      <Filter>Lib\SFML\System\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\System\Win32\Thread.hpp">
+      <Filter>Lib\SFML\System\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\System\Unix\Mutex.hpp">
+      <Filter>Lib\SFML\System\Unix</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\sfml-1.6\System\Unix\Thread.hpp">
+      <Filter>Lib\SFML\System\Unix</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib\GL\glut.h">
+      <Filter>Lib\GL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Framework\Behavior.cpp">
-      <Filter>Framework\Engine Core\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\DrawingState.cpp">
-      <Filter>Framework\Engine Core\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\DrawUtils.cpp">
-      <Filter>Framework\Engine Core\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\FlyCamera.cpp">
-      <Filter>Framework\Engine Core\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\GraphicsTownUI.cxx">
-      <Filter>Framework\Engine Core\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\GrObject.cpp">
-      <Filter>Framework\Engine Core\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\GrTown_PCH.cpp">
-      <Filter>Framework\Engine Core\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\GrWorld.cpp">
-      <Filter>Framework\Engine Core\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Main.cpp">
-      <Filter>Framework\Engine Core\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Examples\Cars.cpp">
-      <Filter>Framework\Example Objects and Behaviors\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Examples\Objects.cpp">
-      <Filter>Framework\Example Objects and Behaviors\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Examples\SimpleBehaviors.cpp">
-      <Filter>Framework\Example Objects and Behaviors\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Examples\Suburbs.cpp">
-      <Filter>Framework\Example Objects and Behaviors\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Utilities\3DUtils.cpp">
-      <Filter>Framework\Utilities\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Utilities\ArcBallCam.cpp">
-      <Filter>Framework\Utilities\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Utilities\GLee.c">
-      <Filter>Framework\Utilities\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Utilities\libtarga.c">
-      <Filter>Framework\Utilities\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Utilities\Pnt3f.cpp">
-      <Filter>Framework\Utilities\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Utilities\ShaderTools.cpp">
-      <Filter>Framework\Utilities\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Utilities\Texture.cpp">
-      <Filter>Framework\Utilities\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Roads\Drive.cpp">
-      <Filter>Framework\Roads\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Roads\Roads.cpp">
-      <Filter>Framework\Roads\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\MMatrix.cpp">
-      <Filter>Framework\Engine Core\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\TownViewWidget.cpp">
-      <Filter>Framework\Engine Core\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Core\main.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -377,10 +803,346 @@
     <ClCompile Include="Utility\BoundingBox.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
+    <ClCompile Include="Lib\glee\GLee.c">
+      <Filter>Lib\glee</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Framework\GraphicsTownUI.fl">
-      <Filter>Framework\Resource Files</Filter>
+    <None Include="Lib\glm-math\glm\CMakeLists.txt">
+      <Filter>Lib\glm-math\glm</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\associated_min_max.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\bit.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\closest_point.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\color_cast.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\color_space.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\color_space_YCoCg.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\compatibility.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\component_wise.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\constants.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\epsilon.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\euler_angles.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\extend.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\extented_min_max.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\fast_exponential.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\fast_square_root.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\fast_trigonometry.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\gradient_paint.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\handed_coordinate_space.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\inertia.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\int_10_10_10_2.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\integer.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\intersect.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\log_base.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\matrix_cross_product.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\matrix_interpolation.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\matrix_major_storage.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\matrix_operation.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\matrix_query.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\mixed_product.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\multiple.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\noise.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\norm.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\normal.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\normalize_dot.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\number_precision.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\ocl_type.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\optimum_pow.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\orthonormalize.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\perpendicular.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\polar_coordinates.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\projection.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\quaternion.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\random.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\raw_data.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\reciprocal.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\rotate_vector.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\simd_mat4.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\simd_vec4.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\spline.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\std_based_type.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\string_cast.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\transform.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\transform2.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\ulp.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\unsigned_int.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\vec1.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\vector_access.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\vector_angle.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\vector_query.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\verbose_operator.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtx\wrap.inl">
+      <Filter>Lib\glm-math\glm\gtx</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtc\half_float.inl">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtc\matrix_access.inl">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtc\matrix_inverse.inl">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtc\matrix_transform.inl">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtc\noise.inl">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtc\quaternion.inl">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtc\random.inl">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtc\swizzle.inl">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtc\type_precision.inl">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\gtc\type_ptr.inl">
+      <Filter>Lib\glm-math\glm\gtc</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\func_common.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\func_exponential.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\func_geometric.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\func_integer.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\func_matrix.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\func_noise.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\func_packing.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\func_trigonometric.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\func_vector_relational.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\intrinsic_common.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\intrinsic_exponential.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\intrinsic_geometric.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\intrinsic_matrix.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\intrinsic_trigonometric.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\intrinsic_vector_relational.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\type_gentype.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\type_half.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\type_mat.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\type_mat2x2.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\type_mat2x3.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\type_mat2x4.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\type_mat3x2.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\type_mat3x3.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\type_mat3x4.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\type_mat4x2.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\type_mat4x3.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\type_mat4x4.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\type_vec.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\type_vec1.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\type_vec2.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\type_vec3.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\glm-math\glm\core\type_vec4.inl">
+      <Filter>Lib\glm-math\glm\core</Filter>
+    </None>
+    <None Include="Lib\sfml-1.6\Graphics\Matrix3.inl">
+      <Filter>Lib\SFML\Graphics</Filter>
+    </None>
+    <None Include="Lib\sfml-1.6\Graphics\Rect.inl">
+      <Filter>Lib\SFML\Graphics</Filter>
+    </None>
+    <None Include="Lib\sfml-1.6\Network\Selector.inl">
+      <Filter>Lib\SFML\Network</Filter>
+    </None>
+    <None Include="Lib\sfml-1.6\System\Resource.inl">
+      <Filter>Lib\SFML\System</Filter>
+    </None>
+    <None Include="Lib\sfml-1.6\System\ResourcePtr.inl">
+      <Filter>Lib\SFML\System</Filter>
+    </None>
+    <None Include="Lib\sfml-1.6\System\Unicode.inl">
+      <Filter>Lib\SFML\System</Filter>
+    </None>
+    <None Include="Lib\sfml-1.6\System\Vector2.inl">
+      <Filter>Lib\SFML\System</Filter>
+    </None>
+    <None Include="Lib\sfml-1.6\System\Vector3.inl">
+      <Filter>Lib\SFML\System</Filter>
     </None>
   </ItemGroup>
 </Project>
