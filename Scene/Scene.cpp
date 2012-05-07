@@ -130,6 +130,7 @@ void Scene::setup()
 	objects.push_back(new Blimp(vec3(120, 50, 80), 10));
 	objects.push_back(new ModelObject(vec3(15, heightmap->heightAt(15, 20) + 3.5, 20), "./Resources/models/house/house.obj", *heightmap, 7.f));
 	objects.push_back(new ModelObject(vec3(35, heightmap->heightAt(35, 20)+1.f, 20), "./Resources/models/car/car_riviera.obj", *heightmap, 4.f));
+	objects.push_back(new FishingRod(vec3(120, heightmap->heightAt(120, 75), 75), *heightmap, 4.f));
 
 	const vec3 position1(60.f, heightmap->heightAt(60, 100) + 2.f, 100.f);
 	FountainEmitter *fountain = new FountainEmitter(position1, 20);
@@ -250,9 +251,9 @@ void Scene::update( const Clock& clock, const Input& input )
 
 	// update scene objects
 	for each(auto object in objects)
-		object->update(clock);
+		object->update(clock, input);
 	for each(auto object in alphaObjects)
-		object->update(clock);
+		object->update(clock, input);
 
 	// Sort alpha scene objects by distance to camera
 	std::sort(alphaObjects.begin(), alphaObjects.end()

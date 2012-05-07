@@ -31,6 +31,6 @@ void SceneObject::draw(const Camera& camera)
 {
 }
 
-void SceneObject::update(const sf::Clock &clock)
+void SceneObject::update(const sf::Clock &clock, const sf::Input& input)
 {
 }

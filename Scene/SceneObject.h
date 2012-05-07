@@ -24,7 +24,7 @@ public:
 	virtual ~SceneObject();
 
 	virtual void draw(const Camera& camera);
-	virtual void update(const sf::Clock &clock);
+	virtual void update(const sf::Clock &clock, const sf::Input& input);
 
 	void setPos(const glm::vec3& pos);
 	glm::vec3 getPos() const;

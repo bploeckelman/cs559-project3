@@ -36,7 +36,7 @@ public:
 
 	~Fish();
 
-	void update(const sf::Clock &clock);
+	void update(const sf::Clock &clock, const sf::Input& input);
 
 	void draw(const Camera& camera);
 };
@@ -65,7 +65,7 @@ public:
 
 	~Fountain();
 
-	void update(const sf::Clock &clock);
+	void update(const sf::Clock &clock, const sf::Input& input);
 
 	void draw(const Camera& camera);
 };
@@ -107,7 +107,7 @@ public:
 
 	~Blimp();
 
-	void update(const sf::Clock &clock);
+	void update(const sf::Clock &clock, const sf::Input& input);
 	void draw(const Camera& camera);
 };
 
@@ -156,7 +156,32 @@ public:
 	~ModelObject();
 
 	void draw(const Camera& camera);
-	void update(const sf::Clock &clock);
+	void update(const sf::Clock &clock, const sf::Input& input);
+};
+
+/************************************************************************/
+/* Fishing Rod
+/* --------
+/* A Fishing Rod that has one articluated joint
+/************************************************************************/
+
+class FishingRod : public SceneObject{
+private:
+	float size;
+	HeightMap&		heightmap;
+	GLUquadricObj*	quadric;
+	sf::Image		texture;
+	glm::mat4		secondary;
+	float			theta;
+	float			phi;
+
+public:
+	FishingRod( glm::vec3 pos, HeightMap& heightmap, float size);
+
+	~FishingRod();
+
+	void draw(const Camera& camera);
+	void update(const sf::Clock &clock, const sf::Input& input);
 };
 
 

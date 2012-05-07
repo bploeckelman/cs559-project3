@@ -7,6 +7,8 @@
 #include "Skybox.h"
 #include "../Particles/Particles.h"
 #include "../Utility/RenderUtils.h"
+#include "../Core/Common.h"
+#include <iostream>
 
 #undef __glext_h_
 #undef __glxext_h_
@@ -48,7 +50,7 @@ Fish::~Fish()
 	gluDeleteQuadric(quadric);
 }
 
-void Fish::update(const Clock &clock)
+void Fish::update(const Clock &clock, const sf::Input& input)
 {
 	//TODO: make this a little more flashy (all 3 axes instead of one, rotate instead of flip, fix minor visual glitch)
 	float randz = Randomizer::Random(0.f, .05f);
@@ -155,7 +157,7 @@ Fountain::~Fountain()
 	delete fluid;
 }
 
-void Fountain::update(const Clock &clock)
+void Fountain::update(const Clock &clock, const sf::Input& input)
 {
 	std::for_each(emitter.getParticles().begin(), emitter.getParticles().end(),
 			[&](Particle& particle)
@@ -466,7 +468,7 @@ Blimp::~Blimp()
 	gluDeleteQuadric(quadric);
 }
 
-void Blimp::update(const Clock &clock)
+void Blimp::update(const Clock &clock, const sf::Input& input)
 {
 	transform[0][0] = cos(theta);
 	transform[2][0] = sin(theta);
@@ -626,6 +628,115 @@ void ModelObject::draw(const Camera& camera)
 	}
 }
 
-void ModelObject::update(const sf::Clock &clock)
+void ModelObject::update(const sf::Clock &clock, const sf::Input& input)
 {
+}
+
+/************************************************************************/
+/* Fishing Rod
+/* --------
+/* A Fishing Rod that has one articluated joint
+/************************************************************************/
+
+FishingRod::FishingRod( glm::vec3 pos, HeightMap& heightmap, float size)
+	: SceneObject(pos)
+	, heightmap(heightmap)
+	, quadric(gluNewQuadric())
+	, texture(GetImage("rod.png"))
+	, size(size)
+	, theta(0)
+	, phi(0)
+{
+	transform[0][0] = cos(theta);
+	transform[2][0] = sin(theta);
+	transform[0][2] = -sin(theta);
+	transform[2][2] = cos(theta);
+	transform[1][1] = 1;
+
+	secondary = glm::mat4x4();
+	secondary[0][0] = cos(phi);
+	secondary[2][0] = sin(phi);
+	secondary[0][2] = -sin(phi);
+	secondary[2][2] = cos(phi);
+	secondary[1][1] = 1;
+}
+
+FishingRod::~FishingRod()
+{
+	gluQuadricNormals(quadric, GLU_SMOOTH);
+}
+
+void FishingRod::draw(const Camera& camera)
+{
+	glEnable(GL_TEXTURE_2D);
+	texture.Bind();
+	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+
+	gluQuadricDrawStyle( quadric, GLU_FILL);
+	gluQuadricNormals( quadric, GLU_SMOOTH);
+	gluQuadricOrientation( quadric, GLU_OUTSIDE);
+	gluQuadricTexture( quadric, GL_TRUE);
+
+	glColor3f(0.7f, 0.7f, 0.7f);
+
+	glPushMatrix();
+		glMultMatrixf(value_ptr(transform));
+		glRotatef(-90, 1, 0, 0);
+		glPushMatrix();
+			gluCylinder(quadric, .1, .1, size, 15, 15);
+			gluDisk(quadric, 0, .1, 15, 15);
+			glTranslatef(0, 0, size);
+			gluDisk(quadric, 0, .1, 15, 15);
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(0, 0, size);
+			glMultMatrixf(glm::value_ptr(secondary));
+			gluCylinder(quadric, .1, .1, size, 15, 15);
+			glTranslatef(0, 0, size);
+			gluDisk(quadric, 0, .1, 15, 15);
+			glTranslatef(0, 0, -size);
+			glRotatef(180, 1, 0, 0);
+			gluDisk(quadric, 0, .1, 15, 15);
+		glPopMatrix();
+	glPopMatrix();
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+	
+
+void FishingRod::update(const sf::Clock &clock, const sf::Input& input)
+{
+	if(input.IsKeyDown(sf::Key::Home))
+	{
+		theta -= .1f;
+	}
+	else if(input.IsKeyDown(sf::Key::End))
+	{
+		theta += .1f;
+	}
+	else if(input.IsKeyDown(sf::Key::PageUp))
+	{
+		if(phi <= 0.1f) return;
+		phi -= .1f;
+	}
+	else if(input.IsKeyDown(sf::Key::PageDown))
+	{
+		if(phi >= 1) return;
+		phi += .1f;
+	}
+
+	transform[0][0] = cos(theta);
+	transform[2][0] = sin(theta);
+	transform[0][2] = -sin(theta);
+	transform[2][2] = cos(theta);
+	transform[1][1] = 1;
+
+	secondary[0][0] = cos(phi);
+	secondary[2][0] = sin(phi);
+	secondary[0][2] = -sin(phi);
+	secondary[2][2] = cos(phi);
+	secondary[1][1] = 1;
+
 }
