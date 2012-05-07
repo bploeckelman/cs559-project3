@@ -607,7 +607,8 @@ ModelObject::ModelObject( glm::vec3 pos, const std::string& filename, HeightMap&
 	transform[2][2] = size;
 	if( model != nullptr )
 	{
-		model->setRenderMode(GLM_SMOOTH | GLM_TEXTURE | GLM_MATERIAL);
+		// TODO: add GLM_MATERIAL back when more materials are specified for other things
+		model->setRenderMode(GLM_SMOOTH | GLM_TEXTURE);// | GLM_MATERIAL);
 	}
 }
 
