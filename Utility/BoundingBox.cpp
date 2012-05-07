@@ -22,9 +22,9 @@ BoundingBox::BoundingBox(Mesh& mesh)
 	edges = glm::mat2x3();
 	edges[0] = mesh.vertexAt(0,0);
 	edges[1] = mesh.vertexAt(0,0);
-	for(int i = 0; i < mesh.getWidth() ; ++i)
+	for(unsigned int i = 0; i < mesh.getWidth() ; ++i)
 	{
-		for(int j = 0; j < mesh.getHeight(); ++j)
+		for(unsigned int j = 0; j < mesh.getHeight(); ++j)
 		{
 			for(int k = 0; k < 3; ++k)
 			{
@@ -40,9 +40,9 @@ BoundingBox::BoundingBox(MeshOverlay& mesh)
 	edges = glm::mat2x3();
 	edges[0] = mesh.vertexAt(0,0);
 	edges[1] = mesh.vertexAt(0,0);
-	for(int i = 0; i < mesh.getWidth() ; ++i)
+	for(unsigned int i = 0; i < mesh.getWidth() ; ++i)
 	{
-		for(int j = 0; j < mesh.getHeight(); ++j)
+		for(unsigned int j = 0; j < mesh.getHeight(); ++j)
 		{
 			for(int k = 0; k < 3; ++k)
 			{
