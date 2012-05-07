@@ -130,7 +130,7 @@ void Scene::setup()
 	objects.push_back(new Blimp(vec3(120, 50, 80), 10));
 	objects.push_back(new ModelObject(vec3(15, heightmap->heightAt(15, 20) + 3.5, 20), "./Resources/models/house/house.obj", *heightmap, 7.f));
 	objects.push_back(new ModelObject(vec3(35, heightmap->heightAt(35, 20)+1.f, 20), "./Resources/models/car/car_riviera.obj", *heightmap, 4.f));
-	objects.push_back(new ModelObject(vec3(35, heightmap->heightAt(35, 20)+1.f, 20), "./Resources/models/people/Zack.obj", *heightmap, 4.f));
+	//objects.push_back(new ModelObject(vec3(35, heightmap->heightAt(35, 20)+1.f, 20), "./Resources/models/people/Zack.obj", *heightmap, 4.f));
 	objects.push_back(new FishingRod(vec3(120, heightmap->heightAt(120, 75), 75), *heightmap, 4.f));
 
 
