@@ -83,6 +83,10 @@ void Fish::draw(const Camera& camera)
 
 	glDisable(GL_TEXTURE_2D);
 	glEnable(GL_LIGHTING);
+	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.0f, 0.0f, 0.0f, 1.f)));
+	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.6f, 0.7f, 0.5f, 1.f)));
+	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.6f, 0.7f, 0.5f, 1.f)));
+	glMaterialf (GL_FRONT, GL_SHININESS, 20.f);
 
 	glColor3ub(color.r, color.g, color.b);
 
@@ -187,12 +191,18 @@ void Fountain::update(const Clock &clock, const sf::Input& input)
 
 void Fountain::draw(const Camera& camera)
 {
+	texture.Bind();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.1f, 0.1f, 0.1f, 1.f)));
+	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.8f, 0.7f, 0.9f, 1.f)));
+	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.8f, 0.7f, 0.9f, 1.f)));
+	glMaterialf (GL_FRONT, GL_SHININESS, 40.f);
+
 	glColor3f(1.0, 1.0, 1.0);
 	glPushMatrix();
 		glMultMatrixf(value_ptr(transform));
-		texture.Bind();
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 		float l =  1.f * size;
 		float w =  0.5f * size;
@@ -295,7 +305,10 @@ void Fountain::draw(const Camera& camera)
 
 	glPopMatrix();
 
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, value_ptr(vec4(0.1f, 0.8f, 1.f, 0.5f)));
+	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.2f, 0.2f, 0.2f, 1.f)));
+	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.1f, 0.8f, 1.0f, 0.7f)));
+	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.1f, 0.8f, 1.0f, 1.f)));
+	glMaterialf (GL_FRONT, GL_SHININESS, 20.f);
 	fluid->render(camera);
 }
 
@@ -482,6 +495,10 @@ void Blimp::draw(const Camera& camera)
 {
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_LIGHTING);
+	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.2f, 0.2f, 0.2f, 1.f)));
+	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(1.0f, 1.0f, 1.0f, 0.5f)));
+	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(1.0f, 1.0f, 1.0f, 1.f)));
+	glMaterialf (GL_FRONT, GL_SHININESS, 30.f);
 
 	btext.Bind();	
 
@@ -500,7 +517,6 @@ void Blimp::draw(const Camera& camera)
 			glScalef(size, size*2, size);
 			gluSphere(quadric, 1.f, 20, 20);
 
-//			glDisable(GL_BLEND);
 			gluQuadricTexture( quadric, GL_FALSE);
 			gluQuadricNormals( quadric, GLU_SMOOTH);
 
@@ -513,8 +529,6 @@ void Blimp::draw(const Camera& camera)
 			gluDisk(quadric, 0, size/16, 20, 20);
 		glPopMatrix();
 	glPopMatrix();
-
-//	glEnable(GL_BLEND);
 }
 
 
@@ -542,6 +556,11 @@ void Campfire::draw(const Camera& camera)
 {
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_LIGHTING);
+	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.2f, 0.2f, 0.2f, 1.f)));
+	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.8f, 0.3f, 0.8f, 0.5f)));
+	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.8f, 0.3f, 0.8f, 1.f)));
+	glMaterialf (GL_FRONT, GL_SHININESS, 0.f);
+
 	wood.Bind();
 	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
@@ -551,7 +570,6 @@ void Campfire::draw(const Camera& camera)
 	gluQuadricOrientation( quadric, GLU_OUTSIDE);
 	gluQuadricTexture( quadric, GL_TRUE);
 
-//	glColor4ub(150, 75, 0, 255);
 	glColor3f(0.7f, 0.7f, 0.7f);
 
 	glPushMatrix();
@@ -607,8 +625,7 @@ ModelObject::ModelObject( glm::vec3 pos, const std::string& filename, HeightMap&
 	transform[2][2] = size;
 	if( model != nullptr )
 	{
-		// TODO: add GLM_MATERIAL back when more materials are specified for other things
-		model->setRenderMode(GLM_SMOOTH | GLM_TEXTURE);// | GLM_MATERIAL);
+		model->setRenderMode(GLM_SMOOTH | GLM_TEXTURE | GLM_MATERIAL);
 	}
 }
 
@@ -670,6 +687,11 @@ void FishingRod::draw(const Camera& camera)
 {
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_LIGHTING);
+	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.2f, 0.2f, 0.2f, 1.f)));
+	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.8f, 0.3f, 0.8f, 0.5f)));
+	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.8f, 0.3f, 0.8f, 1.f)));
+	glMaterialf (GL_FRONT, GL_SHININESS, 0.f);
+
 	texture.Bind();
 	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);

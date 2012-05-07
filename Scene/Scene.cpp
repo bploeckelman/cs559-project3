@@ -228,7 +228,7 @@ void Scene::setupLights()
 //	vec4 specular(0.f, 0.f, 1.f, 1.f);
 //	float shininess[1] = { 50.f };
 
-//	glMaterialfv(GL_FRONT, GL_AMBIENT, value_ptr(ambient));
+	glMaterialfv(GL_FRONT, GL_AMBIENT, value_ptr(ambient));
 //	glMaterialfv(GL_FRONT, GL_DIFFUSE, value_ptr(diffuse));
 //	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(specular));
 //	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
@@ -271,14 +271,26 @@ void Scene::render( const Clock& clock )
 
 	skybox.render(*camera);
 
+	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.0f, 0.0f, 0.0f, 1.f)));
+	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.1f, 0.4f, 0.1f, 1.f)));
+	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.1f, 0.4f, 0.1f, 1.f)));
+	glMaterialf (GL_FRONT, GL_SHININESS, 0.f);
 	for each(auto mesh in meshes)
 		mesh->render();
 
+	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.1f, 0.1f, 0.1f, 1.f)));
+	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.6f, 0.6f, 0.6f, 1.f)));
+	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.6f, 0.6f, 0.6f, 1.f)));
+	glMaterialf (GL_FRONT, GL_SHININESS, 1.f);
 	meshOverlay->render();
 
 	for each(auto object in objects)
 		object->draw(*camera);
 
+	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.2f, 0.2f, 0.2f, 1.f)));
+	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.1f, 0.8f, 1.0f, 0.7f)));
+	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.1f, 0.8f, 1.0f, 1.f)));
+	glMaterialf (GL_FRONT, GL_SHININESS, 60.f);
 	fluid->render(*camera);
 
 	glDisable(GL_LIGHTING);
@@ -291,6 +303,10 @@ void Scene::render( const Clock& clock )
 	for each(auto light in lights)
 		light->render();
 
+	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.1f, 0.1f, 0.1f, 1.f)));
+	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(1.0f, 1.0f, 1.0f, 1.f)));
+	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(1.0f, 1.0f, 1.0f, 1.f)));
+	glMaterialf (GL_FRONT, GL_SHININESS, 0.f);
 	Render::basis();
 }
 
