@@ -58,20 +58,20 @@ void Scene::setup()
 {
 	timer.Reset();
 
-	// setup opengl state
+	// setup opengl state ----------------------------------------
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_POINTS);
 	glPointSize(5.f);
 	glLineWidth(1.f);
-
 	glShadeModel(GL_SMOOTH);
-//	glEnable(GL_COLOR_MATERIAL);
-//	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
 	glClearDepth(1.f);
+
+	glClearColor(0.1f, 0.1f, 0.1f, 1.f);
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
 	const vec4 fogColor(0.1f, 0.1f, 0.1f, 1.f);
 	const float fogDensity = 0.01f;
@@ -79,12 +79,8 @@ void Scene::setup()
 	glFogi(GL_FOG_MODE, GL_EXP2);
 	glFogfv(GL_FOG_COLOR, value_ptr(fogColor));
 	glFogf(GL_FOG_DENSITY, fogDensity);
-	glHint(GL_FOG_HINT, GL_NICEST);
 
-	glClearColor(0.1f, 0.1f, 0.1f, 1.f);
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-
-	// setup textures
+	// setup texture directories ---------------------------------
 	ImageManager::get().addResourceDir("Resources/images/");
 	ImageManager::get().addResourceDir("Resources/images/plants/");
 	ImageManager::get().addResourceDir("Resources/images/particles/");
@@ -93,7 +89,7 @@ void Scene::setup()
 	ImageManager::get().addResourceDir("../../Resources/images/plants/");
 	ImageManager::get().addResourceDir("../../Resources/images/particles/");
 
-	// setup meshes
+	// setup meshes ----------------------------------------------
 	HeightMap *heightmap = new HeightMap("heightmap-terrain.png"); 
 //	HeightMap *heightmap2 = new HeightMap("heightmap-terrain.png",256.f, 256.f); 
 //	HeightMap *heightmap3 = new HeightMap("heightmap-terrain.png",256.f, 0.f);
@@ -104,15 +100,7 @@ void Scene::setup()
 
 	meshOverlay = new MeshOverlay(*heightmap);
 
-	// load models
-	/*ObjModel *model = new ObjModel("./Resources/models/house/house.obj");
-	if( model != nullptr )
-	{
-		model->setRenderMode(GLM_SMOOTH | GLM_TEXTURE);
-		models.push_back(model);
-	}*/
-
-	// generate a new fluid surface
+	// generate a new fluid surface ------------------------------
 	fluid = new Fluid(
 		256,   // number of vertices wide
 		256,   // number of vertices high
@@ -124,36 +112,40 @@ void Scene::setup()
 	);
 	fluid->setSkybox(&skybox);
 	
-	// add Scene objects
+	// add Scene objects -----------------------------------------
 //	const vec3 housePos(100.f, heightmap->heightAt(100,100) + 10, 100.f);
 //	objects.push_back(new House(housePos, sf::Color(0, 255, 0), stone, 10, 20, 10));
+
 	objects.push_back(new Blimp(vec3(120, 50, 80), 10));
+
 	objects.push_back(new ModelObject(vec3(15, heightmap->heightAt(15, 20) + 3.5, 20), "./Resources/models/house/house.obj", *heightmap, 7.f));
 	objects.push_back(new ModelObject(vec3(35, heightmap->heightAt(35, 20)+1.f, 20), "./Resources/models/car/car_riviera.obj", *heightmap, 4.f));
+
 	objects.push_back(new FishingRod(vec3(120, heightmap->heightAt(120, 75), 75), *heightmap, 4.f));
-
-
-	const vec3 position1(60.f, heightmap->heightAt(60, 100) + 2.f, 100.f);
-	FountainEmitter *fountain = new FountainEmitter(position1, 20);
-	FireEmitter *fire = new FireEmitter(vec3(30, heightmap->heightAt(30, 30), 30) + 1.f, 500);
-	SmokeEmitter *smoke = new SmokeEmitter(vec3(31, heightmap->heightAt(31, 31) + 1.2f, 31), 500);
-	objects.push_back(new Fountain(vec3(60.f, heightmap->heightAt(60, 100) + 1.f, 100.f), 10, *fountain, &skybox));
-
 	objects.push_back(new Fish(vec3(70, 3.5f, 75), sf::Color(255, 127, 0), *heightmap, *fluid));
 
-	objects.push_back(new Campfire(vec3(31, heightmap->heightAt(31, 31) + 1.f, 31), *fire, *smoke, 5.f));
+	const vec3 firePosition(40.f, heightmap->heightAt(40, 30) + 1.f, 30.f);
+	const vec3 smokePosition(firePosition + vec3(0,1.f,0));
+	FireEmitter  *fire  = new FireEmitter(firePosition);
+	SmokeEmitter *smoke = new SmokeEmitter(smokePosition);
+	objects.push_back(new Campfire(firePosition, *fire, *smoke, 5.f));
 
-	// add transparent scene objects
+	const vec3 fountainPosition(60.f, heightmap->heightAt(60, 100) + 2.f, 100.f);
+	FountainEmitter *fountain = new FountainEmitter(fountainPosition, 20);
+	objects.push_back(new Fountain(fountainPosition - vec3(0,1.f,0), 10, *fountain, &skybox));
+
+	// add transparent scene objects -----------------------------
 	const unsigned int numBushes = 50;
 	for(unsigned int i = 0; i < numBushes; ++i)
 	{
-		const float x = linearRand(5.f, 250.f); // TODO: pick in heightmap bounds
-		const float z = linearRand(5.f, 250.f); // TODO: pick in heightmap bounds
+		// TODO: don't add where objects already are
+		const float x = linearRand(5.f, 250.f);
+		const float z = linearRand(5.f, 250.f);
 		const vec3 pos(x, heightmap->heightAt(x,z), z);
 		alphaObjects.push_back(new Plant(pos)); 
 	}
 
-	// add particle systems
+	// add particle systems --------------------------------------
 	ParticleSystem  *system1 = new ParticleSystem();
 	system1->add(fountain);
 	system1->start();
@@ -176,22 +168,23 @@ void Scene::setup()
 	system4->start();
 	particleMgr.add(system4);
 
-	// create and position cameras
+	// create and position cameras -------------------------------
+	// TODO: add more cameras and be able to switch between them
 	cameras.push_back(Camera( *heightmap 
 							, vec3(-2.5, 25.0, -2.5)    // position
 							, vec3(40.0, 135.0, 0.0) ));// rotation
 	camera = &cameras[0];
 
-	// setup lighting 
+	// setup lighting --------------------------------------------
 	setupLights();
 
-	// perform perspective projection
+	// perform perspective projection ----------------------------
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(value_ptr(camera->projection()));
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	// Log setup duration
+	// log setup duration ----------------------------------------
 	const float delta = timer.GetElapsedTime();
 	std::stringstream ss;
 	ss << "[Scene setup completed in " << delta << " seconds]";
@@ -201,7 +194,6 @@ void Scene::setup()
 
 void Scene::setupLights()
 {
-	// setup and enable lights
 	Light *light0 = new Light();
 	light0->position(vec4(128.f , 15.f, 128.f, 1.f));
 	light0->ambient(vec4(1.f, 1.f, 1.f, 1.f));
@@ -212,7 +204,7 @@ void Scene::setupLights()
 	// MOAR HACK !!!
 	HeightMap *h = reinterpret_cast<HeightMap*>(meshes.front());
 	Light *light1 = new Light();
-	light1->position(vec4(32.f , h->heightAt(32,32) + 8.f, 32.f, 1.f));
+	light1->position(vec4(32.f , h->heightAt(32,32) + 4.f, 32.f, 1.f));
 	light1->ambient(vec4(1.f, 1.f, 1.f, 1.f));
 	light1->diffuse(vec4(1.f, 1.f, 1.f, 1.f));
 	light1->enable();
@@ -261,62 +253,12 @@ void Scene::update( const Clock& clock, const Input& input )
 		object->update(clock, input);
 	for each(auto object in alphaObjects)
 		object->update(clock, input);
-
-	// Sort alpha scene objects by distance to camera
-	std::sort(alphaObjects.begin(), alphaObjects.end()
-		, [&]( const SceneObject* obj1
-		     , const SceneObject* obj2 ) -> bool
-		{
-			const vec3& pos1 = obj1->getPos();
-			const vec3& pos2 = obj2->getPos();
-			const vec3& cpos = camera->position();
-			const float dist1 = length(pos1 - cpos);
-			const float dist2 = length(pos2 - cpos);
-			return dist1 > dist2;
-		}
-	);
+	sortTransparentObjects();
 
 	// update other things
+	updateLights();
 	fluid->evaluate();
 	particleMgr.update(clock.GetElapsedTime());
-
-	// Hacky sort of stuff to change ambient light level 
-	// based on time of day
-	static const float timeLimit = 60.f; // in seconds
-	static float delta = 0.f;
-	static bool toggle = true;
-	if( toggle )
-	{
-		delta += timer.GetElapsedTime();
-		if( delta > timeLimit )
-		{
-			toggle = !toggle;
-			delta  = timeLimit;
-		}
-	}
-	else
-	{
-		delta -= timer.GetElapsedTime();
-		if( delta < 0.f )
-		{
-			toggle = !toggle;
-			delta  = 0.f;
-		}
-	}
-
-	static const float step = 0.1f;
-
-	float ds = step * delta;
-	if( ds < 0.2f  ) ds = 0.2f; // keep it from pitch black
-	if( ds > 0.75f ) ds = 0.75f; // keep it from full bright
-	vec4 ambient(ds, ds, ds, 1.f);
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(ambient));
-
-	// move lights around 
-	const vec4& pos0 = lights[0]->position();
-	const vec4& pos1 = lights[1]->position();
-	lights[0]->position(pos0 + 0.5f * vec4(cos(delta), 0.f, sin(delta), 0.f));
-	lights[1]->position(pos1 + 0.1f * vec4(cos(delta), 0.f, sin(delta), 0.f));
 
 	timer.Reset();
 }
@@ -343,7 +285,6 @@ void Scene::render( const Clock& clock )
 	for each(auto object in alphaObjects)
 		object->draw(*camera);
 
-	glDisable(GL_LIGHTING);
 	particleMgr.render(*camera);
 
 	glDisable(GL_LIGHTING);
@@ -442,4 +383,61 @@ void Scene::cleanup()
 	lights.clear();	
 
 	delete fluid;
+}
+
+void Scene::sortTransparentObjects()
+{
+	std::sort(alphaObjects.begin(), alphaObjects.end()
+		, [&]( const SceneObject* obj1
+             , const SceneObject* obj2 ) -> bool
+		{
+			const vec3& pos1 = obj1->getPos();
+			const vec3& pos2 = obj2->getPos();
+			const vec3& cpos = camera->position();
+			const float dist1 = length(pos1 - cpos);
+			const float dist2 = length(pos2 - cpos);
+			return dist1 > dist2;
+		}
+	);
+}
+
+void Scene::updateLights()
+{
+	// Hacky sort of stuff to change ambient light level 
+	// based on time of day
+	static const float timeLimit = 60.f; // in seconds
+	static float delta = 0.f;
+	static bool toggle = true;
+	if( toggle )
+	{
+		delta += timer.GetElapsedTime();
+		if( delta > timeLimit )
+		{
+			toggle = !toggle;
+			delta  = timeLimit;
+		}
+	}
+	else
+	{
+		delta -= timer.GetElapsedTime();
+		if( delta < 0.f )
+		{
+			toggle = !toggle;
+			delta  = 0.f;
+		}
+	}
+
+	static const float step = 0.1f;
+
+	float ds = step * delta;
+	if( ds < 0.2f  ) ds = 0.2f; // keep it from pitch black
+	if( ds > 0.75f ) ds = 0.75f; // keep it from full bright
+	vec4 ambient(ds, ds, ds, 1.f);
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(ambient));
+
+	// move lights around 
+	const vec4& pos0 = lights[0]->position();
+	const vec4& pos1 = lights[1]->position();
+	lights[0]->position(pos0 + 0.5f * vec4(cos(delta), 0.f, sin(delta), 0.f));
+	lights[1]->position(pos1 + 0.1f * vec4(cos(delta), 0.f, sin(delta), 0.f));
 }
