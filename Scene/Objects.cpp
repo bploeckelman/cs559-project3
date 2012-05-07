@@ -589,10 +589,10 @@ void Campfire::draw(const Camera& camera)
 /* Holds a ObjModel
 /************************************************************************/
 
-	ObjModel*	model;
-
-ModelObject::ModelObject( glm::vec3 pos, const std::string& filename, float size =1.f)
+ModelObject::ModelObject( glm::vec3 pos, const std::string& filename, HeightMap& heightmap, float size =1.f)
 	: SceneObject(pos)
+	, size(size)
+	, heightmap(heightmap)
 	, model(new ObjModel(filename))
 {
 	transform[0][0] = size;
@@ -618,4 +618,8 @@ void ModelObject::draw(const Camera& camera)
 			model->render();
 		glPopMatrix();
 	}
+}
+
+void ModelObject::update(const sf::Clock &clock)
+{
 }

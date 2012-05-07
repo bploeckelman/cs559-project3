@@ -145,13 +145,18 @@ public:
 /************************************************************************/
 
 class ModelObject : public SceneObject{
-private:
+protected:
 	ObjModel*	model;
+	float size;
+	HeightMap& heightmap;
 
 public:
-	ModelObject( glm::vec3 pos, const std::string& filename, float size);
+	ModelObject( glm::vec3 pos, const std::string& filename, HeightMap& heightmap, float size);
 
 	~ModelObject();
 
 	void draw(const Camera& camera);
+	void update(const sf::Clock &clock);
 };
+
+

@@ -129,7 +129,8 @@ void Scene::setup()
 	const vec3 housePos(100.f, heightmap->heightAt(100,100) + 10, 100.f);
 	objects.push_back(new House(housePos, sf::Color(0, 255, 0), stone, 10, 20, 10));
 	objects.push_back(new Blimp(vec3(120, 50, 80), 10));
-	objects.push_back(new ModelObject(vec3(15, heightmap->heightAt(15, 20) + 3.5, 20), "./Resources/models/house/house.obj", 7.f));
+	objects.push_back(new ModelObject(vec3(15, heightmap->heightAt(15, 20) + 3.5, 20), "./Resources/models/house/house.obj", *heightmap, 7.f));
+	objects.push_back(new ModelObject(vec3(35, heightmap->heightAt(35, 20)+1.f, 20), "./Resources/models/car/car_riviera.obj", *heightmap, 4.f));
 
 	const vec3 position1(60.f, heightmap->heightAt(60, 100) + 2.f, 100.f);
 	FountainEmitter *fountain = new FountainEmitter(position1, 20);
