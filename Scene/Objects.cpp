@@ -641,7 +641,7 @@ FishingRod::FishingRod( glm::vec3 pos, HeightMap& heightmap, float size)
 	: SceneObject(pos)
 	, heightmap(heightmap)
 	, quadric(gluNewQuadric())
-	, texture(GetImage("rod.png"))
+	, texture(GetImage("cedar.png"))//rod.png"))
 	, size(size)
 	, theta(0)
 	, phi(0)
@@ -662,12 +662,13 @@ FishingRod::FishingRod( glm::vec3 pos, HeightMap& heightmap, float size)
 
 FishingRod::~FishingRod()
 {
-	gluQuadricNormals(quadric, GLU_SMOOTH);
+	gluDeleteQuadric(quadric);
 }
 
 void FishingRod::draw(const Camera& camera)
 {
 	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_LIGHTING);
 	texture.Bind();
 	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
