@@ -12,6 +12,7 @@
 #include <glm/glm.hpp>
 
 class Skybox;
+class Camera;
 
 
 class Fluid
@@ -58,7 +59,7 @@ public:
 		 , const glm::vec3& pos=glm::vec3(0,0,0) );
 	~Fluid();
 
-	void render();
+	void render(const Camera& camera);
 
 	void evaluate();
 	void displace();
