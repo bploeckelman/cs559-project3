@@ -173,7 +173,7 @@ void Fluid::render()
 		glRotatef(90.f, 1.f, 0.f, 0.f);
 
 //		glColor4f(0.0f, 0.8f, 1.0f, 0.5f);
-		glColor4f(0.1f, 1.f, 1.f, 0.7f);
+		glColor4f(0.1f, 1.f, 1.f, 0.5f);
 		glDrawElements(GL_TRIANGLES
 					 , numIndices
 					 , GL_UNSIGNED_INT
