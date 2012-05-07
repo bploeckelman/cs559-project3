@@ -295,7 +295,8 @@ void Fountain::draw(const Camera& camera)
 
 	glPopMatrix();
 
-	fluid->render();
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, value_ptr(vec4(0.1f, 0.8f, 1.f, 0.5f)));
+	fluid->render(camera);
 }
 
 

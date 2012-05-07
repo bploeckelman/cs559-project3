@@ -66,8 +66,8 @@ void Scene::setup()
 	glLineWidth(1.f);
 
 	glShadeModel(GL_SMOOTH);
-	glEnable(GL_COLOR_MATERIAL);
-	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+//	glEnable(GL_COLOR_MATERIAL);
+//	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
@@ -337,7 +337,7 @@ void Scene::render( const Clock& clock )
 	for each(auto object in objects)
 		object->draw(*camera);
 
-	fluid->render();
+	fluid->render(*camera);
 
 	glDisable(GL_LIGHTING);
 	for each(auto object in alphaObjects)

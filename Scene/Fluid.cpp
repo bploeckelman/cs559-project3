@@ -8,6 +8,7 @@
 /************************************************************************/
 #include "Fluid.h"
 #include "Skybox.h"
+#include "Camera.h"
 
 #undef __glext_h_
 #undef __glxext_h_
@@ -20,8 +21,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/random.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-using glm::vec3;
+using namespace glm;
+
 
 /**
 * Fluid surface ctor
@@ -103,7 +106,7 @@ Fluid::Fluid( long n, long m, float d
 	t_step = t;
 
 	blend = true;
-	light = false;
+	light = true;
 
 	skyboxEnvTexture = 0;
 }
@@ -120,7 +123,7 @@ Fluid::~Fluid()
 		glDeleteTextures(1, &skyboxEnvTexture);
 }
 
-void Fluid::render()
+void Fluid::render(const Camera& camera)
 {
 	// Setup environment mapping
 	if( skybox != nullptr )
@@ -135,6 +138,12 @@ void Fluid::render()
 		glEnable(GL_TEXTURE_GEN_S);
 		glEnable(GL_TEXTURE_GEN_T);
 		glEnable(GL_TEXTURE_GEN_R);
+
+		// Invert camera rotation and apply to texture matrix
+		glMatrixMode(GL_TEXTURE);
+		glPushMatrix();
+		mat4 mat( inverse( translate(camera.view(), camera.position()) ) );
+		glMultMatrixf(value_ptr(mat));
 	}
 	else
 		glDisable(GL_TEXTURE_2D);
@@ -168,6 +177,7 @@ void Fluid::render()
 	glVertexPointer(3, GL_FLOAT, 0, vertexArray);
 	glNormalPointer(GL_FLOAT, 0, normalArray);
 
+	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 		glTranslatef(pos.x, pos.y, pos.z); 
 		glRotatef(90.f, 1.f, 0.f, 0.f);
@@ -194,8 +204,12 @@ void Fluid::render()
 		glDisable(GL_LIGHTING);
 	}
 
-	if( skybox != nullptr )
+	if( skybox != nullptr ) 
 	{
+		glMatrixMode(GL_TEXTURE);
+		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
+
 		glDisable(GL_TEXTURE_GEN_S);
 		glDisable(GL_TEXTURE_GEN_T);
 		glDisable(GL_TEXTURE_GEN_R);
