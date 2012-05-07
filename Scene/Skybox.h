@@ -34,6 +34,7 @@ public:
 	void setDay();
 	void setNight();
 
+	float getDayNightCycleDelta() const;
 	const sf::Image& getTexture(const Face& face, const bool day);
 
 private:
@@ -51,6 +52,7 @@ private:
 
 	sf::Clock timer;
 	bool toggleDayNight;  // true = day, false = night
+	float dayNightCycleDelta;
 
 	bool init();
 	void cleanup();

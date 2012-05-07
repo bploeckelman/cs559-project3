@@ -74,14 +74,14 @@ void Scene::setup()
 
 	glClearColor(0.1f, 0.1f, 0.1f, 1.f);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-
+/*
 	const vec4 fogColor(0.1f, 0.1f, 0.1f, 1.f);
 	const float fogDensity = 0.01f;
 	glEnable(GL_FOG);
 	glFogi(GL_FOG_MODE, GL_EXP2);
 	glFogfv(GL_FOG_COLOR, value_ptr(fogColor));
 	glFogf(GL_FOG_DENSITY, fogDensity);
-
+*/
 	// setup texture directories ---------------------------------
 	ImageManager::get().addResourceDir("Resources/images/");
 	ImageManager::get().addResourceDir("Resources/images/plants/");
@@ -106,11 +106,11 @@ void Scene::setup()
 	fluid = new Fluid(
 		256,   // number of vertices wide
 		256,   // number of vertices high
-		0.75f,  // distance between vertices
+		1.75f,  // distance between vertices
 		0.03f, // time step for evaluation
 		10.0f,  // wave velocity
 		0.1f,  // fluid viscosity
-		vec3(40.f, 5.f, 40.f)
+		vec3(40.f, 100.f, 40.f)
 	);
 	fluid->setSkybox(&skybox);
 	
@@ -141,8 +141,8 @@ void Scene::setup()
 	for(unsigned int i = 0; i < numBushes; ++i)
 	{
 		// TODO: don't add where objects already are
-		const float x = linearRand(5.f, 250.f);
-		const float z = linearRand(5.f, 250.f);
+		const float x = linearRand(5.f, 512.f);
+		const float z = linearRand(5.f, 512.f);
 		const vec3 pos(x, heightmap->heightAt(x,z), z);
 		alphaObjects.push_back(new Plant(pos)); 
 	}
@@ -450,8 +450,8 @@ void Scene::updateLights()
 	static const float step = 0.1f;
 
 	float ds = step * delta;
-	if( ds < 0.2f  ) ds = 0.2f; // keep it from pitch black
-	if( ds > 0.75f ) ds = 0.75f; // keep it from full bright
+	if( ds < 0.5f  ) ds = 0.5f; // keep it from pitch black
+	if( ds > 1.f ) ds = 1.f; // keep it from full bright
 	vec4 ambient(ds, ds, ds, 1.f);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(ambient));
 

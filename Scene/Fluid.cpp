@@ -125,100 +125,11 @@ Fluid::~Fluid()
 
 void Fluid::render(const Camera& camera)
 {
-	// Setup environment mapping
-	if( skybox != nullptr )
-	{
-		glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxEnvTextureDay);
-		glEnable(GL_TEXTURE_CUBE_MAP);
-			
-		glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP);
-		glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP);
-		glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP);
+	setDay();
+	subRender(camera);
 
-		glEnable(GL_TEXTURE_GEN_S);
-		glEnable(GL_TEXTURE_GEN_T);
-		glEnable(GL_TEXTURE_GEN_R);
-
-		// Invert camera rotation and apply to texture matrix
-		glMatrixMode(GL_TEXTURE);
-		glPushMatrix();
-		mat4 mat( inverse( translate(camera.view(), camera.position()) ) );
-		glMultMatrixf(value_ptr(mat));
-	}
-	else
-		glDisable(GL_TEXTURE_2D);
-
-	if( light )
-	{
-		glEnable(GL_LIGHTING);
-	}
-	else
-	{
-		glDisable(GL_LIGHTING);
-	}
-
-	if( blend )
-	{
-		glDepthMask(GL_FALSE);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	}
-	else 
-	{
-		glDepthMask(GL_TRUE);
-		glDisable(GL_BLEND);
-	}
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-
-	float *vertexArray = getVertexBufferPtr();
-	float *normalArray = getNormalBufferPtr();
-	glVertexPointer(3, GL_FLOAT, 0, vertexArray);
-	glNormalPointer(GL_FLOAT, 0, normalArray);
-
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-		glTranslatef(pos.x, pos.y, pos.z); 
-		glRotatef(90.f, 1.f, 0.f, 0.f);
-
-//		glColor4f(0.0f, 0.8f, 1.0f, 0.5f);
-		glColor4f(0.1f, 1.f, 1.f, 0.5f);
-		glDrawElements(GL_TRIANGLES
-					 , numIndices
-					 , GL_UNSIGNED_INT
-					 , indices);
-	glPopMatrix();
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-
-	if( blend )
-	{
-		glDisable(GL_BLEND);
-		glDepthMask(GL_TRUE);
-	}
-
-	if( light )
-	{
-		glDisable(GL_LIGHTING);
-	}
-
-	if( skybox != nullptr ) 
-	{
-		glMatrixMode(GL_TEXTURE);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-
-		glDisable(GL_TEXTURE_GEN_S);
-		glDisable(GL_TEXTURE_GEN_T);
-		glDisable(GL_TEXTURE_GEN_R);
-
-		glDisable(GL_TEXTURE_CUBE_MAP);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-	}
-	else
-		glEnable(GL_TEXTURE_2D);
+	setNight();
+	subRender(camera);
 }
 
 void Fluid::evaluate()
@@ -387,4 +298,126 @@ void Fluid::setSkybox( Skybox *box )
 		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tFrontN.GetPixelsPtr());
 		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tBackN.GetPixelsPtr());
 	}
+}
+
+void Fluid::setDay()
+{
+	if( skybox != nullptr )
+	{
+		glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxEnvTextureDay);
+		glEnable(GL_TEXTURE_CUBE_MAP);
+		glColor4f(0.1f, 1.f, 1.f, skybox->getDayNightCycleDelta());
+	}
+	else
+		glColor4f(0.1f, 1.f, 1.f, 0.7f);
+}
+
+void Fluid::setNight()
+{
+	if( skybox != nullptr )
+	{
+		glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxEnvTextureNight);
+		glEnable(GL_TEXTURE_CUBE_MAP);
+
+
+		glColor4f(0.1f, 1.f, 1.f, 1.f - skybox->getDayNightCycleDelta());
+	}	
+	else
+		glColor4f(0.1f, 1.f, 1.f, 0.7f);
+}
+
+void Fluid::subRender( const Camera& camera )
+{
+
+	// Setup environment mapping
+	if( skybox != nullptr )
+	{
+		glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP);
+		glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP);
+		glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP);
+
+		glEnable(GL_TEXTURE_GEN_S);
+		glEnable(GL_TEXTURE_GEN_T);
+		glEnable(GL_TEXTURE_GEN_R);
+
+		// Invert camera rotation and apply to texture matrix
+		glMatrixMode(GL_TEXTURE);
+		glPushMatrix();
+		mat4 mat( inverse( translate(camera.view(), camera.position()) ) );
+		glMultMatrixf(value_ptr(mat));
+	}
+	else
+		glDisable(GL_TEXTURE_2D);
+
+	if( light )
+	{
+		glEnable(GL_LIGHTING);
+	}
+	else
+	{
+		glDisable(GL_LIGHTING);
+	}
+
+	if( blend )
+	{
+		glDepthMask(GL_FALSE);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+	else 
+	{
+		glDepthMask(GL_TRUE);
+		glDisable(GL_BLEND);
+	}
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+
+	float *vertexArray = getVertexBufferPtr();
+	float *normalArray = getNormalBufferPtr();
+	glVertexPointer(3, GL_FLOAT, 0, vertexArray);
+	glNormalPointer(GL_FLOAT, 0, normalArray);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+		glTranslatef(pos.x, pos.y, pos.z); 
+		glRotatef(90.f, 1.f, 0.f, 0.f);
+
+//		glColor4f(0.0f, 0.8f, 1.0f, 0.5f);
+//		glColor4f(0.1f, 1.f, 1.f, 0.5f);
+		glDrawElements(GL_TRIANGLES
+					 , numIndices
+					 , GL_UNSIGNED_INT
+					 , indices);
+	glPopMatrix();
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+
+	if( blend )
+	{
+		glDisable(GL_BLEND);
+		glDepthMask(GL_TRUE);
+	}
+
+	if( light )
+	{
+		glDisable(GL_LIGHTING);
+	}
+
+	if( skybox != nullptr ) 
+	{
+		glMatrixMode(GL_TEXTURE);
+		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
+
+		glDisable(GL_TEXTURE_GEN_S);
+		glDisable(GL_TEXTURE_GEN_T);
+		glDisable(GL_TEXTURE_GEN_R);
+
+		glDisable(GL_TEXTURE_CUBE_MAP);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+	}
+	else
+		glEnable(GL_TEXTURE_2D);
 }

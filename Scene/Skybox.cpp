@@ -69,6 +69,7 @@ Skybox::Skybox()
 	, nightTextures()
 	, timer()
 	, toggleDayNight(true)
+	, dayNightCycleDelta(0.f)
 {
 	if( !init() )
 		throw exception("Error initializing skybox.");
@@ -146,7 +147,7 @@ void Skybox::render(const Camera& camera)
 	timer.Reset();
 
 	// Day-night cycle delta [0,1]
-	const float delta = deltaTime / timeLimit;
+	dayNightCycleDelta = deltaTime / timeLimit;
 
 	// Setup skybox drawing --------------------------------------
 	glDisable(GL_LIGHTING);
@@ -162,12 +163,12 @@ void Skybox::render(const Camera& camera)
 
 	// Draw day --------------------------------------------------
 	setDay();
-	glColor4f(1.f, 1.f, 1.f, delta);
+	glColor4f(1.f, 1.f, 1.f, dayNightCycleDelta);
 	drawSkybox(camera);
 
 	// Draw night ------------------------------------------------
 	setNight();
-	glColor4f(1.f, 1.f, 1.f, 1.f - delta);
+	glColor4f(1.f, 1.f, 1.f, 1.f - dayNightCycleDelta);
 	drawSkybox(camera);
 
 	// Re-clear the depth buffer so we 
@@ -390,6 +391,11 @@ bool Skybox::getFaceImageMap(const vector<string>& filenames
 		return false;
 	}
 	return true;
+}
+
+float Skybox::getDayNightCycleDelta() const 
+{
+	return dayNightCycleDelta;
 }
 
 const sf::Image& Skybox::getTexture(const Face& face, const bool day)

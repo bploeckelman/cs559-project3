@@ -34,6 +34,7 @@ private:
 	float t_step;
 
 	sf::Clock evalTimer;
+
 	Skybox *skybox;
 	
 	unsigned int skyboxEnvTextureDay;
@@ -41,6 +42,10 @@ private:
 
 	float* getVertexBufferPtr();
 	float* getNormalBufferPtr();
+
+	void setDay();
+	void setNight();
+	void subRender(const Camera& camera);
 
 public:
 	bool blend;  // Toggle alpha blending
