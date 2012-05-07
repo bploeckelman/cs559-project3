@@ -76,6 +76,7 @@ HeightMap::HeightMap( const std::string& imageFilename
 	addTexture(detailTex, detailTexCoord);
 
 	// Setup default render states
+	light        = true;
 	fill         = true;
 	texture      = true;
 	multiTexture = true;
