@@ -103,7 +103,7 @@ Fluid::Fluid( long n, long m, float d
 	t_step = t;
 
 	blend = true;
-	light = true;
+	light = false;
 
 	skyboxEnvTexture = 0;
 }

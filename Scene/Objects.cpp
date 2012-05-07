@@ -41,9 +41,7 @@ Fish::Fish(vec3 pos, Color color, HeightMap& heightmap, Fluid& fluid)
 	, heightmap(heightmap)
 	, quadric(gluNewQuadric())
 	, color(color)
-{
-	gluQuadricNormals(quadric, GLU_SMOOTH);
-}
+{ }
 
 Fish::~Fish()
 {
@@ -84,6 +82,7 @@ void Fish::draw(const Camera& camera)
 	float height = size;
 
 	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_LIGHTING);
 
 	glColor3ub(color.r, color.g, color.b);
 
@@ -459,9 +458,7 @@ Blimp::Blimp(vec3 pos, float size)
 	, theta(0)
 	, btext(GetImage("blimp2.png"))
 	, quadric(gluNewQuadric())
-{
-	gluQuadricNormals(quadric, GLU_SMOOTH);
-}
+{ }
 
 Blimp::~Blimp()
 {
@@ -483,6 +480,8 @@ void Blimp::update(const Clock &clock, const sf::Input& input)
 void Blimp::draw(const Camera& camera)
 {
 	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_LIGHTING);
+
 	btext.Bind();	
 
 	glPushMatrix();
@@ -531,9 +530,7 @@ Campfire::Campfire(vec3 pos, ParticleEmitter& fire, ParticleEmitter& smoke, floa
 	, smoke(smoke)
 	, quadric(gluNewQuadric())
 	, wood(GetImage("cedar.png"))
-{
-	gluQuadricNormals(quadric, GLU_SMOOTH);
-}
+{ }
 
 Campfire::~Campfire()
 {
@@ -543,6 +540,7 @@ Campfire::~Campfire()
 void Campfire::draw(const Camera& camera)
 {
 	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_LIGHTING);
 	wood.Bind();
 	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
@@ -608,7 +606,7 @@ ModelObject::ModelObject( glm::vec3 pos, const std::string& filename, HeightMap&
 	transform[2][2] = size;
 	if( model != nullptr )
 	{
-		model->setRenderMode(GLM_SMOOTH | GLM_TEXTURE);
+		model->setRenderMode(GLM_SMOOTH | GLM_TEXTURE | GLM_MATERIAL);
 	}
 }
 

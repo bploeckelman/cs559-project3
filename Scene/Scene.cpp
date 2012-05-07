@@ -132,6 +132,7 @@ void Scene::setup()
 	objects.push_back(new ModelObject(vec3(35, heightmap->heightAt(35, 20)+1.f, 20), "./Resources/models/car/car_riviera.obj", *heightmap, 4.f));
 	objects.push_back(new FishingRod(vec3(120, heightmap->heightAt(120, 75), 75), *heightmap, 4.f));
 
+
 	const vec3 position1(60.f, heightmap->heightAt(60, 100) + 2.f, 100.f);
 	FountainEmitter *fountain = new FountainEmitter(position1, 20);
 	FireEmitter *fire = new FireEmitter(vec3(30, heightmap->heightAt(30, 30), 30) + 1.f, 500);
@@ -183,6 +184,12 @@ void Scene::setup()
 
 	// setup lighting 
 	setupLights();
+
+	// perform perspective projection
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(value_ptr(camera->projection()));
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 
 	// Log setup duration
 	const float delta = timer.GetElapsedTime();
@@ -309,7 +316,7 @@ void Scene::update( const Clock& clock, const Input& input )
 	const vec4& pos0 = lights[0]->position();
 	const vec4& pos1 = lights[1]->position();
 	lights[0]->position(pos0 + 0.5f * vec4(cos(delta), 0.f, sin(delta), 0.f));
-	lights[1]->position(pos1 + 0.1f * vec4(0.f, sin(delta), 0.f, 0.f));
+	lights[1]->position(pos1 + 0.1f * vec4(cos(delta), 0.f, sin(delta), 0.f));
 
 	timer.Reset();
 }
@@ -325,29 +332,18 @@ void Scene::render( const Clock& clock )
 	for each(auto mesh in meshes)
 		mesh->render();
 
-	// TODO: remove these
 	meshOverlay->render();
-	fluid->render();
 
-	glEnable(GL_LIGHTING);
 	for each(auto object in objects)
 		object->draw(*camera);
+
+	fluid->render();
+
 	glDisable(GL_LIGHTING);
-
-	// TODO: ObjModel should be a part of a SceneObject
-	// so that it has its own transform
-	//glEnable(GL_LIGHTING);
-	/*glPushMatrix();
-	glTranslatef(32, 15, 40);
-	glScalef(3,3,3);
-	for each(auto model in models)
-		model->render();
-	glPopMatrix();
-	glDisable(GL_LIGHTING);*/
-
 	for each(auto object in alphaObjects)
 		object->draw(*camera);
 
+	glDisable(GL_LIGHTING);
 	particleMgr.render(*camera);
 
 	glDisable(GL_LIGHTING);
