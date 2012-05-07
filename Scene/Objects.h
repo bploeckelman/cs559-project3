@@ -9,6 +9,7 @@
 #include "HeightMap.h"
 #include "../Core/ImageManager.h"
 #include "../Particles/Particles.h"
+#include "../Utility/ObjModel.h"
 
 #include <SFML\Graphics.hpp>
 
@@ -132,6 +133,25 @@ public:
 			, float size );
 
 	~Campfire();
+
+	void draw(const Camera& camera);
+};
+
+
+/************************************************************************/
+/* Model Object
+/* --------
+/* Holds a ObjModel
+/************************************************************************/
+
+class ModelObject : public SceneObject{
+private:
+	ObjModel*	model;
+
+public:
+	ModelObject( glm::vec3 pos, const std::string& filename, float size);
+
+	~ModelObject();
 
 	void draw(const Camera& camera);
 };

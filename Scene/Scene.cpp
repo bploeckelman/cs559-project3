@@ -106,12 +106,12 @@ void Scene::setup()
 	meshOverlay = new MeshOverlay(*heightmap);
 
 	// load models
-	ObjModel *model = new ObjModel("./Resources/models/house/house.obj");
+	/*ObjModel *model = new ObjModel("./Resources/models/house/house.obj");
 	if( model != nullptr )
 	{
 		model->setRenderMode(GLM_SMOOTH | GLM_TEXTURE);
 		models.push_back(model);
-	}
+	}*/
 
 	// generate a new fluid surface
 	fluid = new Fluid(
@@ -129,6 +129,7 @@ void Scene::setup()
 	const vec3 housePos(100.f, heightmap->heightAt(100,100) + 10, 100.f);
 	objects.push_back(new House(housePos, sf::Color(0, 255, 0), stone, 10, 20, 10));
 	objects.push_back(new Blimp(vec3(120, 50, 80), 10));
+	objects.push_back(new ModelObject(vec3(15, heightmap->heightAt(15, 20) + 3.5, 20), "./Resources/models/house/house.obj", 7.f));
 
 	const vec3 position1(60.f, heightmap->heightAt(60, 100) + 2.f, 100.f);
 	FountainEmitter *fountain = new FountainEmitter(position1, 20);
@@ -279,17 +280,17 @@ void Scene::render( const Clock& clock )
 
 	// TODO: ObjModel should be a part of a SceneObject
 	// so that it has its own transform
-	glEnable(GL_LIGHTING);
+	//glEnable(GL_LIGHTING);
 //	glPolygonMode(GL_FRONT, GL_LINE);
 //	glColor3f(1,1,1);
-	glPushMatrix();
+	/*glPushMatrix();
 	glTranslatef(32, 15, 40);
 	glScalef(3,3,3);
 	for each(auto model in models)
 		model->render();
 	glPopMatrix();
 //	glPolygonMode(GL_FRONT, GL_FILL);
-	glDisable(GL_LIGHTING);
+	glDisable(GL_LIGHTING);*/
 
 	for each(auto object in alphaObjects)
 		object->draw(*camera);

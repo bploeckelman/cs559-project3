@@ -581,3 +581,41 @@ void Campfire::draw(const Camera& camera)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
+
+
+/************************************************************************/
+/* Model Object
+/* --------
+/* Holds a ObjModel
+/************************************************************************/
+
+	ObjModel*	model;
+
+ModelObject::ModelObject( glm::vec3 pos, const std::string& filename, float size =1.f)
+	: SceneObject(pos)
+	, model(new ObjModel(filename))
+{
+	transform[0][0] = size;
+	transform[1][1] = size;
+	transform[2][2] = size;
+	if( model != nullptr )
+	{
+		model->setRenderMode(GLM_SMOOTH | GLM_TEXTURE);
+	}
+}
+
+ModelObject::~ModelObject()
+{
+	delete model;
+}
+
+void ModelObject::draw(const Camera& camera)
+{
+	if( model != nullptr )
+	{
+		glPushMatrix();
+			glMultMatrixf(glm::value_ptr(transform));
+			model->render();
+		glPopMatrix();
+	}
+}
