@@ -62,6 +62,7 @@ public:
 	void init();
 	// Update this scene, process input
 	void update(const sf::Clock& clock, const sf::Input& input);
+
 	// Render this scene's objects from the current camera perspective
 	void render(const sf::Clock& clock);
 	// Handle an event generated from an SFML Window
@@ -76,8 +77,12 @@ public:
 private:
 	// Load resources, arrange scene and cameras
 	void setup();
+	// Sort transparent scene objects based on distance to camera
+	void sortTransparentObjects();
 	// Setup the OpenGL lighting for the scene
 	void setupLights();
+	// Update the OpenGL lighting for the scene
+	void updateLights();
 	// Free any allocated memory, called on destruction
 	void cleanup();
 };
