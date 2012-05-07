@@ -39,7 +39,9 @@ Fish::Fish(vec3 pos, Color color, HeightMap& heightmap, Fluid& fluid)
 	, heightmap(heightmap)
 	, quadric(gluNewQuadric())
 	, color(color)
-{ }
+{
+	gluQuadricNormals(quadric, GLU_SMOOTH);
+}
 
 Fish::~Fish()
 {
@@ -455,7 +457,9 @@ Blimp::Blimp(vec3 pos, float size)
 	, theta(0)
 	, btext(GetImage("blimp2.png"))
 	, quadric(gluNewQuadric())
-{ }
+{
+	gluQuadricNormals(quadric, GLU_SMOOTH);
+}
 
 Blimp::~Blimp()
 {
@@ -525,7 +529,9 @@ Campfire::Campfire(vec3 pos, ParticleEmitter& fire, ParticleEmitter& smoke, floa
 	, smoke(smoke)
 	, quadric(gluNewQuadric())
 	, wood(GetImage("cedar.png"))
-{ }
+{
+	gluQuadricNormals(quadric, GLU_SMOOTH);
+}
 
 Campfire::~Campfire()
 {
