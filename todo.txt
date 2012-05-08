@@ -1,6 +1,7 @@
 - move car along road, add more cars
 - put campfire by house by lake
 - see if mipmaps work for Buildings on lab computers
+- randomly rotate windmills on y axis for variety
 - write up readme
 - submit
 - probably other things
