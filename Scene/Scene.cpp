@@ -184,14 +184,16 @@ void Scene::setup()
 		heightmap->flattenArea(buildingbb->getEdges()[0].y, minXZ, maxXZ);
 	}
 
+	// Add the goodyear blimp
 	objects.push_back(new Blimp(vec3(120, 150, 80), 10));
 
+	// Add the articulated fishing rod
 	objects.push_back(new FishingRod(vec3(195, heightmap->heightAt(195, 250), 250), *heightmap, 4.f));
 
+	// Add the house model
 	const vec3 housePos(193.5, heightmap->heightAt(193.5, 258.5) + 4.f, 258.5);
 	ModelObject* house = new ModelObject(housePos, "./Resources/models/house/house.obj", *heightmap, 7.f);
 	objects.push_back(house);
-//	bounds.push_back(new BoundingBox(*house, vec3(15 - 7, heightmap->heightAt(15, 20) + 3.5 - 7, 20 - 7), vec3(15 + 7, heightmap->heightAt(15, 20) + 3.5 + 7, 20 + 7)));
 	// Manually flatten area under house
 	heightmap->flattenArea(vec2(185.f, 250.5f), vec2(201.5, 266.5), 0.1f);
 
@@ -213,12 +215,12 @@ void Scene::setup()
 	ps->start();
 	particleMgr.add(ps);
 
-
+	// Add the car model
 	ModelObject* carModel = new ModelObject(vec3(64, heightmap->heightAt(64, 16.5)+1.f, 16.5), "./Resources/models/car/car_riviera.obj", *heightmap, 4.f);
 	objects.push_back(carModel);
-//	bounds.push_back(new BoundingBox(*car, vec3(35 - 4, heightmap->heightAt(35, 20)+1.f - 4, 20 - 4), vec3(35 + 4, heightmap->heightAt(35, 20)+1.f + 4, 20 + 4)));
 	car = carModel;
 
+	// Add several windmills
 	const unsigned int numWindmills = 3;
 	for(unsigned int i = 0; i < numWindmills; ++i)
 	{
@@ -248,7 +250,7 @@ void Scene::setup()
 		heightmap->flattenArea(windbb->getEdges()[0].y - .1f, minXZ, maxXZ);
 	}
 	
-
+	// Add lots of fish
 	const unsigned int numFish = 15;
 	for(unsigned int i = 0; i < numFish; ++i)
 	{
@@ -265,9 +267,8 @@ void Scene::setup()
 		objects.push_back(new Fish(pos, sf::Color(255, 127, 0), *heightmap, *fluid));
 	}
 
-
+	// Add several campfires
 	ParticleSystem  *system3 = new ParticleSystem();
-
 	const unsigned int numFires = 6;
 	for(unsigned int i = 0; i < numFires; ++i)
 	{
@@ -308,12 +309,9 @@ void Scene::setup()
 		heightmap->flattenArea(firebb->getEdges()[0].y - .1f, minXZ, maxXZ);
 	}
 
-	
-	
-	
-	//moved to accomodate multiple fountains
+		
+	// Add several fountains
 	ParticleSystem  *system1 = new ParticleSystem();
-
 	const unsigned int numFountains = 4;
 	for(unsigned int i = 0; i < numFountains; ++i)
 	{
@@ -350,7 +348,6 @@ void Scene::setup()
 		heightmap->flattenArea(founbb->getEdges()[0].y - .1f, minXZ, maxXZ);
 	}
 
-	
 
 	// add transparent scene objects -----------------------------
 	const unsigned int numBushes = 50;
@@ -373,8 +370,8 @@ void Scene::setup()
 		alphaObjects.push_back(new Plant(pos)); 
 	}
 
+
 	// add particle systems --------------------------------------
-	
 	system1->start();
 	particleMgr.add(system1);
 
@@ -673,6 +670,7 @@ void Scene::updateLights()
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(ambient));
 
 	// move lights around 
+/*
 	static float limit = constants::two_pi;
 	static float accum = 0.f;
 	if( (accum += timer.GetElapsedTime()) > limit )
@@ -683,4 +681,5 @@ void Scene::updateLights()
 	const vec4& pos1 = lights[1]->position();
 	lights[0]->position(pos0 + 0.5f * vec4(cos(accum), 0.f, sin(accum), 0.f));
 	lights[1]->position(pos1 + 0.1f * vec4(cos(accum), 0.f, sin(accum), 0.f));
+*/
 }

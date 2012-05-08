@@ -48,12 +48,12 @@ House::House(glm::vec3 pos, sf::Color color, int houseType, int roofType, float 
 {
 //	roof.Bind();
 //	glEnable(GL_TEXTURE_2D);
-//  glGenerateMipmap(true);
+//	glGenerateMipmap(true);
 //	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 
 //	side.Bind();
 //	glEnable(GL_TEXTURE_2D);
-//  glGenerateMipmap(true);
+//	glGenerateMipmap(true);
 //	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 }
 
@@ -70,8 +70,8 @@ void House::draw(const Camera& camera)
 		side.Bind();
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);		
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
 		float l = length;
@@ -82,42 +82,42 @@ void House::draw(const Camera& camera)
 		//sides
 		glBegin(GL_QUADS);
 			glNormal3d(0,0,1);
-				glTexCoord2f(0.f,    0.f);glVertex3d(-w,-height,l);
-				glTexCoord2f(w, 0.f);glVertex3d(w,-height,l);
-				glTexCoord2f(w, height);glVertex3d(w,height,l);
-				glTexCoord2f(0.f,   height);glVertex3d(-w,height,l);
+				glTexCoord2f(0.f, 0.f);glVertex3d(-w,-height,l);
+				glTexCoord2f(1.f, 0.f);glVertex3d(w,-height,l);
+				glTexCoord2f(1.f, 1.f);glVertex3d(w,height,l);
+				glTexCoord2f(0.f, 1.f);glVertex3d(-w,height,l);
 
 			glNormal3d( 0,0,-1);
-				glTexCoord2f(0.f,    0.f);glVertex3d(-w,-height,-l);
-				glTexCoord2f(0.f,  height);glVertex3d(-w,height,-l);
-				glTexCoord2f(w, height);glVertex3d(w,height,-l);
-				glTexCoord2f(w,   0.f);glVertex3d(w,-height,-l);
+				glTexCoord2f(0.f, 0.f);glVertex3d(-w,-height,-l);
+				glTexCoord2f(0.f, 1.f);glVertex3d(-w,height,-l);
+				glTexCoord2f(1.f, 1.f);glVertex3d(w,height,-l);
+				glTexCoord2f(1.f, 0.f);glVertex3d(w,-height,-l);
 
 			glNormal3d( 1, 0, 0);
-				glTexCoord2f(l,    0.f);glVertex3d(w,-height, -l);
-				glTexCoord2f(l,    height);glVertex3d(w,height, -l);
-				glTexCoord2f(0.f,    height);glVertex3d(w,height, l);
-				glTexCoord2f(0.f,   0.f);glVertex3d(w,-height,l);
+				glTexCoord2f(1.f, 0.f);glVertex3d(w,-height, -l);
+				glTexCoord2f(1.f, 1.f);glVertex3d(w,height, -l);
+				glTexCoord2f(0.f, 1.f);glVertex3d(w,height, l);
+				glTexCoord2f(0.f, 0.f);glVertex3d(w,-height,l);
 
 
 			glNormal3d( -1,0,0);
-				glTexCoord2f(0.f,    0.f);glVertex3d(-w,-height,-l);
-				glTexCoord2f(l,    0.f);glVertex3d(-w,-height,l);
-				glTexCoord2f(l,    height);glVertex3d(-w,height,l);
-				glTexCoord2f(0.f,   height);glVertex3d(-w,height,-l);
+				glTexCoord2f(0.f, 0.f);glVertex3d(-w,-height,-l);
+				glTexCoord2f(1.f, 0.f);glVertex3d(-w,-height,l);
+				glTexCoord2f(1.f, 1.f);glVertex3d(-w,height,l);
+				glTexCoord2f(0.f, 1.f);glVertex3d(-w,height,-l);
 
 			//bottom
 			glNormal3d( 0,1,0);
-				glTexCoord2f(0.f,    0.f);glVertex3d(-w,-height,-l);
-				glTexCoord2f(0.f,    l);glVertex3d(-w,-height,l);
-				glTexCoord2f(w,    l);glVertex3d(w,-height,l);
-				glTexCoord2f(w,  0.f);glVertex3d(w,-height,-l);
+				glTexCoord2f(0.f, 0.f);glVertex3d(-w,-height,-l);
+				glTexCoord2f(0.f, 1.f);glVertex3d(-w,-height,l);
+				glTexCoord2f(1.f, 1.f);glVertex3d(w,-height,l);
+				glTexCoord2f(1.f, 0.f);glVertex3d(w,-height,-l);
 
 			glNormal3d( 0,-1,0);
-				glTexCoord2f(w,    l);glVertex3d(-w,-height,-l);
-				glTexCoord2f(0.f,   l);glVertex3d(w,-height,-l);
-				glTexCoord2f(0.f,    0.f);glVertex3d(w,-height,l);
-				glTexCoord2f(w,    0.f);glVertex3d(-w,-height,l);
+				glTexCoord2f(1.f, 1.f);glVertex3d(-w,-height,-l);
+				glTexCoord2f(0.f, 1.f);glVertex3d(w,-height,-l);
+				glTexCoord2f(0.f, 0.f);glVertex3d(w,-height,l);
+				glTexCoord2f(1.f, 0.f);glVertex3d(-w,-height,l);
 		glEnd();
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -134,14 +134,14 @@ void House::draw(const Camera& camera)
 	w += 1;
 	
 	roof.Bind();
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);		
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);		
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 	//roof
 	glPushMatrix();
 		glTranslatef(tmp.x, tmp.y, tmp.z);
-		glDisable(GL_TEXTURE_2D);
+//		glDisable(GL_TEXTURE_2D);
 		glColor3f(0.1f, 0.1f, 0.f);
 		glPushMatrix();
 			glRotatef(180, 1, 0, 0);
@@ -153,7 +153,7 @@ void House::draw(const Camera& camera)
 				glVertex3d(w, 0, -l);
 			glEnd();
 		glPopMatrix();
-		glEnable(GL_TEXTURE_2D);
+//		glEnable(GL_TEXTURE_2D);
 
 		/*glm::vec3 norm = glm::vec3((glm::vec3(-w, 0, -l).z - glm::vec3(0, height, 0).z)*(glm::vec3(-w, 0, l).x - glm::vec3(0, height, 0).x)
 			- (glm::vec3(-w, 0, -l).x - glm::vec3(0, height, 0).x)*(glm::vec3(-w, 0, l).z - glm::vec3(0, height, 0).z));*/

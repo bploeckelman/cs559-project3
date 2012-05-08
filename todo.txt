@@ -1,7 +1,8 @@
 - move car along road, add more cars
-- put campfire by house by lake
-- see if mipmaps work for Buildings on lab computers
+X put campfire by house by lake
+X remove scene.cpp.orig
+X see if mipmaps work for Buildings on lab computers (nope)
 - randomly rotate windmills on y axis for variety
-- write up readme
+- write up readme (in progress) 
 - submit
-- probably other things
+
