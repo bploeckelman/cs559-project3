@@ -5,6 +5,7 @@
 /************************************************************************/
 
 #include "BoundingBox.h"
+#include <iostream>
 
 
 BoundingBox::BoundingBox(glm::vec3 pos, glm::vec3 greater, glm::vec3 lesser)
@@ -15,7 +16,7 @@ BoundingBox::BoundingBox(glm::vec3 pos, glm::vec3 greater, glm::vec3 lesser)
 	edges[1] = greater;
 }
 
-BoundingBox::BoundingBox(MeshOverlay& mesh, glm::vec3 lesser, glm::vec3 greater)
+BoundingBox::BoundingBox(MeshOverlay& mesh)//, glm::vec3 lesser, glm::vec3 greater)
 {
 	
 
@@ -29,8 +30,8 @@ BoundingBox::BoundingBox(MeshOverlay& mesh, glm::vec3 lesser, glm::vec3 greater)
 		{
 			for(int k = 0; k < 3; ++k)
 			{
-				edges[0][k] < mesh.vertexAt(i , j)[k] ? edges[0][k] : mesh.vertexAt(i , j)[k];
-				edges[1][k] > mesh.vertexAt(i , j)[k] ? edges[0][k] : mesh.vertexAt(i , j)[k];
+				edges[0][k] = edges[0][k] < mesh.vertexAt(i , j)[k] ? edges[0][k] : mesh.vertexAt(i , j)[k];
+				edges[1][k] = edges[1][k] > mesh.vertexAt(i , j)[k] ? edges[0][k] : mesh.vertexAt(i , j)[k];
 			}
 		}
 	}	
@@ -40,6 +41,12 @@ BoundingBox::BoundingBox(MeshOverlay& mesh, glm::vec3 lesser, glm::vec3 greater)
 	edges[1][0] -= mesh.getOffset().x;
 	edges[0][2] -= mesh.getOffset().y;
 	edges[1][2] -= mesh.getOffset().y;
+	std::cout << edges[0][0] << std::endl;
+	std::cout << edges[0][1] << std::endl;
+	std::cout << edges[0][2] << std::endl;
+	std::cout << edges[1][0] << std::endl;
+	std::cout << edges[1][1] << std::endl;
+	std::cout << edges[1][2] << std::endl;
 }
 
 BoundingBox::BoundingBox(ModelObject& obj, glm::vec3 lesser, glm::vec3 greater)

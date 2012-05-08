@@ -75,14 +75,14 @@ void Scene::setup()
 
 	glClearColor(0.1f, 0.1f, 0.1f, 1.f);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-
+/*
 	const vec4 fogColor(0.1f, 0.1f, 0.1f, 1.f);
-	const float fogDensity = 0.0025f;
+	const float fogDensity = 0.01f;
 	glEnable(GL_FOG);
 	glFogi(GL_FOG_MODE, GL_EXP2);
 	glFogfv(GL_FOG_COLOR, value_ptr(fogColor));
 	glFogf(GL_FOG_DENSITY, fogDensity);
-
+*/
 	// setup texture directories ---------------------------------
 	ImageManager::get().addResourceDir("Resources/images/");
 	ImageManager::get().addResourceDir("Resources/images/plants/");
@@ -93,8 +93,7 @@ void Scene::setup()
 	ImageManager::get().addResourceDir("../../Resources/images/particles/");
 
 	// setup meshes ----------------------------------------------
-//	HeightMap *heightmap = new HeightMap(512, 512, 0.f, 0.f, 2.f, 200.f);
-	HeightMap *heightmap = new HeightMap("heightmap-terrain.png", 0.f, 0.f, 2.f, 100.f); 
+	HeightMap *heightmap = new HeightMap("heightmap-terrain.png", 0.f, 0.f, 2.f, 200.f); 
 //	HeightMap *heightmap2 = new HeightMap("heightmap-terrain.png",256.f, 256.f); 
 //	HeightMap *heightmap3 = new HeightMap("heightmap-terrain.png",256.f, 0.f);
 	
@@ -103,6 +102,7 @@ void Scene::setup()
 //	meshes.push_back(heightmap3);
 
 	meshOverlay = new MeshOverlay(*heightmap);
+	bounds.push_back(new BoundingBox(*meshOverlay));
 
 	// generate a new fluid surface ------------------------------
 	fluid = new Fluid(
@@ -112,7 +112,7 @@ void Scene::setup()
 		0.03f, // time step for evaluation
 		10.0f,  // wave velocity
 		0.1f,  // fluid viscosity
-		vec3(80.f, 30.f, 80.f)
+		vec3(40.f, 100.f, 40.f)
 	);
 	fluid->setSkybox(&skybox);
 	
@@ -124,16 +124,15 @@ void Scene::setup()
 
 	ModelObject* house = new ModelObject(vec3(15, heightmap->heightAt(15, 20) + 3.5, 20), "./Resources/models/house/house.obj", *heightmap, 7.f);
 	objects.push_back(house);
-	bounds.push_back(new BoundingBox(*house));
+	bounds.push_back(new BoundingBox(*house, vec3(15 - 7, heightmap->heightAt(15, 20) + 3.5 - 7, 20 - 7), vec3(15 + 7, heightmap->heightAt(15, 20) + 3.5 + 7, 20 + 7)));
 	ModelObject* car = new ModelObject(vec3(35, heightmap->heightAt(35, 20)+1.f, 20), "./Resources/models/car/car_riviera.obj", *heightmap, 4.f);
 	objects.push_back(car);
-	bounds.push_back(new BoundingBox(*car));
+	bounds.push_back(new BoundingBox(*car, vec3(35 - 4, heightmap->heightAt(35, 20)+1.f - 4, 20 - 4), vec3(35 + 4, heightmap->heightAt(35, 20)+1.f + 4, 20 + 4)));
 
 	//objects.push_back(new FishingRod(vec3(120, heightmap->heightAt(120, 75), 75), *heightmap, 4.f));
 	Windmill* windmill = new Windmill(vec3(120, heightmap->heightAt(120, 75), 75), *heightmap, 50.f);
 	objects.push_back(windmill);
-	bounds.push_back(new BoundingBox(*windmill));
-
+	bounds.push_back(new BoundingBox(*windmill, vec3(120 - 50, heightmap->heightAt(120, 75) - 50, 75 - 50), vec3(120 + 50, heightmap->heightAt(120, 75) + 50, 75 + 50)));
 
 	objects.push_back(new Fish(vec3(70, 3.5f, 75), sf::Color(255, 127, 0), *heightmap, *fluid));
 
@@ -144,13 +143,13 @@ void Scene::setup()
 	
 	Campfire* campfire = new Campfire(firePosition, *fire, *smoke, 5.f);
 	objects.push_back(campfire);
-	bounds.push_back(new BoundingBox(*campfire));
+	bounds.push_back(new BoundingBox(*campfire, glm::vec3(firePosition.x - 5, firePosition.y - 5, firePosition.z - 5) , glm::vec3(firePosition.x + 5, firePosition.y + 5, firePosition.z + 5)));
 
 	const vec3 fountainPosition(60.f, heightmap->heightAt(60, 100) + 2.f, 100.f);
 	FountainEmitter *fountain = new FountainEmitter(fountainPosition, 20);
 	Fountain* foun = new Fountain(fountainPosition - vec3(0,1.f,0), 10, *fountain, &skybox);
 	objects.push_back(foun);
-	bounds.push_back(new BoundingBox(*foun));
+	bounds.push_back(new BoundingBox(*foun, glm::vec3(fountainPosition.x - 10, fountainPosition.y - 10, fountainPosition.z - 10) , glm::vec3(fountainPosition.x + 10, fountainPosition.y + 10, fountainPosition.z + 10)));
 
 	// add transparent scene objects -----------------------------
 	const unsigned int numBushes = 50;
@@ -221,7 +220,7 @@ void Scene::setup()
 void Scene::setupLights()
 {
 	Light *light0 = new Light();
-	light0->position(vec4(256.f , 75.f, 256.f, 1.f));
+	light0->position(vec4(128.f , 15.f, 128.f, 1.f));
 	light0->ambient(vec4(1.f, 1.f, 1.f, 1.f));
 	light0->diffuse(vec4(1.f, 1.f, 1.f, 1.f));
 	light0->enable();
@@ -230,15 +229,35 @@ void Scene::setupLights()
 	// MOAR HACK !!!
 	HeightMap *h = reinterpret_cast<HeightMap*>(meshes.front());
 	Light *light1 = new Light();
-	light1->position(vec4(128.f , h->heightAt(128,128) + 4.f, 128.f, 1.f));
+	light1->position(vec4(32.f , h->heightAt(32,32) + 4.f, 32.f, 1.f));
 	light1->ambient(vec4(1.f, 1.f, 1.f, 1.f));
 	light1->diffuse(vec4(1.f, 1.f, 1.f, 1.f));
 	light1->enable();
-
+/*
+	Light *light2 = new Light(
+		vec4(50.f, 40.f, 100.f, 1.f),      // position
+		vec4(0.1f, 0.1f, 0.1f, 1.f),  // ambient
+		vec4(0.f, 1.f, 0.3f, 1.f),    // diffuse
+		vec4(0.f, 1.f, 0.f, 1.f)      // specular 
+	);
+	light2->disable();
+//	light2->enable();
+*/
 	lights.push_back(light0);
 	lights.push_back(light1);
+//	lights.push_back(light2);
 
-	vec4 ambient(0.1f, 0.1f, 0.1f, 1.f);
+	// setup and enable materials
+	vec4 ambient(0.2f, 0.2f, 0.2f, 1.f);
+//	vec4 diffuse(1.f, 1.f, 1.f, 1.f);
+//	vec4 specular(0.f, 0.f, 1.f, 1.f);
+//	float shininess[1] = { 50.f };
+
+//	glMaterialfv(GL_FRONT, GL_AMBIENT, value_ptr(ambient));
+//	glMaterialfv(GL_FRONT, GL_DIFFUSE, value_ptr(diffuse));
+//	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(specular));
+//	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
+
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(ambient));
 
 	glEnable(GL_LIGHTING);
@@ -277,15 +296,29 @@ void Scene::render( const Clock& clock )
 
 	skybox.render(*camera);
 
+//	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.0f, 0.0f, 0.0f, 1.f)));
+//	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.1f, 0.4f, 0.1f, 1.f)));
+//	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.1f, 0.4f, 0.1f, 1.f)));
+//	glMaterialf (GL_FRONT, GL_SHININESS, 0.f);
 	for each(auto mesh in meshes)
 		mesh->render();
 
+//	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.1f, 0.1f, 0.1f, 1.f)));
+//	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.6f, 0.6f, 0.6f, 1.f)));
+//	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.6f, 0.6f, 0.6f, 1.f)));
+//	glMaterialf (GL_FRONT, GL_SHININESS, 1.f);
 	meshOverlay->render();
 
 	for each(auto object in objects)
 		object->draw(*camera);
 
+//	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.2f, 0.2f, 0.2f, 1.f)));
+//	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.1f, 0.8f, 1.0f, 0.7f)));
+//	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.1f, 0.8f, 1.0f, 1.f)));
+//	glMaterialf (GL_FRONT, GL_SHININESS, 60.f);
+	glDisable(GL_COLOR_MATERIAL);
 	fluid->render(*camera);
+	glEnable(GL_COLOR_MATERIAL);
 
 	glDisable(GL_LIGHTING);
 	for each(auto object in alphaObjects)
@@ -297,6 +330,10 @@ void Scene::render( const Clock& clock )
 	for each(auto light in lights)
 		light->render();
 
+//	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.1f, 0.1f, 0.1f, 1.f)));
+//	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(1.0f, 1.0f, 1.0f, 1.f)));
+//	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(1.0f, 1.0f, 1.0f, 1.f)));
+//	glMaterialf (GL_FRONT, GL_SHININESS, 0.f);
 	Render::basis();
 }
 
@@ -409,12 +446,35 @@ void Scene::sortTransparentObjects()
 
 void Scene::updateLights()
 {
-	const float delta = skybox.getDayNightCycleDelta();
+	// Hacky sort of stuff to change ambient light level 
+	// based on time of day
+	static const float timeLimit = 60.f; // in seconds
+	static float delta = 0.f;
+	static bool toggle = true;
+	if( toggle )
+	{
+		delta += timer.GetElapsedTime();
+		if( delta > timeLimit )
+		{
+			toggle = !toggle;
+			delta  = timeLimit;
+		}
+	}
+	else
+	{
+		delta -= timer.GetElapsedTime();
+		if( delta < 0.f )
+		{
+			toggle = !toggle;
+			delta  = 0.f;
+		}
+	}
+
 	static const float step = 0.1f;
 
 	float ds = step * delta;
-	if( ds < 0.2f  ) ds = 0.2f; // keep it from pitch black
-	if( ds > 0.9f ) ds = 0.9f; // keep it from full bright
+	if( ds < 0.5f  ) ds = 0.5f; // keep it from pitch black
+	if( ds > 1.f ) ds = 1.f; // keep it from full bright
 	vec4 ambient(ds, ds, ds, 1.f);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(ambient));
 
