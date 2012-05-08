@@ -268,7 +268,7 @@ void Mesh::initialize( const sf::Image& image
 	}
 
 	// Smooth mesh height values
-	for(int i = 0; i < 50; ++i)
+	for(int i = 0; i < 20; ++i)
 		smoothHeights();
 
 	generateArrayIndices();
@@ -557,8 +557,8 @@ vec2& Mesh::texcoordAt( const unsigned int col
 void Mesh::smoothHeights()
 {
 	assert(vertices != nullptr);
-	for(unsigned int z = 1; z < (height - 1); ++z)
-	for(unsigned int x = 1; x < (width  - 1); ++x)
+	for(unsigned int z = 0; z < height; ++z)
+	for(unsigned int x = 0; x < width;  ++x)
 	{
 		vec3& v0 = vertexAt(x,z);
 
