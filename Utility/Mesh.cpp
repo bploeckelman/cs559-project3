@@ -509,8 +509,8 @@ vec2& Mesh::texcoordAt( const unsigned int col
 void Mesh::smoothHeights()
 {
 	assert(vertices != nullptr);
-	for(unsigned int z = 0; z < height; ++z)
-	for(unsigned int x = 0; x < width;  ++x)
+	for(unsigned int z = 1; z < (height - 1); ++z)
+	for(unsigned int x = 1; x < (width - 1);  ++x)
 	{
 		vec3& v0 = vertexAt(x,z);
 
