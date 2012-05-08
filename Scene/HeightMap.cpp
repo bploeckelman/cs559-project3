@@ -227,3 +227,34 @@ void HeightMap::zeroHeightValues()
 	for(unsigned int x = 0; x < width;  ++x)
 		vertexAt(x,z).y = 0.f;
 }
+
+void HeightMap::flattenArea( const glm::vec2& minXZ
+						   , const glm::vec2& maxXZ
+						   , float tolerance )
+{
+	const unsigned int minx = static_cast<unsigned int>(minXZ.x);
+	const unsigned int minz = static_cast<unsigned int>(minXZ.y);
+	const unsigned int maxx = static_cast<unsigned int>(maxXZ.x);
+	const unsigned int maxz = static_cast<unsigned int>(maxXZ.y);
+
+	// First find average height level
+	float avgHeight = 0.f;
+	int count = 0;
+	for(unsigned int z = minz; z <= maxz; ++z)
+	for(unsigned int x = minx; x <= maxx; ++x)
+	{
+		avgHeight += vertexAt(x, z).y;
+		++count;
+	}
+	avgHeight /= count;
+
+	// Next, lower heights more than tolerance above avg
+	// and raise heights more than tolerance below avg
+	for(unsigned int z = minz; z <= maxz; ++z)
+	for(unsigned int x = minx; x <= maxx; ++x)
+	{
+		vec3& v = vertexAt(x, z);
+		if( v.y < avgHeight - tolerance ) v.y = avgHeight - tolerance;
+		if( v.y > avgHeight + tolerance ) v.y = avgHeight + tolerance;
+	}
+}

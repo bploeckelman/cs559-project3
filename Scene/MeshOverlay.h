@@ -23,6 +23,8 @@ public:
                , const unsigned int offsetw = 60
                , const unsigned int offseth = 5 );
 
+	void regenerateVertices();
+
 	const glm::vec2 getOffset() const;
 };
 
