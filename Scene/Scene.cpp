@@ -114,7 +114,6 @@ void Scene::setup()
 	BoundingBox *bb = new BoundingBox(*meshOverlay);
 	bounds.push_back(bb);
 
-	// TESTING!!
 	// Flatten HeightMap under MeshOverlay
 	vec2 minXZ(bb->getEdges()[0].x, bb->getEdges()[0].z);
 	vec2 maxXZ(bb->getEdges()[1].x, bb->getEdges()[1].z);
@@ -186,6 +185,8 @@ void Scene::setup()
 	}
 
 	objects.push_back(new Blimp(vec3(120, 150, 80), 10));
+
+	objects.push_back(new FishingRod(vec3(195, heightmap->heightAt(195, 250), 250), *heightmap, 4.f));
 
 	ModelObject* house = new ModelObject(vec3(193.5, heightmap->heightAt(193.5, 258.5) + 4.f, 258.5), "./Resources/models/house/house.obj", *heightmap, 7.f);
 	objects.push_back(house);
@@ -531,10 +532,10 @@ void Scene::render( const Clock& clock )
 
 	particleMgr.render(*camera);
 
-	glDisable(GL_LIGHTING);
-	for each(auto light in lights)
-		light->render();
+//	for each(auto light in lights)
+//		light->render();
 
+	glDisable(GL_LIGHTING);
 	Render::basis();
 
 //	for each(auto bound in bounds)
