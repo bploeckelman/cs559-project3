@@ -62,6 +62,8 @@ public:
 	float getHeightScale() const;
 	float getGroundScale() const;
 
+	void flattenArea(const glm::vec2& minXZ, const glm::vec2& maxXZ, float tolerance);
+
 private:
 	void diamondSquare(bool smooth = true);
 	void randomizeGaussian();

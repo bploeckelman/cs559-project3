@@ -23,6 +23,28 @@ MeshOverlay::MeshOverlay( Mesh& parent
 	, offseth(offseth)
 {
 	// initialize vertices based on offset and parent
+	regenerateVertices();
+
+	// initialize texture
+	glm::vec2 *texcoord = new glm::vec2[numVertices];
+
+	unsigned int i  = 0;
+	float ts = 0.1f;
+	for(unsigned int z = 0; z < height; ++z)
+	for(unsigned int x = 0; x < width;  ++x)
+		texcoord[i++] = glm::vec2(x * 1.f / (width-1), z * ts);
+
+	sf::Image *tex = &GetImage("road.png");
+	addTexture(tex, texcoord);
+
+	fill = true;
+	texture = true;
+	light = true;
+//	normalsVis = true;
+}
+
+void MeshOverlay::regenerateVertices()
+{
 	for(unsigned int z = 0; z < height; ++z)
 	for(unsigned int x = 0; x < width;  ++x)
 	{
@@ -41,20 +63,5 @@ MeshOverlay::MeshOverlay( Mesh& parent
 		}
 	}
 
-	// initialize texture
-	glm::vec2 *texcoord = new glm::vec2[numVertices];
-
-	unsigned int i  = 0;
-	float ts = 0.1f;
-	for(unsigned int z = 0; z < height; ++z)
-	for(unsigned int x = 0; x < width;  ++x)
-		texcoord[i++] = glm::vec2(x * 1.f / (width-1), z * ts);
-
-	sf::Image *tex = &GetImage("road.png");
-	addTexture(tex, texcoord);
-
-	fill = true;
-	texture = true;
-	light = true;
-//	normalsVis = true;
+	regenerateNormals();
 }

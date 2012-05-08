@@ -109,7 +109,15 @@ void Scene::setup()
 //	meshes.push_back(heightmap3);
 
 	meshOverlay = new MeshOverlay(*heightmap);
-	bounds.push_back(new BoundingBox(*meshOverlay));
+	BoundingBox *bb = new BoundingBox(*meshOverlay);
+	bounds.push_back(bb);
+
+	// TESTING!!
+	// Flatten HeightMap under MeshOverlay
+	const vec2 minXZ(bb->getEdges()[0].x, bb->getEdges()[0].z);
+	const vec2 maxXZ(bb->getEdges()[1].x, bb->getEdges()[1].z);
+	heightmap->flattenArea(minXZ, maxXZ, 5.f);
+	meshOverlay->regenerateVertices();
 
 	// generate a new fluid surface ------------------------------
 	fluid = new Fluid(
@@ -304,8 +312,7 @@ void Scene::update( const Clock& clock, const Input& input )
 	// randomly displace fluid every 'limit' seconds
 	static const float limit = 2.f; // in seconds
 	static float accum = 0.f;
-	accum += timer.GetElapsedTime();
-	if( accum > limit )
+	if( (accum += timer.GetElapsedTime()) > limit )
 	{
 		fluid->displace( linearRand(0.f, (float)fluid->getWidth())
                        , linearRand(0.f, (float)fluid->getHeight())
@@ -475,7 +482,7 @@ void Scene::updateLights()
 	// move lights around 
 	static float limit = constants::two_pi;
 	static float accum = 0.f;
-	if( accum += timer.GetElapsedTime() > limit )
+	if( (accum += timer.GetElapsedTime()) > limit )
 	{
 		accum = 0.f;
 
