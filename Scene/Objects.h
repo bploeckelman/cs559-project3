@@ -185,3 +185,28 @@ public:
 };
 
 
+/************************************************************************/
+/* Windwill
+/* --------
+/* A windmill with articulated blades
+/************************************************************************/
+
+class Windmill : public SceneObject{
+private:
+	float size;
+	HeightMap&		heightmap;
+	GLUquadricObj*	quadric;
+	sf::Image		base;
+	sf::Image		blade;
+	glm::mat4		secondary;
+	float			theta;
+	float			phi;
+
+public:
+	Windmill( glm::vec3 pos, HeightMap& heightmap, float size);
+
+	~Windmill();
+
+	void draw(const Camera& camera);
+	void update(const sf::Clock &clock, const sf::Input& input);
+};

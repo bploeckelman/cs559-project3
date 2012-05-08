@@ -123,7 +123,8 @@ void Scene::setup()
 	objects.push_back(new ModelObject(vec3(15, heightmap->heightAt(15, 20) + 3.5, 20), "./Resources/models/house/house.obj", *heightmap, 7.f));
 	objects.push_back(new ModelObject(vec3(35, heightmap->heightAt(35, 20)+1.f, 20), "./Resources/models/car/car_riviera.obj", *heightmap, 4.f));
 
-	objects.push_back(new FishingRod(vec3(120, heightmap->heightAt(120, 75), 75), *heightmap, 4.f));
+	//objects.push_back(new FishingRod(vec3(120, heightmap->heightAt(120, 75), 75), *heightmap, 4.f));
+	objects.push_back(new Windmill(vec3(120, heightmap->heightAt(120, 75), 75), *heightmap, 50.f));
 	objects.push_back(new Fish(vec3(70, 3.5f, 75), sf::Color(255, 127, 0), *heightmap, *fluid));
 
 	const vec3 firePosition(40.f, heightmap->heightAt(40, 30) + 1.f, 30.f);

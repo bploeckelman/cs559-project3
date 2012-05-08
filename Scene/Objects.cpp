@@ -768,3 +768,152 @@ void FishingRod::update(const sf::Clock &clock, const sf::Input& input)
 	secondary[1][1] = 1;
 
 }
+
+
+/************************************************************************/
+/* Windwill
+/* --------
+/* A windmill with articulated blades
+/************************************************************************/
+
+Windmill::Windmill( glm::vec3 pos, HeightMap& heightmap, float size)
+	: SceneObject(pos)
+	, heightmap(heightmap)
+	, quadric(gluNewQuadric())
+	, base(GetImage("stone.png"))
+	, blade(GetImage("blade.png"))
+	, size(size)
+	, theta(0)
+	, phi(0)
+{
+	transform[0][0] = cos(theta);
+	transform[2][0] = sin(theta);
+	transform[0][2] = -sin(theta);
+	transform[2][2] = cos(theta);
+	transform[1][1] = 1;
+
+	secondary = glm::mat4x4();
+	secondary[0][0] = cos(phi);
+	secondary[1][0] = -sin(phi);
+	secondary[0][1] = sin(phi);
+	secondary[1][1] = cos(phi);
+	secondary[2][2] = 1;
+}
+
+Windmill::~Windmill()
+{
+	gluDeleteQuadric(quadric);
+}
+
+void Windmill::draw(const Camera& camera)
+{
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_LIGHTING);
+//	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.2f, 0.2f, 0.2f, 1.f)));
+//	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.8f, 0.3f, 0.8f, 0.5f)));
+//	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.8f, 0.3f, 0.8f, 1.f)));
+//	glMaterialf (GL_FRONT, GL_SHININESS, 0.f);
+
+
+	base.Bind();
+	glGenerateMipmap(GL_TEXTURE_2D);
+//	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	gluQuadricDrawStyle( quadric, GLU_FILL);
+	gluQuadricNormals( quadric, GLU_SMOOTH);
+	gluQuadricOrientation( quadric, GLU_OUTSIDE);
+	gluQuadricTexture( quadric, GL_TRUE);
+
+	glColor3f(0.7f, 0.7f, 0.7f);
+
+	glPushMatrix();
+		glMultMatrixf(value_ptr(transform));
+		glRotatef(-90, 1, 0, 0);
+		glPushMatrix();
+			gluCylinder(quadric, 10, 7, size, 16, 16);
+			gluDisk(quadric, 0, 10, 16, 16);
+			glTranslatef(0, 0, size);
+			gluSphere(quadric, 7, 16, 16);
+		glPopMatrix();
+		glPushMatrix();
+			blade.Bind();
+			glTranslatef(0, -7, size);
+			glRotatef(90, 1 , 0, 0);
+			glMultMatrixf(glm::value_ptr(secondary));
+			glPushMatrix();
+				gluCylinder(quadric, .5, .5, 2, 16, 16);
+				glTranslatef(0, 0, 2);
+				gluDisk(quadric, 0, .5, 16, 16);
+				glTranslatef(0, 0, -2);
+				glRotatef(180, 1, 0, 0);
+				gluDisk(quadric, 0, .5, 16, 16);
+			glPopMatrix();
+			glBegin(GL_QUADS);
+				glNormal3f(0, 0, 1);
+				glTexCoord2f(1.f, 0.f); glVertex3f(-20, 2, 1.5f);
+				glTexCoord2f(0.f, 0.f); glVertex3f(-20, -2, 1.5f);
+				glTexCoord2f(0.f, 1.f); glVertex3f(20, -2, 1.5f);
+				glTexCoord2f(1.f, 1.f); glVertex3f(20, 2, 1.5f);
+			glEnd();
+			glPushMatrix();
+				glRotatef(180, 0, 1, 0);
+				glBegin(GL_QUADS);
+					glNormal3f(0, 0, -1);
+					glTexCoord2f(1.f, 0.f); glVertex3f(-20, 2, -1.5f);
+					glTexCoord2f(0.f, 0.f); glVertex3f(-20, -2, -1.5f);
+					glTexCoord2f(0.f, 1.f); glVertex3f(20, -2, -1.5f);
+					glTexCoord2f(1.f, 1.f); glVertex3f(20, 2, -1.5f);
+				glEnd();
+				glRotatef(90, 0, 0, 1);
+				glBegin(GL_QUADS);
+					glNormal3f(0, 0, -1);
+					glTexCoord2f(1.f, 0.f); glVertex3f(-20, 2, -1.4f);
+					glTexCoord2f(0.f, 0.f); glVertex3f(-20, -2, -1.4f);
+					glTexCoord2f(0.f, 1.f); glVertex3f(20, -2, -1.4f);
+					glTexCoord2f(1.f, 1.f); glVertex3f(20, 2, -1.4f);
+				glEnd();
+			glPopMatrix();
+			glRotatef(90, 0, 0, 1);
+			glBegin(GL_QUADS);
+				glNormal3f(0, 0, 1);
+				glTexCoord2f(1.f, 0.f); glVertex3f(-20, 2, 1.4f);
+				glTexCoord2f(0.f, 0.f); glVertex3f(-20, -2, 1.4f);
+				glTexCoord2f(0.f, 1.f); glVertex3f(20, -2, 1.4f);
+				glTexCoord2f(1.f, 1.f); glVertex3f(20, 2, 1.4f);
+			glEnd();
+		glPopMatrix();
+	glPopMatrix();
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+	
+void Windmill::update(const sf::Clock &clock, const sf::Input& input)
+{
+	if(input.IsKeyDown(sf::Key::Home))
+	{
+		theta -= .1f;
+	}
+	else if(input.IsKeyDown(sf::Key::End))
+	{
+		theta += .1f;
+	}
+	phi += .025f;
+
+	transform[0][0] = cos(theta);
+	transform[2][0] = sin(theta);
+	transform[0][2] = -sin(theta);
+	transform[2][2] = cos(theta);
+	transform[1][1] = 1;
+
+	secondary[0][0] = cos(phi);
+	secondary[1][0] = -sin(phi);
+	secondary[0][1] = sin(phi);
+	secondary[1][1] = cos(phi);
+	secondary[2][2] = 1;
+}
