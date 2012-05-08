@@ -153,8 +153,8 @@ Fountain::Fountain(vec3 pos, float size, ParticleEmitter& emitter, Skybox *skybo
 
 	texture.Bind();
 	glEnable(GL_TEXTURE_2D);
-//	glGenerateMipmap(GL_TEXTURE_2D);
-	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+	glGenerateMipmap(GL_TEXTURE_2D);
+//	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 }
 
 Fountain::~Fountain()
@@ -357,8 +357,8 @@ Plant::Plant(const vec3& pos)
 
 	texture.Bind();
 	glEnable(GL_TEXTURE_2D);
-//	glGenerateMipmap(GL_TEXTURE_2D);
-	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+	glGenerateMipmap(GL_TEXTURE_2D);
+//	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 }
 
 void Plant::draw(const Camera& camera)
@@ -547,8 +547,8 @@ Campfire::Campfire(vec3 pos, ParticleEmitter& fire, ParticleEmitter& smoke, floa
 {
 	wood.Bind();
 	glEnable(GL_TEXTURE_2D);
-//	glGenerateMipmap(GL_TEXTURE_2D);
-	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+	glGenerateMipmap(GL_TEXTURE_2D);
+//	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 }
 
 Campfire::~Campfire()
@@ -683,8 +683,8 @@ FishingRod::FishingRod( glm::vec3 pos, HeightMap& heightmap, float size)
 
 	texture.Bind();
 	glEnable(GL_TEXTURE_2D);
-//	glGenerateMipmap(GL_TEXTURE_2D);
-	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+	glGenerateMipmap(GL_TEXTURE_2D);
+//	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 }
 
 FishingRod::~FishingRod()
@@ -805,8 +805,8 @@ Windmill::Windmill( glm::vec3 pos, HeightMap& heightmap, float size)
 
 	blade.Bind();
 	glEnable(GL_TEXTURE_2D);
-//	glGenerateMipmap(GL_TEXTURE_2D);
-	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+	glGenerateMipmap(GL_TEXTURE_2D);
+//	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 }
 
 Windmill::~Windmill()
