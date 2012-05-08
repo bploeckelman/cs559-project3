@@ -149,6 +149,7 @@ Fountain::Fountain(vec3 pos, float size, ParticleEmitter& emitter, Skybox *skybo
 		vec3(pos.x - (size/2.f), pos.y + .25f, pos.z - (size))
 	);
 	fluid->setSkybox(skybox);
+	fluid->blend = false;
 
 	texture.Bind();
 	glEnable(GL_TEXTURE_2D);

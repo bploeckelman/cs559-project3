@@ -46,6 +46,15 @@ House::House(glm::vec3 pos, sf::Color color, int houseType, int roofType, float 
 	 ,width(width)
 	 ,height(height)
 {
+//	roof.Bind();
+//	glEnable(GL_TEXTURE_2D);
+//  glGenerateMipmap(true);
+//	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+
+//	side.Bind();
+//	glEnable(GL_TEXTURE_2D);
+//  glGenerateMipmap(true);
+//	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 }
 
 House::~House()
@@ -59,9 +68,11 @@ void House::draw(const Camera& camera)
 		glMultMatrixf(glm::value_ptr(transform));
 
 		side.Bind();
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);		
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
 		float l = length;
 		float w = width;
@@ -123,12 +134,15 @@ void House::draw(const Camera& camera)
 	w += 1;
 	
 	roof.Bind();
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);		
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
 	//roof
 	glPushMatrix();
 		glTranslatef(tmp.x, tmp.y, tmp.z);
 		glDisable(GL_TEXTURE_2D);
-		glColor3f(1.f, 1.f, 1.f);
+		glColor3f(0.1f, 0.1f, 0.f);
 		glPushMatrix();
 			glRotatef(180, 1, 0, 0);
 			glBegin(GL_QUADS);
@@ -155,7 +169,6 @@ void House::draw(const Camera& camera)
 		glEnd();
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 	glPopMatrix();

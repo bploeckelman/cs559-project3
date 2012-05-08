@@ -40,6 +40,8 @@ using namespace glm;
 
 // TODO: keep a container of followee's in Scene, or add followee member to camera
 ParticleEmitter *followee = nullptr;
+// TODO: keep a container of mobile stuff in Scene
+ModelObject *car = nullptr;
 
 
 Scene::Scene()
@@ -108,7 +110,7 @@ void Scene::setup()
 //	meshes.push_back(heightmap2);
 //	meshes.push_back(heightmap3);
 
-	meshOverlay = new MeshOverlay(*heightmap);
+	meshOverlay = new MeshOverlay(*heightmap);//, 10, 600, -5, 5);
 	BoundingBox *bb = new BoundingBox(*meshOverlay);
 	bounds.push_back(bb);
 
@@ -116,7 +118,7 @@ void Scene::setup()
 	// Flatten HeightMap under MeshOverlay
 	vec2 minXZ(bb->getEdges()[0].x, bb->getEdges()[0].z);
 	vec2 maxXZ(bb->getEdges()[1].x, bb->getEdges()[1].z);
-	heightmap->flattenArea(minXZ, maxXZ, 5.f);
+	heightmap->flattenArea(minXZ, maxXZ, 10.f);
 	meshOverlay->regenerateVertices();
 
 	// generate a new fluid surface ------------------------------
@@ -137,7 +139,7 @@ void Scene::setup()
 	bounds.push_back(new BoundingBox(*fluid));
 	
 	// add Scene objects -----------------------------------------
-	const unsigned int numHouses = 10;
+	const unsigned int numHouses = 5;
 	for(unsigned int i = 0; i < numHouses; ++i)
 	{
 		bool boolBound = false;
@@ -146,9 +148,9 @@ void Scene::setup()
 		const vec3 pos(x, heightmap->heightAt(x,z), z);
 		const float house = linearRand(0.f, 4.f);
 		const float roof = linearRand(0.f, 2.f);
-		const float length = linearRand(10.f, 50.f);
-		const float width = linearRand(10.f, 50.f);
-		const float height = linearRand(10.f, 20.f);
+		const float length = linearRand(5.f, 20.f);
+		const float width = linearRand(5.f, 20.f);
+		const float height = linearRand(5.f, 10.f);
 		House* building = new House(pos, sf::Color(0, 255, 0), house, roof, length, width, height);
 		BoundingBox* buildingbb = new BoundingBox(*building, vec3(pos.x - width - 1, pos.y - height, pos.z - length - 1), vec3(pos.x + width + 1, pos.y + height*2, pos.z + length + 1));
 		
@@ -185,14 +187,18 @@ void Scene::setup()
 
 	objects.push_back(new Blimp(vec3(120, 150, 80), 10));
 
-	/*ModelObject* house = new ModelObject(vec3(15, heightmap->heightAt(15, 20) + 3.5, 20), "./Resources/models/house/house.obj", *heightmap, 7.f);
+	ModelObject* house = new ModelObject(vec3(193.5, heightmap->heightAt(193.5, 258.5) + 4.f, 258.5), "./Resources/models/house/house.obj", *heightmap, 7.f);
 	objects.push_back(house);
-	bounds.push_back(new BoundingBox(*house, vec3(15 - 7, heightmap->heightAt(15, 20) + 3.5 - 7, 20 - 7), vec3(15 + 7, heightmap->heightAt(15, 20) + 3.5 + 7, 20 + 7)));
-	ModelObject* car = new ModelObject(vec3(35, heightmap->heightAt(35, 20)+1.f, 20), "./Resources/models/car/car_riviera.obj", *heightmap, 4.f);
-	objects.push_back(car);
-	bounds.push_back(new BoundingBox(*car, vec3(35 - 4, heightmap->heightAt(35, 20)+1.f - 4, 20 - 4), vec3(35 + 4, heightmap->heightAt(35, 20)+1.f + 4, 20 + 4)));*/
+//	bounds.push_back(new BoundingBox(*house, vec3(15 - 7, heightmap->heightAt(15, 20) + 3.5 - 7, 20 - 7), vec3(15 + 7, heightmap->heightAt(15, 20) + 3.5 + 7, 20 + 7)));
+	// Manually flatten area under house
+	heightmap->flattenArea(vec2(185.f, 250.5f), vec2(201.5, 266.5), 0.1f);
 
-	const unsigned int numWindmills = 5;
+	ModelObject* carModel = new ModelObject(vec3(64, heightmap->heightAt(64, 16.5)+1.f, 16.5), "./Resources/models/car/car_riviera.obj", *heightmap, 4.f);
+	objects.push_back(carModel);
+//	bounds.push_back(new BoundingBox(*car, vec3(35 - 4, heightmap->heightAt(35, 20)+1.f - 4, 20 - 4), vec3(35 + 4, heightmap->heightAt(35, 20)+1.f + 4, 20 + 4)));
+	car = carModel;
+
+	const unsigned int numWindmills = 3;
 	for(unsigned int i = 0; i < numWindmills; ++i)
 	{
 		bool boolBound = false;
@@ -251,7 +257,7 @@ void Scene::setup()
 	
 	ParticleSystem  *system3 = new ParticleSystem();
 
-	const unsigned int numFires = 4;
+	const unsigned int numFires = 6;
 	for(unsigned int i = 0; i < numFires; ++i)
 	{
 		bool boolBound = false;
@@ -371,7 +377,7 @@ void Scene::setup()
 	particleMgr.add(system3);
 
 	ParticleSystem *system4 = new ParticleSystem();
-	const float heightmapMax = heightmap->getHeight() * heightmap->getGroundScale();
+	const float heightmapMax = (heightmap->getHeight() - 5.f) * heightmap->getGroundScale();
 	const vec3 p1(linearRand(5.f, heightmapMax), 0.f, linearRand(5.f, heightmapMax));
 	const vec3 p2(linearRand(5.f, heightmapMax), 0.f, linearRand(5.f, heightmapMax));
 	const vec3 p3(linearRand(5.f, heightmapMax), 0.f, linearRand(5.f, heightmapMax));
@@ -394,8 +400,6 @@ void Scene::setup()
 							, vec3(0,50,0)
 							, vec3(40.f, 0.f, 0.f)) );
 	camera = &cameras[0];
-
-	Camera* cam = &cameras[1];
 
 	// setup lighting --------------------------------------------
 	setupLights();
@@ -426,7 +430,7 @@ void Scene::setupLights()
 	// MOAR HACK !!!
 	HeightMap *h = reinterpret_cast<HeightMap*>(meshes.front());
 	Light *light1 = new Light();
-	light1->position(vec4(32.f , h->heightAt(32,32) + 4.f, 32.f, 1.f));
+	light1->position(vec4(64.f , h->heightAt(64,64) + 8.f, 64.f, 1.f));
 	light1->ambient(vec4(1.f, 1.f, 1.f, 1.f));
 	light1->diffuse(vec4(1.f, 1.f, 1.f, 1.f));
 	light1->enable();
@@ -471,8 +475,18 @@ void Scene::update( const Clock& clock, const Input& input )
 	updateLights();
 	particleMgr.update(clock.GetElapsedTime());
 
+	// TODO: fixme
+	// move the car
+/*
+	car->setPos(car->getPos() + vec3(0, timer.GetElapsedTime(), 0));
+	const vec3 p(car->getPos());
+	if( p.z > h->getHeight() * h->getGroundScale() )
+		car->setPos(vec3(p.x, p.y, 0.f));
+	car->setPos(vec3(p.x, p.z, h->heightAt(p.x, p.z) + 1.f));//, p.z));
+//*/
+
 	// randomly displace fluid every 'limit' seconds
-	static const float limit = 2.f; // in seconds
+	static const float limit = 4.f; // in seconds
 	static float accum = 0.f;
 	if( (accum += timer.GetElapsedTime()) > limit )
 	{
@@ -488,6 +502,8 @@ void Scene::update( const Clock& clock, const Input& input )
 
 //	std::cout << "timer: " << std::setw(10) << timer.GetElapsedTime() << "   "
 //		      << "clock: " << std::setw(10) << clock.GetElapsedTime() << std::endl; 
+//	const vec3 p(camera->position());
+//	std::cout << "cam: (" << p.x << " , " << p.y << " , " << p.z << ")" << std::endl;
 	timer.Reset();
 }
 
@@ -651,10 +667,9 @@ void Scene::updateLights()
 	if( (accum += timer.GetElapsedTime()) > limit )
 	{
 		accum = 0.f;
-
-		const vec4& pos0 = lights[0]->position();
-		const vec4& pos1 = lights[1]->position();
-		lights[0]->position(pos0 + 0.5f * vec4(cos(accum), 0.f, sin(accum), 0.f));
-		lights[1]->position(pos1 + 0.1f * vec4(cos(accum), 0.f, sin(accum), 0.f));
 	}
+	const vec4& pos0 = lights[0]->position();
+	const vec4& pos1 = lights[1]->position();
+	lights[0]->position(pos0 + 0.5f * vec4(cos(accum), 0.f, sin(accum), 0.f));
+	lights[1]->position(pos1 + 0.1f * vec4(cos(accum), 0.f, sin(accum), 0.f));
 }

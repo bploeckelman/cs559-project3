@@ -107,16 +107,16 @@ void Camera::processInput(const Input& input, const Clock& clock)
 	}
 
 	float moveSpeed   = 0.f;
-	if( input.IsKeyDown(Key::W) )		moveSpeed = -0.5f;
-	if( input.IsKeyDown(Key::S) )		moveSpeed =  0.5;
+	if( input.IsKeyDown(Key::W) )		moveSpeed = -0.75f;
+	if( input.IsKeyDown(Key::S) )		moveSpeed =  0.75;
 
 	float strafeSpeed = 0.f;
-	if( input.IsKeyDown(Key::A) )		strafeSpeed =  0.4f;
-	if( input.IsKeyDown(Key::D) )		strafeSpeed = -0.4f;
+	if( input.IsKeyDown(Key::A) )		strafeSpeed =  0.6f;
+	if( input.IsKeyDown(Key::D) )		strafeSpeed = -0.6f;
 
 	move(moveSpeed,strafeSpeed);
 
-	const float y = 0.5f;
+	const float y = 0.75f;
 	if( input.IsKeyDown(Key::Q) )		moveY(-y);
 	if( input.IsKeyDown(Key::E) )		moveY(y);
 

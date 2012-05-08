@@ -19,9 +19,9 @@ protected:
 public:
 	MeshOverlay( Mesh& parent
                , const unsigned int width   = 16
-               , const unsigned int height  = 600 
+               , const unsigned int height  = 512 
                , const unsigned int offsetw = 60
-               , const unsigned int offseth = 5 );
+               , const unsigned int offseth = 0 );
 
 	void regenerateVertices();
 
