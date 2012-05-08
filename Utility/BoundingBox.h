@@ -25,6 +25,7 @@ public:
 	BoundingBox(MeshOverlay& mesh);//, glm::vec3 lesser, glm::vec3 greater);
 	BoundingBox(ModelObject& obj, glm::vec3 lesser, glm::vec3 greater);
 	BoundingBox(SceneObject& obj, glm::vec3 lesser, glm::vec3 greater);
+	BoundingBox(Fluid& fluid);
 
 	~BoundingBox();
 	
@@ -38,6 +39,7 @@ inline const glm::mat2x3& BoundingBox::getEdges() { return edges;}
 inline const bool BoundingBox::inBox(glm::vec3 vec)
 {
 	if(	vec.x >= edges[0].x && vec.x <= edges[1].x &&
+		vec.y >= edges[0].y && vec.y <= edges[1].y &&
 		vec.z >= edges[0].z && vec.z <= edges[1].z)
 	{
 		return true;

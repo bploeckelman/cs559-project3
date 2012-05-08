@@ -118,6 +118,8 @@ void Scene::setup()
 		vec3(80.f, 0.f, 80.f)
 	);
 	fluid->setSkybox(&skybox);
+
+	bounds.push_back(new BoundingBox(*fluid));
 	
 	// add Scene objects -----------------------------------------
 //	const vec3 housePos(100.f, heightmap->heightAt(100,100) + 10, 100.f);
@@ -343,8 +345,8 @@ void Scene::render( const Clock& clock )
 //	glMaterialf (GL_FRONT, GL_SHININESS, 0.f);
 	Render::basis();
 
-	//for each(auto bound in bounds)
-	//	bound->draw();
+	for each(auto bound in bounds)
+		bound->draw();
 }
 
 void Scene::handle(const Event& event)

@@ -16,10 +16,8 @@ BoundingBox::BoundingBox(glm::vec3 pos, glm::vec3 greater, glm::vec3 lesser)
 	edges[1] = greater;
 }
 
-BoundingBox::BoundingBox(MeshOverlay& mesh)//, glm::vec3 lesser, glm::vec3 greater)
-{
-	
-
+BoundingBox::BoundingBox(MeshOverlay& mesh)
+{	
 	edges = glm::mat2x3();
 	edges[0] = mesh.vertexAt(0,0);
 	edges[1] = mesh.vertexAt(0,0);
@@ -54,6 +52,15 @@ BoundingBox::BoundingBox(SceneObject& obj, glm::vec3 lesser, glm::vec3 greater)
 	edges = glm::mat2x3();
 	edges[0] = lesser;
 	edges[1] = greater;
+}
+
+BoundingBox::BoundingBox(Fluid& obj)
+	: SceneObject(obj.pos)
+{
+	//TODO: Figure out a good way to get vertices
+	edges = glm::mat2x3();
+	edges[0] = glm::vec3(obj.pos.x, -FLT_MIN, obj.pos.z);
+	edges[1] = glm::vec3(obj.getHeight()*obj.getDist() + obj.pos.x, obj.pos.y, obj.getWidth()*obj.getDist() + obj.pos.z);
 }
 
 BoundingBox::~BoundingBox()
