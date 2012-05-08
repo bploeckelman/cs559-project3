@@ -144,6 +144,8 @@ private:
 protected:
 	// Apply a box filter over the y-values of each vertex
 	void smoothHeights();
+	// Regenerate vertex normals
+	void regenerateNormals();
 };
 
 
