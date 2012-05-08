@@ -20,10 +20,10 @@ using namespace glm;
 
 HeightMap::HeightMap( const unsigned int width
 					, const unsigned int height
-					, const float offsetWidth
-					, const float offsetHeight
 					, const float groundScale
-					, const float heightScale )
+					, const float heightScale
+					, const float offsetWidth
+					, const float offsetHeight )
 	// TODO: update Mesh ctor to accept heightScale
 	: Mesh(width, height, groundScale)
 	, offset(offsetWidth, offsetHeight)
@@ -33,14 +33,15 @@ HeightMap::HeightMap( const unsigned int width
 {
 	updateVerticesByOffsets();
 	diamondSquare();
+	regenerateNormals();
 	setupTextures();
 }
 
 HeightMap::HeightMap( const std::string& imageFilename
-					, const float offsetWidth
-					, const float offsetHeight
                     , const float groundScale /* = 0.5f */
-					, const float heightScale /* = 2.f */ )
+					, const float heightScale /* = 20.f */
+					, const float offsetWidth
+					, const float offsetHeight )
 	: Mesh(imageFilename, groundScale, heightScale)
 	, offset(offsetWidth, offsetHeight)
 	, groundScale(groundScale)
@@ -48,6 +49,7 @@ HeightMap::HeightMap( const std::string& imageFilename
 	, imageName(imageFilename)
 {
 	updateVerticesByOffsets();
+	regenerateNormals();
 	setupTextures();
 }
 
@@ -108,12 +110,12 @@ void HeightMap::updateVerticesByOffsets()
 }
 
 // Note: assumes a square 
-void HeightMap::diamondSquare()
+void HeightMap::diamondSquare( bool smooth /*= true*/ )
 {
 	zeroHeightValues();
 
 	const unsigned int size = height; // and width
-	float heightRange = heightScale;
+	float heightRange = 500.f;//heightScale;
 
 	// Shrink sideLength and heightRange for each step
 	for(unsigned int sideLength = size - 1;	sideLength >= 2;
@@ -159,14 +161,28 @@ void HeightMap::diamondSquare()
 		}
 	}
 
-	// Smooth it a bunch 
-	for(unsigned int i = 0; i < 10; ++i)
-		smoothHeights();
+	if( smooth )
+	{
+		// Smooth it a bunch 
+		for(unsigned int i = 0; i < 10; ++i)
+			smoothHeights();
+	}
+
+	// Find max height value
+	float max = -9999999.0f;
+	for(unsigned int z = 0; z < height; ++z)
+	for(unsigned int x = 0; x < width;  ++x)
+	{
+		const float y = vertexAt(x, z).y;
+		if( y > max )
+			max = y;
+	}
+
 
 	// Rescale heights
 	for(unsigned int z = 0; z < height; ++z)
 	for(unsigned int x = 0; x < width;  ++x)
-		vertexAt(x, z).y *= 20.f; //heightScale * 0.1f;
+		vertexAt(x, z).y = vertexAt(x, z).y / max * heightScale;
 }
 
 void HeightMap::setupTextures()

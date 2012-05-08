@@ -30,10 +30,10 @@ public:
 	**/
 	HeightMap(const unsigned int width  = 100
 			, const unsigned int height = 100
-			, const float offsetWidth   = 0.f
-			, const float offsetHeight  = 0.f
 			, const float groundScale   = 1.f
-			, const float heightScale   = 20.f);
+			, const float heightScale   = 20.f
+			, const float offsetWidth   = 0.f
+			, const float offsetHeight  = 0.f);
 
 	/**
 	 * Creates a new heightmap by loading height data from an image 
@@ -42,10 +42,10 @@ public:
 	 * \param heightScale - distance between vertices vertically
 	**/
 	HeightMap(const std::string& imageFilename
-			, const float offsetWidth   = 0.f
-			, const float offsetHeight  = 0.f
 			, const float groundScale   = 0.5f
-			, const float heightScale   = 20.f);
+			, const float heightScale   = 20.f
+			, const float offsetWidth   = 0.f
+			, const float offsetHeight  = 0.f);
 
 	/**
 	 * Get the height value for the given column and row 
@@ -63,7 +63,7 @@ public:
 	float getGroundScale() const;
 
 private:
-	void diamondSquare();
+	void diamondSquare(bool smooth = true);
 	void randomizeGaussian();
 	void updateVerticesByOffsets();
 	void setupTextures();

@@ -147,32 +147,7 @@ void Mesh::regenerateArrays( const unsigned int w
 	}
 
 	generateArrayIndices();
-
-	// Calculate normals
-	for(unsigned int i = 0; i < numIndices; i += 3)
-	{
-		const vec3 v[3] = {
-			vertices[ indices[i+0] ],
-			vertices[ indices[i+1] ],
-			vertices[ indices[i+2] ]
-		};
-		const vec3 va = v[1] - v[0];
-		const vec3 vb = v[2] - v[0];
-		const vec3 normal = normalize( cross(va, vb) );
-
-		for(unsigned int j = 0; j < 3; ++j)
-		{
-			const vec3 a = v[(j+1) % 3] - v[j];
-			const vec3 b = v[(j+2) % 3] - v[j];
-			const float weight = acos( dot(a, b) / (a.length() * b.length()) );
-			normals[ indices[i + j] ] += weight * normal;
-		}
-	}
-
-	for(unsigned int i = 0; i < numVertices; ++i)
-	{
-		normals[i] = normalize(normals[i]);
-	}
+	regenerateNormals();
 }
 
 void Mesh::dropMesh()
@@ -273,31 +248,7 @@ void Mesh::initialize( const sf::Image& image
 
 	generateArrayIndices();
 
-	// Calculate normals
-	for(unsigned int i = 0; i < numIndices; i += 3)
-	{
-		const vec3 v[3] = {
-			vertices[ indices[i+0] ],
-			vertices[ indices[i+1] ],
-			vertices[ indices[i+2] ]
-		};
-		const vec3 va = v[1] - v[0];
-		const vec3 vb = v[2] - v[0];
-		const vec3 normal = normalize( cross(va, vb) );
-
-		for(unsigned int j = 0; j < 3; ++j)
-		{
-			const vec3 a = v[(j+1) % 3] - v[j];
-			const vec3 b = v[(j+2) % 3] - v[j];
-			const float weight = acos( dot(a, b) / (a.length() * b.length()) );
-			normals[ indices[i + j] ] += weight * normal;
-		}
-	}
-
-	for(unsigned int i = 0; i < numVertices; ++i)
-	{
-		normals[i] = normalize(normals[i]);
-	}
+	regenerateNormals();
 }
 
 void Mesh::zeroMembers()
@@ -625,4 +576,32 @@ void Mesh::renderNormals() const
 	glEnd();
 
 	glEnable(GL_TEXTURE_2D);
+}
+
+void Mesh::regenerateNormals()
+{
+	for(unsigned int i = 0; i < numIndices; i += 3)
+	{
+		const vec3 v[3] = {
+			vertices[ indices[i+0] ],
+			vertices[ indices[i+1] ],
+			vertices[ indices[i+2] ]
+		};
+		const vec3 va = v[1] - v[0];
+		const vec3 vb = v[2] - v[0];
+		const vec3 normal = normalize( cross(va, vb) );
+
+		for(unsigned int j = 0; j < 3; ++j)
+		{
+			const vec3 a = v[(j+1) % 3] - v[j];
+			const vec3 b = v[(j+2) % 3] - v[j];
+			const float weight = acos( dot(a, b) / (a.length() * b.length()) );
+			normals[ indices[i + j] ] += weight * normal;
+		}
+	}
+
+	for(unsigned int i = 0; i < numVertices; ++i)
+	{
+		normals[i] = normalize(normals[i]);
+	}
 }
