@@ -802,11 +802,6 @@ Windmill::Windmill( glm::vec3 pos, HeightMap& heightmap, float size)
 	secondary[1][1] = cos(phi);
 	secondary[2][2] = 1;
 
-	base.Bind();
-	glEnable(GL_TEXTURE_2D);
-//	glGenerateMipmap(GL_TEXTURE_2D);
-	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-
 	blade.Bind();
 	glEnable(GL_TEXTURE_2D);
 //	glGenerateMipmap(GL_TEXTURE_2D);
@@ -821,18 +816,11 @@ Windmill::~Windmill()
 void Windmill::draw(const Camera& camera)
 {
 	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_LIGHTING);
-
-//	glDisable(GL_COLOR_MATERIAL);
-//	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.2f, 0.2f, 0.2f, 1.f)));
-//	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.8f, 0.3f, 0.8f, 0.5f)));
-//	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.8f, 0.3f, 0.8f, 1.f)));
-//	glMaterialf (GL_FRONT, GL_SHININESS, 0.f);
 
 	base.Bind();
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
