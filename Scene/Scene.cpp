@@ -44,6 +44,7 @@ Scene::Scene()
     , lights()
 	, meshes()
 	, objects()
+	, bounds()
 	, particleMgr()
 	, meshOverlay(nullptr)
 	, timer()
@@ -120,22 +121,34 @@ void Scene::setup()
 
 	objects.push_back(new Blimp(vec3(120, 50, 80), 10));
 
-	objects.push_back(new ModelObject(vec3(15, heightmap->heightAt(15, 20) + 3.5, 20), "./Resources/models/house/house.obj", *heightmap, 7.f));
-	objects.push_back(new ModelObject(vec3(35, heightmap->heightAt(35, 20)+1.f, 20), "./Resources/models/car/car_riviera.obj", *heightmap, 4.f));
+	ModelObject* house = new ModelObject(vec3(15, heightmap->heightAt(15, 20) + 3.5, 20), "./Resources/models/house/house.obj", *heightmap, 7.f);
+	objects.push_back(house);
+	bounds.push_back(new BoundingBox(*house));
+	ModelObject* car = new ModelObject(vec3(35, heightmap->heightAt(35, 20)+1.f, 20), "./Resources/models/car/car_riviera.obj", *heightmap, 4.f);
+	objects.push_back(car);
+	bounds.push_back(new BoundingBox(*car));
 
 	//objects.push_back(new FishingRod(vec3(120, heightmap->heightAt(120, 75), 75), *heightmap, 4.f));
-	objects.push_back(new Windmill(vec3(120, heightmap->heightAt(120, 75), 75), *heightmap, 50.f));
+	Windmill* windmill = new Windmill(vec3(120, heightmap->heightAt(120, 75), 75), *heightmap, 50.f);
+	objects.push_back(windmill);
+	bounds.push_back(new BoundingBox(*windmill));
+
 	objects.push_back(new Fish(vec3(70, 3.5f, 75), sf::Color(255, 127, 0), *heightmap, *fluid));
 
 	const vec3 firePosition(40.f, heightmap->heightAt(40, 30) + 1.f, 30.f);
 	const vec3 smokePosition(firePosition + vec3(0,1.f,0));
 	FireEmitter  *fire  = new FireEmitter(firePosition);
 	SmokeEmitter *smoke = new SmokeEmitter(smokePosition);
-	objects.push_back(new Campfire(firePosition, *fire, *smoke, 5.f));
+	
+	Campfire* campfire = new Campfire(firePosition, *fire, *smoke, 5.f);
+	objects.push_back(campfire);
+	bounds.push_back(new BoundingBox(*campfire));
 
 	const vec3 fountainPosition(60.f, heightmap->heightAt(60, 100) + 2.f, 100.f);
 	FountainEmitter *fountain = new FountainEmitter(fountainPosition, 20);
-	objects.push_back(new Fountain(fountainPosition - vec3(0,1.f,0), 10, *fountain, &skybox));
+	Fountain* foun = new Fountain(fountainPosition - vec3(0,1.f,0), 10, *fountain, &skybox);
+	objects.push_back(foun);
+	bounds.push_back(new BoundingBox(*foun));
 
 	// add transparent scene objects -----------------------------
 	const unsigned int numBushes = 50;
@@ -145,6 +158,14 @@ void Scene::setup()
 		const float x = linearRand(5.f, 512.f);
 		const float z = linearRand(5.f, 512.f);
 		const vec3 pos(x, heightmap->heightAt(x,z), z);
+		for each(auto bound in bounds)
+		{
+			if(bound->inBox(pos))		//TODO: fix the super crappy way I wrote this
+			{
+				i--;
+				continue;
+			}
+		}
 		alphaObjects.push_back(new Plant(pos)); 
 	}
 

@@ -1,3 +1,5 @@
+#ifndef OBJECT_H
+#define OBJECT_H
 /************************************************************************/
 /* Objects
 /* ------
@@ -210,3 +212,5 @@ public:
 	void draw(const Camera& camera);
 	void update(const sf::Clock &clock, const sf::Input& input);
 };
+
+#endif

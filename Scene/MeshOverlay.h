@@ -22,4 +22,9 @@ public:
                , const unsigned int height  = 600 
                , const unsigned int offsetw = 60
                , const unsigned int offseth = 5 );
+
+	const glm::vec2& getOffset() const;
 };
+
+
+inline const glm::vec2& MeshOverlay::getOffset() const {return glm::vec2(offsetw, offseth);}

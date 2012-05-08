@@ -15,6 +15,7 @@
 #include "../Utility/Plane.h"
 #include "../Utility/ObjModel.h"
 #include "../Particles/Particles.h"
+#include "../Utility/BoundingBox.h"
 
 #include <glm/glm.hpp>
 
@@ -34,6 +35,7 @@ typedef std::vector<ObjModel*>    Models;
 typedef std::vector<Mesh*>        Meshes;
 typedef std::vector<Light*>       Lights;
 typedef std::vector<SceneObject*> SceneObjects;
+typedef std::vector<BoundingBox*> BoundingBoxes;
 
 
 
@@ -48,8 +50,10 @@ protected:
 	Models          models;      // container of 3d models
 	Meshes          meshes;      // container of mesh objects
 	SceneObjects    objects;     // scene objects
-	SceneObjects    alphaObjects;// transparent scene objects 
+	SceneObjects    alphaObjects;// transparent scene objects
+	BoundingBoxes	bounds;		//holds bounding boxes for objects
 	ParticleManager particleMgr; // handler for particle systems
+
 
 	MeshOverlay    *meshOverlay; // test mesh overlay
 	sf::Clock timer;
