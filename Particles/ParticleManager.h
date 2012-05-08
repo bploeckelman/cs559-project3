@@ -36,4 +36,8 @@ public:
 	void render(const Camera& camera);
 	// Cleanup all particle systems
 	void clean();
+
+	const ParticleSystems& getSystems();
 };
+
+inline const ParticleSystems& ParticleManager::getSystems()	{return systems;}

@@ -63,6 +63,7 @@ public:
 	float getGroundScale() const;
 
 	void flattenArea(const glm::vec2& minXZ, const glm::vec2& maxXZ, float tolerance);
+	void flattenArea(float height, const glm::vec2& minXZ, const glm::vec2& maxXZ);
 
 private:
 	void diamondSquare(bool smooth = true);

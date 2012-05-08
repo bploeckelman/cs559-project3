@@ -114,8 +114,8 @@ void Scene::setup()
 
 	// TESTING!!
 	// Flatten HeightMap under MeshOverlay
-	const vec2 minXZ(bb->getEdges()[0].x, bb->getEdges()[0].z);
-	const vec2 maxXZ(bb->getEdges()[1].x, bb->getEdges()[1].z);
+	vec2 minXZ(bb->getEdges()[0].x, bb->getEdges()[0].z);
+	vec2 maxXZ(bb->getEdges()[1].x, bb->getEdges()[1].z);
 	heightmap->flattenArea(minXZ, maxXZ, 5.f);
 	meshOverlay->regenerateVertices();
 
@@ -150,10 +150,13 @@ void Scene::setup()
 	bounds.push_back(new BoundingBox(*car, vec3(35 - 4, heightmap->heightAt(35, 20)+1.f - 4, 20 - 4), vec3(35 + 4, heightmap->heightAt(35, 20)+1.f + 4, 20 + 4)));
 
 	//objects.push_back(new FishingRod(vec3(120, heightmap->heightAt(120, 75), 75), *heightmap, 4.f));
-	Windmill* windmill = new Windmill(vec3(120, heightmap->heightAt(120, 75), 75), *heightmap, 50.f);
+	Windmill* windmill = new Windmill(vec3(120, heightmap->heightAt(120, 200), 200), *heightmap, 50.f);
 	objects.push_back(windmill);
-	bounds.push_back(new BoundingBox(*windmill, vec3(120 - 10, heightmap->heightAt(120, 75) - 10, 75 - 10), vec3(120 + 10, heightmap->heightAt(120, 75) + 60, 75 + 10)));
-
+	BoundingBox* windbb = new BoundingBox(*windmill, vec3(120 - 10, heightmap->heightAt(120, 200), 200 - 10), vec3(120 + 10, heightmap->heightAt(120, 200) + 60, 200 + 10));
+	bounds.push_back(windbb);
+	minXZ = vec2(windbb->getEdges()[0].x, windbb->getEdges()[0].z);
+	maxXZ = vec2(windbb->getEdges()[1].x, windbb->getEdges()[1].z);
+	heightmap->flattenArea(windbb->getEdges()[0].y - .1f, minXZ, maxXZ);
 	//objects.push_back(new Fish(vec3(70, 3.5f, 75), sf::Color(255, 127, 0), *heightmap, *fluid));
 
 	const vec3 firePosition(40.f, heightmap->heightAt(40, 30) + 1.f, 30.f);
@@ -165,11 +168,16 @@ void Scene::setup()
 	objects.push_back(campfire);
 	bounds.push_back(new BoundingBox(*campfire, glm::vec3(firePosition.x - 5, firePosition.y - 5, firePosition.z - 5) , glm::vec3(firePosition.x + 5, firePosition.y + 5, firePosition.z + 5)));
 
-	const vec3 fountainPosition(60.f, heightmap->heightAt(60, 100) + 2.f, 100.f);
+	const vec3 fountainPosition(40.f, heightmap->heightAt(40, 100) + 2.f, 100.f);
 	FountainEmitter *fountain = new FountainEmitter(fountainPosition, 20);
 	Fountain* foun = new Fountain(fountainPosition - vec3(0,1.f,0), 10, *fountain, &skybox);
 	objects.push_back(foun);
-	bounds.push_back(new BoundingBox(*foun, glm::vec3(fountainPosition.x - 10, fountainPosition.y - 10, fountainPosition.z - 11) , glm::vec3(fountainPosition.x + 10, fountainPosition.y + 10, fountainPosition.z + 11)));
+	BoundingBox* founbb = new BoundingBox(*foun, glm::vec3(fountainPosition.x - 6, fountainPosition.y - 1.5, fountainPosition.z - 11) , glm::vec3(fountainPosition.x + 6, fountainPosition.y + 1, fountainPosition.z + 11));
+	bounds.push_back(founbb);
+
+	minXZ = vec2(founbb->getEdges()[0].x, founbb->getEdges()[0].z);
+	maxXZ = vec2(founbb->getEdges()[1].x, founbb->getEdges()[1].z);
+	heightmap->flattenArea(founbb->getEdges()[0].y - .1f, minXZ, maxXZ);
 
 	// add transparent scene objects -----------------------------
 	const unsigned int numBushes = 50;
