@@ -126,8 +126,6 @@ private:
 	void regenerateArrays( const unsigned int w
 						 , const unsigned int h
 						 , const float s );
-	// Apply a box filter over the y-values of each vertex
-	void smoothHeights();
 
 	// Clean up memory and zero out all members
 	void dropMesh();
@@ -142,6 +140,10 @@ private:
 
 	// Render normal vectors for visualization
 	void renderNormals() const;
+
+protected:
+	// Apply a box filter over the y-values of each vertex
+	void smoothHeights();
 };
 
 

@@ -128,8 +128,8 @@ void Fluid::render(const Camera& camera)
 	setDay();
 	subRender(camera);
 
-	setNight();
-	subRender(camera);
+//	setNight();
+//	subRender(camera);
 }
 
 void Fluid::evaluate()
@@ -306,7 +306,7 @@ void Fluid::setDay()
 	{
 		glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxEnvTextureDay);
 		glEnable(GL_TEXTURE_CUBE_MAP);
-		glColor4f(0.1f, 1.f, 1.f, skybox->getDayNightCycleDelta());
+		glColor4f(0.1f, 1.f, 1.f, 0.7f);//skybox->getDayNightCycleDelta());
 	}
 	else
 		glColor4f(0.1f, 1.f, 1.f, 0.7f);

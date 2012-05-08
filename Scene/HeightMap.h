@@ -21,6 +21,8 @@ private:
 public:
 	/**
 	 * Creates a new heightmap with the specified parameters
+	 * by using the diamond-square algorithm to generate 
+	 * height values procedurally
 	 * \param width  - number of vertices wide
 	 * \param height - number of vertices long
 	 * \param groundScale - distance between vertices in the plane
@@ -54,19 +56,20 @@ public:
 	 * \return - the height value at the specified indices,
 	 *           or the smallest possible float 
 	**/
-
 	float heightAt(const float col  
                  , const float row);
-
 
 	float getHeightScale() const;
 	float getGroundScale() const;
 
 private:
+	void diamondSquare();
 	void randomizeGaussian();
+	void updateVerticesByOffsets();
+	void setupTextures();
+	void zeroHeightValues();
 };
 
 
 inline float HeightMap::getHeightScale() const {return heightScale;}
 inline float HeightMap::getGroundScale() const {return groundScale;}
-

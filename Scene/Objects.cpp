@@ -149,6 +149,11 @@ Fountain::Fountain(vec3 pos, float size, ParticleEmitter& emitter, Skybox *skybo
 		vec3(pos.x - (size/2.f), pos.y + .25f, pos.z - (size))
 	);
 	fluid->setSkybox(skybox);
+
+	texture.Bind();
+	glEnable(GL_TEXTURE_2D);
+//	glGenerateMipmap(GL_TEXTURE_2D);
+	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 }
 
 Fountain::~Fountain()
@@ -190,11 +195,6 @@ void Fountain::draw(const Camera& camera)
 	texture.Bind();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-//	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.1f, 0.1f, 0.1f, 1.f)));
-//	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.8f, 0.7f, 0.9f, 1.f)));
-//	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.8f, 0.7f, 0.9f, 1.f)));
-//	glMaterialf (GL_FRONT, GL_SHININESS, 40.f);
 
 	glColor3f(1.0, 1.0, 1.0);
 	glPushMatrix();
@@ -301,13 +301,7 @@ void Fountain::draw(const Camera& camera)
 
 	glPopMatrix();
 
-	glDisable(GL_COLOR_MATERIAL);
-	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.2f, 0.2f, 0.2f, 1.f)));
-	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.1f, 0.8f, 1.0f, 0.7f)));
-	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.1f, 0.8f, 1.0f, 1.f)));
-	glMaterialf (GL_FRONT, GL_SHININESS, 20.f);
 	fluid->render(camera);
-	glEnable(GL_COLOR_MATERIAL);
 }
 
 
@@ -359,6 +353,11 @@ Plant::Plant(const vec3& pos)
 
 	// Offset the height by the random size
 	setPos(vec3(pos) + vec3(0,size,0));
+
+	texture.Bind();
+	glEnable(GL_TEXTURE_2D);
+//	glGenerateMipmap(GL_TEXTURE_2D);
+	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 }
 
 void Plant::draw(const Camera& camera)
@@ -375,10 +374,8 @@ void Plant::draw(const Camera& camera)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	texture.Bind();
-	glGenerateMipmap(GL_TEXTURE_2D);
-//	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);		
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);		
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
 	glPushMatrix();
 		// Move the plant into position
@@ -546,7 +543,12 @@ Campfire::Campfire(vec3 pos, ParticleEmitter& fire, ParticleEmitter& smoke, floa
 	, smoke(smoke)
 	, quadric(gluNewQuadric())
 	, wood(GetImage("cedar.png"))
-{ }
+{
+	wood.Bind();
+	glEnable(GL_TEXTURE_2D);
+//	glGenerateMipmap(GL_TEXTURE_2D);
+	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+}
 
 Campfire::~Campfire()
 {
@@ -563,10 +565,8 @@ void Campfire::draw(const Camera& camera)
 //	glMaterialf (GL_FRONT, GL_SHININESS, 0.f);
 
 	wood.Bind();
-	glGenerateMipmap(GL_TEXTURE_2D);
-//	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
 	gluQuadricDrawStyle( quadric, GLU_FILL);
 	gluQuadricNormals( quadric, GLU_SMOOTH);
@@ -628,7 +628,7 @@ ModelObject::ModelObject( glm::vec3 pos, const std::string& filename, HeightMap&
 	transform[2][2] = size;
 	if( model != nullptr )
 	{
-		model->setRenderMode(GLM_SMOOTH | GLM_TEXTURE | GLM_MATERIAL);
+		model->setRenderMode(GLM_SMOOTH | GLM_TEXTURE);// | GLM_MATERIAL);
 	}
 }
 
@@ -679,6 +679,11 @@ FishingRod::FishingRod( glm::vec3 pos, HeightMap& heightmap, float size)
 	secondary[0][2] = -sin(phi);
 	secondary[2][2] = cos(phi);
 	secondary[1][1] = 1;
+
+	texture.Bind();
+	glEnable(GL_TEXTURE_2D);
+//	glGenerateMipmap(GL_TEXTURE_2D);
+	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 }
 
 FishingRod::~FishingRod()
@@ -696,10 +701,8 @@ void FishingRod::draw(const Camera& camera)
 //	glMaterialf (GL_FRONT, GL_SHININESS, 0.f);
 
 	texture.Bind();
-	glGenerateMipmap(GL_TEXTURE_2D);
-//	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
 	gluQuadricDrawStyle( quadric, GLU_FILL);
 	gluQuadricNormals( quadric, GLU_SMOOTH);
@@ -798,6 +801,11 @@ Windmill::Windmill( glm::vec3 pos, HeightMap& heightmap, float size)
 	secondary[0][1] = sin(phi);
 	secondary[1][1] = cos(phi);
 	secondary[2][2] = 1;
+
+	blade.Bind();
+	glEnable(GL_TEXTURE_2D);
+//	glGenerateMipmap(GL_TEXTURE_2D);
+	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 }
 
 Windmill::~Windmill()
@@ -808,18 +816,11 @@ Windmill::~Windmill()
 void Windmill::draw(const Camera& camera)
 {
 	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_LIGHTING);
-//	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.2f, 0.2f, 0.2f, 1.f)));
-//	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.8f, 0.3f, 0.8f, 0.5f)));
-//	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.8f, 0.3f, 0.8f, 1.f)));
-//	glMaterialf (GL_FRONT, GL_SHININESS, 0.f);
-
 
 	base.Bind();
-	glGenerateMipmap(GL_TEXTURE_2D);
-//	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -829,7 +830,7 @@ void Windmill::draw(const Camera& camera)
 	gluQuadricOrientation( quadric, GLU_OUTSIDE);
 	gluQuadricTexture( quadric, GL_TRUE);
 
-	glColor3f(0.7f, 0.7f, 0.7f);
+	glColor4f(0.7f, 0.7f, 0.7f, 1.f);
 
 	glPushMatrix();
 		glMultMatrixf(value_ptr(transform));
