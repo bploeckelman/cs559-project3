@@ -122,7 +122,7 @@ void Scene::setup()
 	// generate a new fluid surface ------------------------------
 	fluid = new Fluid(
 		heightmap->getWidth()  / 4,   // number of vertices wide
-		heightmap->getHeight() / 4
+		heightmap->getHeight() / 3.5	//stupid change just to make it look nicer
 		,   // number of vertices high
 		2.2f,  // distance between vertices
 		0.03f, // time step for evaluation
@@ -137,54 +137,209 @@ void Scene::setup()
 	bounds.push_back(new BoundingBox(*fluid));
 	
 	// add Scene objects -----------------------------------------
-//	const vec3 housePos(100.f, heightmap->heightAt(100,100) + 10, 100.f);
-//	objects.push_back(new House(housePos, sf::Color(0, 255, 0), stone, 10, 20, 10));
+	const unsigned int numHouses = 10;
+	for(unsigned int i = 0; i < numHouses; ++i)
+	{
+		bool boolBound = false;
+		const float x = linearRand(50.f, heightmap->getWidth()*heightmap->getGroundScale());		//kinda cheating way to prevent buildings from landing on road
+		const float z = linearRand(5.f, heightmap->getHeight()*heightmap->getGroundScale());
+		const vec3 pos(x, heightmap->heightAt(x,z), z);
+		const float house = linearRand(0.f, 4.f);
+		const float roof = linearRand(0.f, 2.f);
+		const float length = linearRand(10.f, 50.f);
+		const float width = linearRand(10.f, 50.f);
+		const float height = linearRand(10.f, 20.f);
+		House* building = new House(pos, sf::Color(0, 255, 0), house, roof, length, width, height);
+		BoundingBox* buildingbb = new BoundingBox(*building, vec3(pos.x - width - 1, pos.y - height, pos.z - length - 1), vec3(pos.x + width + 1, pos.y + height*2, pos.z + length + 1));
+		
+		//UGLY... to prevent weird edge behavior (no sides, or no flattening, etc)
+		if(	buildingbb->getEdges()[0].x < 0 ||
+			buildingbb->getEdges()[1].x > heightmap->getWidth()*heightmap->getGroundScale() ||
+			buildingbb->getEdges()[0].z < 0 ||
+			buildingbb->getEdges()[1].z > heightmap->getHeight()*heightmap->getGroundScale())
+		{
+			delete building;
+			delete buildingbb;
+			i--;
+			continue;
+		}
+
+		for each(auto bound in bounds)
+		{
+			if(bound->intersect(buildingbb))		//TODO: fix the super crappy way I wrote this
+			{
+				delete building;
+				delete buildingbb;
+				i--;
+				boolBound = true;
+				break;
+			}
+		}
+		if(boolBound) continue;
+		objects.push_back(building);
+		bounds.push_back(buildingbb);
+		minXZ = vec2(buildingbb->getEdges()[0].x, buildingbb->getEdges()[0].z);
+		maxXZ = vec2(buildingbb->getEdges()[1].x, buildingbb->getEdges()[1].z);
+		heightmap->flattenArea(buildingbb->getEdges()[0].y, minXZ, maxXZ);
+	}
 
 	objects.push_back(new Blimp(vec3(120, 150, 80), 10));
 
-	ModelObject* house = new ModelObject(vec3(15, heightmap->heightAt(15, 20) + 3.5, 20), "./Resources/models/house/house.obj", *heightmap, 7.f);
+	/*ModelObject* house = new ModelObject(vec3(15, heightmap->heightAt(15, 20) + 3.5, 20), "./Resources/models/house/house.obj", *heightmap, 7.f);
 	objects.push_back(house);
 	bounds.push_back(new BoundingBox(*house, vec3(15 - 7, heightmap->heightAt(15, 20) + 3.5 - 7, 20 - 7), vec3(15 + 7, heightmap->heightAt(15, 20) + 3.5 + 7, 20 + 7)));
 	ModelObject* car = new ModelObject(vec3(35, heightmap->heightAt(35, 20)+1.f, 20), "./Resources/models/car/car_riviera.obj", *heightmap, 4.f);
 	objects.push_back(car);
-	bounds.push_back(new BoundingBox(*car, vec3(35 - 4, heightmap->heightAt(35, 20)+1.f - 4, 20 - 4), vec3(35 + 4, heightmap->heightAt(35, 20)+1.f + 4, 20 + 4)));
+	bounds.push_back(new BoundingBox(*car, vec3(35 - 4, heightmap->heightAt(35, 20)+1.f - 4, 20 - 4), vec3(35 + 4, heightmap->heightAt(35, 20)+1.f + 4, 20 + 4)));*/
 
-	//objects.push_back(new FishingRod(vec3(120, heightmap->heightAt(120, 75), 75), *heightmap, 4.f));
-	Windmill* windmill = new Windmill(vec3(120, heightmap->heightAt(120, 200), 200), *heightmap, 50.f);
-	objects.push_back(windmill);
-	BoundingBox* windbb = new BoundingBox(*windmill, vec3(120 - 10, heightmap->heightAt(120, 200), 200 - 10), vec3(120 + 10, heightmap->heightAt(120, 200) + 60, 200 + 10));
-	bounds.push_back(windbb);
-	minXZ = vec2(windbb->getEdges()[0].x, windbb->getEdges()[0].z);
-	maxXZ = vec2(windbb->getEdges()[1].x, windbb->getEdges()[1].z);
-	heightmap->flattenArea(windbb->getEdges()[0].y - .1f, minXZ, maxXZ);
-	//objects.push_back(new Fish(vec3(70, 3.5f, 75), sf::Color(255, 127, 0), *heightmap, *fluid));
+	const unsigned int numWindmills = 5;
+	for(unsigned int i = 0; i < numWindmills; ++i)
+	{
+		bool boolBound = false;
+		const float x = linearRand(5.f, heightmap->getWidth()*heightmap->getGroundScale());
+		const float z = linearRand(5.f, heightmap->getHeight()*heightmap->getGroundScale());
+		const vec3 pos(x, heightmap->heightAt(x,z), z);
 
-	const vec3 firePosition(40.f, heightmap->heightAt(40, 30) + 1.f, 30.f);
+		Windmill* windmill = new Windmill(pos, *heightmap, 50.f);
+		BoundingBox* windbb = new BoundingBox(*windmill, vec3(pos.x - 10, pos.y, pos.z - 10), vec3(pos.x + 10, pos.y + 60, pos.z + 10));
+		for each(auto bound in bounds)
+		{
+			if(bound->intersect(windbb))		//TODO: fix the super crappy way I wrote this
+			{
+				delete windmill;
+				delete windbb;
+				i--;
+				boolBound = true;
+				break;
+			}
+		}
+		if(boolBound) continue;
+		objects.push_back(windmill);
+		bounds.push_back(windbb);
+		vec2 minXZ = vec2(windbb->getEdges()[0].x, windbb->getEdges()[0].z);
+		vec2 maxXZ = vec2(windbb->getEdges()[1].x, windbb->getEdges()[1].z);
+		heightmap->flattenArea(windbb->getEdges()[0].y - .1f, minXZ, maxXZ);
+	}
+	
+
+	const unsigned int numFish = 15;
+	for(unsigned int i = 0; i < numFish; ++i)
+	{
+		bool boolBound = false;
+		const float x = linearRand(fluid->pos.x * fluid->getDist(), fluid->getWidth() * fluid->getDist());
+		const float z = linearRand(fluid->pos.z * fluid->getDist(), fluid->getHeight() * fluid->getDist());
+		vec3 pos(x, heightmap->heightAt(x,z), z);
+		if(pos[1] > fluid->pos.y)
+		{
+			i--;
+			continue;
+		}
+		pos.y = pos.y + 1.f >= fluid->pos.y - 1.f ? fluid->pos.y - 1.f : pos.y + 1.f;
+		objects.push_back(new Fish(pos, sf::Color(255, 127, 0), *heightmap, *fluid));
+	}
+	
+
+	/*const vec3 firePosition(40.f, heightmap->heightAt(40, 30) + 1.f, 30.f);
 	const vec3 smokePosition(firePosition + vec3(0,1.f,0));
 	FireEmitter  *fire  = new FireEmitter(firePosition);
 	SmokeEmitter *smoke = new SmokeEmitter(smokePosition);
 	
 	Campfire* campfire = new Campfire(firePosition, *fire, *smoke, 5.f);
 	objects.push_back(campfire);
-	bounds.push_back(new BoundingBox(*campfire, glm::vec3(firePosition.x - 5, firePosition.y - 5, firePosition.z - 5) , glm::vec3(firePosition.x + 5, firePosition.y + 5, firePosition.z + 5)));
+	bounds.push_back(new BoundingBox(*campfire, glm::vec3(firePosition.x - 5, firePosition.y - 5, firePosition.z - 5) , glm::vec3(firePosition.x + 5, firePosition.y + 5, firePosition.z + 5)));*/
 
-	const vec3 fountainPosition(40.f, heightmap->heightAt(40, 100) + 2.f, 100.f);
-	FountainEmitter *fountain = new FountainEmitter(fountainPosition, 20);
-	Fountain* foun = new Fountain(fountainPosition - vec3(0,1.f,0), 10, *fountain, &skybox);
-	objects.push_back(foun);
-	BoundingBox* founbb = new BoundingBox(*foun, glm::vec3(fountainPosition.x - 6, fountainPosition.y - 1.5, fountainPosition.z - 11) , glm::vec3(fountainPosition.x + 6, fountainPosition.y + 1, fountainPosition.z + 11));
-	bounds.push_back(founbb);
+	
+	ParticleSystem  *system3 = new ParticleSystem();
 
-	minXZ = vec2(founbb->getEdges()[0].x, founbb->getEdges()[0].z);
-	maxXZ = vec2(founbb->getEdges()[1].x, founbb->getEdges()[1].z);
-	heightmap->flattenArea(founbb->getEdges()[0].y - .1f, minXZ, maxXZ);
+	const unsigned int numFires = 4;
+	for(unsigned int i = 0; i < numFires; ++i)
+	{
+		bool boolBound = false;
+		const float x = linearRand(5.f, heightmap->getWidth()*heightmap->getGroundScale());
+		const float z = linearRand(5.f, heightmap->getHeight()*heightmap->getGroundScale());
+		const vec3 pos(x, heightmap->heightAt(x,z)  + 2.f, z);
+		
+		const vec3 firePosition(pos.x, pos.y + 1.f, pos.z);
+		const vec3 smokePosition(firePosition + vec3(0,1.f,0));
+		FireEmitter  *fire  = new FireEmitter(firePosition);
+		SmokeEmitter *smoke = new SmokeEmitter(smokePosition);
+		Campfire* campfire = new Campfire(firePosition, *fire, *smoke, 5.f);
+		BoundingBox* firebb = new BoundingBox(*campfire,glm::vec3(pos.x - 5, pos.y + 1, pos.z - 5) , 
+														glm::vec3(pos.x + 5, pos.y + 5, pos.z + 5));
+
+		for each(auto bound in bounds)
+		{
+			if(bound->intersect(firebb))		//TODO: fix the super crappy way I wrote this
+			{
+				delete fire;
+				delete smoke;
+				delete campfire;
+				delete firebb;
+				i--;
+				boolBound = true;
+				break;
+			}
+		}
+		if(boolBound) continue;
+
+		objects.push_back(campfire);
+		bounds.push_back(firebb);
+		system3->add(fire);
+		system3->add(smoke);
+		minXZ = vec2(firebb->getEdges()[0].x, firebb->getEdges()[0].z);
+		maxXZ = vec2(firebb->getEdges()[1].x, firebb->getEdges()[1].z);
+		heightmap->flattenArea(firebb->getEdges()[0].y - .1f, minXZ, maxXZ);
+	}
+
+	
+	
+	
+	//moved to accomodate multiple fountains
+	ParticleSystem  *system1 = new ParticleSystem();
+
+	const unsigned int numFountains = 4;
+	for(unsigned int i = 0; i < numFountains; ++i)
+	{
+		bool boolBound = false;
+		const float x = linearRand(5.f, heightmap->getWidth()*heightmap->getGroundScale());
+		const float z = linearRand(5.f, heightmap->getHeight()*heightmap->getGroundScale());
+		const vec3 pos(x, heightmap->heightAt(x,z)  + 2.f, z);
+		
+		//const vec3 fountainPosition(40.f, heightmap->heightAt(40, 100) + 2.f, 100.f);
+		FountainEmitter *fountain = new FountainEmitter(pos, 20);
+		Fountain* foun = new Fountain(pos - vec3(0,1.f,0), 10, *fountain, &skybox);
+		BoundingBox* founbb = new BoundingBox(*foun,	glm::vec3(pos.x - 6, pos.y - 1.5, pos.z - 11) , 
+														glm::vec3(pos.x + 6, pos.y + 1, pos.z + 11));
+
+		for each(auto bound in bounds)
+		{
+			if(bound->intersect(founbb))		//TODO: fix the super crappy way I wrote this
+			{
+				delete fountain;
+				delete founbb;
+				delete foun;
+				i--;
+				boolBound = true;
+				break;
+			}
+		}
+		if(boolBound) continue;
+
+		objects.push_back(foun);
+		bounds.push_back(founbb);
+		system1->add(fountain);
+		minXZ = vec2(founbb->getEdges()[0].x, founbb->getEdges()[0].z);
+		maxXZ = vec2(founbb->getEdges()[1].x, founbb->getEdges()[1].z);
+		heightmap->flattenArea(founbb->getEdges()[0].y - .1f, minXZ, maxXZ);
+	}
+
+	
 
 	// add transparent scene objects -----------------------------
 	const unsigned int numBushes = 50;
 	for(unsigned int i = 0; i < numBushes; ++i)
 	{
 		bool boolBound = false;
-		// TODO: don't add where objects already are
 		const float x = linearRand(5.f, 512.f);
 		const float z = linearRand(5.f, 512.f);
 		const vec3 pos(x, heightmap->heightAt(x,z), z);
@@ -202,8 +357,7 @@ void Scene::setup()
 	}
 
 	// add particle systems --------------------------------------
-	ParticleSystem  *system1 = new ParticleSystem();
-	system1->add(fountain);
+	
 	system1->start();
 	particleMgr.add(system1);
 
@@ -213,9 +367,6 @@ void Scene::setup()
 	system2->start();
 	particleMgr.add(system2);
 
-	ParticleSystem *system3 = new ParticleSystem();
-	system3->add(smoke);
-	system3->add(fire);
 	system3->start();
 	particleMgr.add(system3);
 

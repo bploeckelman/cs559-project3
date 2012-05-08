@@ -19,7 +19,15 @@ std::string HouseTypeNames[] =
 	"brick",
 	"stone",
 	"wood",
-	"cement"
+	"cement",
+	"mossy"
+};
+
+std::string RoofTypeNames[] =
+{
+	"roof",
+	"oldTile",
+	"smallTile"
 };
 
 House::House()
@@ -29,10 +37,10 @@ House::House()
 {
 }
 
-House::House(glm::vec3 pos, sf::Color color, HouseType type, float length, float width, float height = 10.f)
+House::House(glm::vec3 pos, sf::Color color, int houseType, int roofType, float length, float width, float height = 10.f)
 	: SceneObject(pos)
-	 ,roof(GetImage("roof.png"))
-	 ,side(GetImage( std::string(HouseTypeNames[type]) + ".png"))
+	 ,roof(GetImage( std::string(RoofTypeNames[roofType]) + ".png"))
+	 ,side(GetImage( std::string(HouseTypeNames[houseType]) + ".png"))
 	 ,color(color)
 	 ,length(length)
 	 ,width(width)

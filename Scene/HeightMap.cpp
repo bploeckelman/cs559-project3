@@ -268,8 +268,6 @@ void HeightMap::flattenArea( float height
 	const unsigned int maxx = static_cast<unsigned int>(maxXZ.x);
 	const unsigned int maxz = static_cast<unsigned int>(maxXZ.y);
 
-	// Next, lower heights more than tolerance above avg
-	// and raise heights more than tolerance below avg
 	for(unsigned int z = minz; z <= maxz; ++z)
 	for(unsigned int x = minx; x <= maxx; ++x)
 	{

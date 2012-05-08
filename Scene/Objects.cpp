@@ -50,7 +50,7 @@ void Fish::update(const Clock &clock, const sf::Input& input)
 	float randz = Randomizer::Random(0.f, .05f);
 	float randx = Randomizer::Random(-.02f, .02f);
 
-	if( heightmap.heightAt(this->getPos().x + randx, this->getPos().z + randz)  > this->getPos().y - .2f)		//should fix for when fish out of fluid
+	if( heightmap.heightAt(this->getPos().x + randx, this->getPos().z + randz)  > this->getPos().y - .4f)		//should fix for when fish out of fluid
 	{		//need to turn
 		transform[0][0] = cos(theta);
 		transform[2][0] = sin(theta);
@@ -904,7 +904,8 @@ void Windmill::update(const sf::Clock &clock, const sf::Input& input)
 	{
 		theta += .1f;
 	}
-	phi += .025f;
+	
+	phi += linearRand(0.02f, 0.025f);
 
 	transform[0][0] = cos(theta);
 	transform[2][0] = sin(theta);
