@@ -122,7 +122,8 @@ void Scene::setup()
 	// generate a new fluid surface ------------------------------
 	fluid = new Fluid(
 		heightmap->getWidth()  / 4,   // number of vertices wide
-		heightmap->getHeight() / 4,   // number of vertices high
+		heightmap->getHeight() / 4
+		,   // number of vertices high
 		2.2f,  // distance between vertices
 		0.03f, // time step for evaluation
 		10.0f, // wave velocity
@@ -316,8 +317,11 @@ void Scene::update( const Clock& clock, const Input& input )
 	static float accum = 0.f;
 	if( (accum += timer.GetElapsedTime()) > limit )
 	{
-		fluid->displace( linearRand(0.f, (float)fluid->getWidth())
-                       , linearRand(0.f, (float)fluid->getHeight())
+		float x = linearRand(0.f, (float)fluid->getWidth());
+		float z = linearRand(0.f, (float)fluid->getHeight());
+		if(h->heightAt(x*fluid->getDist() + fluid->pos.x, z*fluid->getDist() + fluid->pos.z) > fluid->pos.y)	return;
+		fluid->displace( x
+                       , z
 					   , 1.f, linearRand(0.2f, 2.2f));
 		accum = 0.f;
 	}
