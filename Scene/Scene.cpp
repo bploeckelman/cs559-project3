@@ -188,11 +188,31 @@ void Scene::setup()
 
 	objects.push_back(new FishingRod(vec3(195, heightmap->heightAt(195, 250), 250), *heightmap, 4.f));
 
-	ModelObject* house = new ModelObject(vec3(193.5, heightmap->heightAt(193.5, 258.5) + 4.f, 258.5), "./Resources/models/house/house.obj", *heightmap, 7.f);
+	const vec3 housePos(193.5, heightmap->heightAt(193.5, 258.5) + 4.f, 258.5);
+	ModelObject* house = new ModelObject(housePos, "./Resources/models/house/house.obj", *heightmap, 7.f);
 	objects.push_back(house);
 //	bounds.push_back(new BoundingBox(*house, vec3(15 - 7, heightmap->heightAt(15, 20) + 3.5 - 7, 20 - 7), vec3(15 + 7, heightmap->heightAt(15, 20) + 3.5 + 7, 20 + 7)));
 	// Manually flatten area under house
 	heightmap->flattenArea(vec2(185.f, 250.5f), vec2(201.5, 266.5), 0.1f);
+
+	// Add campfire near house
+	const vec3 firePosition(housePos + vec3(-1.5f, -6.f, 10.f));
+	const vec3 smokePosition(firePosition + vec3(0,1.f,0));
+	FireEmitter  *fire  = new FireEmitter(firePosition);
+	SmokeEmitter *smoke = new SmokeEmitter(smokePosition);
+	Campfire* campfire  = new Campfire(firePosition, *fire, *smoke, 3.f);
+	objects.push_back(campfire);
+	bb = new BoundingBox(*campfire, glm::vec3(firePosition.x - 5, firePosition.y - 5, firePosition.z - 5) , glm::vec3(firePosition.x + 5, firePosition.y + 5, firePosition.z + 5));
+	bounds.push_back(bb);
+	minXZ = vec2(bb->getEdges()[0].x, bb->getEdges()[0].z);
+	maxXZ = vec2(bb->getEdges()[1].x, bb->getEdges()[1].z);
+	heightmap->flattenArea(minXZ, maxXZ, 0.1f);
+	ParticleSystem *ps = new ParticleSystem();
+	ps->add(fire);
+	ps->add(smoke);
+	ps->start();
+	particleMgr.add(ps);
+
 
 	ModelObject* carModel = new ModelObject(vec3(64, heightmap->heightAt(64, 16.5)+1.f, 16.5), "./Resources/models/car/car_riviera.obj", *heightmap, 4.f);
 	objects.push_back(carModel);
@@ -244,18 +264,8 @@ void Scene::setup()
 		pos.y = pos.y + 1.f >= fluid->pos.y - 1.f ? fluid->pos.y - 1.f : pos.y + 1.f;
 		objects.push_back(new Fish(pos, sf::Color(255, 127, 0), *heightmap, *fluid));
 	}
-	
 
-	/*const vec3 firePosition(40.f, heightmap->heightAt(40, 30) + 1.f, 30.f);
-	const vec3 smokePosition(firePosition + vec3(0,1.f,0));
-	FireEmitter  *fire  = new FireEmitter(firePosition);
-	SmokeEmitter *smoke = new SmokeEmitter(smokePosition);
-	
-	Campfire* campfire = new Campfire(firePosition, *fire, *smoke, 5.f);
-	objects.push_back(campfire);
-	bounds.push_back(new BoundingBox(*campfire, glm::vec3(firePosition.x - 5, firePosition.y - 5, firePosition.z - 5) , glm::vec3(firePosition.x + 5, firePosition.y + 5, firePosition.z + 5)));*/
 
-	
 	ParticleSystem  *system3 = new ParticleSystem();
 
 	const unsigned int numFires = 6;
@@ -270,7 +280,7 @@ void Scene::setup()
 		const vec3 smokePosition(firePosition + vec3(0,1.f,0));
 		FireEmitter  *fire  = new FireEmitter(firePosition);
 		SmokeEmitter *smoke = new SmokeEmitter(smokePosition);
-		Campfire* campfire = new Campfire(firePosition, *fire, *smoke, 5.f);
+		Campfire* campfire = new Campfire(firePosition, *fire, *smoke, linearRand(2.5f, 5.f));
 		BoundingBox* firebb = new BoundingBox(*campfire,glm::vec3(pos.x - 5, pos.y + 1, pos.z - 5) , 
 														glm::vec3(pos.x + 5, pos.y + 5, pos.z + 5));
 
