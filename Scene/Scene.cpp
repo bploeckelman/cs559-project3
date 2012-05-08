@@ -13,6 +13,7 @@
 #include "../Utility/Plane.h"
 #include "../Utility/ObjModel.h"
 #include "../Utility/RenderUtils.h"
+#include "../Utility/BoundingBox.h"
 #include "../Core/Common.h"
 #include "../Core/ImageManager.h"
 #include "../Particles/Particles.h"
@@ -20,6 +21,7 @@
 #include <functional>
 #include <algorithm>
 #include <sstream>
+#include <iostream>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/random.hpp>
@@ -31,9 +33,13 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Input.hpp>
 #include <SFML/System/Randomizer.hpp>
+#include <iomanip>
 
 using namespace sf;
 using namespace glm; 
+
+// TODO: keep a container of followee's in Scene, or add followee member to camera
+ParticleEmitter *followee = nullptr;
 
 
 Scene::Scene()
@@ -75,14 +81,14 @@ void Scene::setup()
 
 	glClearColor(0.1f, 0.1f, 0.1f, 1.f);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-/*
+
 	const vec4 fogColor(0.1f, 0.1f, 0.1f, 1.f);
-	const float fogDensity = 0.01f;
+	const float fogDensity = 0.002f;
 	glEnable(GL_FOG);
 	glFogi(GL_FOG_MODE, GL_EXP2);
 	glFogfv(GL_FOG_COLOR, value_ptr(fogColor));
 	glFogf(GL_FOG_DENSITY, fogDensity);
-*/
+
 	// setup texture directories ---------------------------------
 	ImageManager::get().addResourceDir("Resources/images/");
 	ImageManager::get().addResourceDir("Resources/images/plants/");
@@ -93,12 +99,10 @@ void Scene::setup()
 	ImageManager::get().addResourceDir("../../Resources/images/particles/");
 
 	// setup meshes ----------------------------------------------
-
-	HeightMap *heightmap = new HeightMap(256, 256, 2.f);
-//	HeightMap *heightmap = new HeightMap("heightmap-terrain.png", 2.f, 100.f); 
+//	HeightMap *heightmap = new HeightMap(256, 256, 2.f);
+	HeightMap *heightmap = new HeightMap("heightmap-terrain.png", 1.f, 100.f); 
 //	HeightMap *heightmap2 = new HeightMap("heightmap-terrain.png", 2.f, 100.f, 256.f, 256.f); 
 //	HeightMap *heightmap3 = new HeightMap("heightmap-terrain.png", 2.f, 100.f, 256.f, 0.f);
-
 	
 	meshes.push_back(heightmap);
 //	meshes.push_back(heightmap2);
@@ -109,13 +113,15 @@ void Scene::setup()
 
 	// generate a new fluid surface ------------------------------
 	fluid = new Fluid(
-		256,   // number of vertices wide
-		256,   // number of vertices high
-		1.75f,  // distance between vertices
+		heightmap->getWidth()  / 4,   // number of vertices wide
+		heightmap->getHeight() / 4,   // number of vertices high
+		2.2f,  // distance between vertices
 		0.03f, // time step for evaluation
-		10.0f,  // wave velocity
+		10.0f, // wave velocity
 		0.1f,  // fluid viscosity
-		vec3(80.f, 0.f, 80.f)
+		vec3(0.1f * heightmap->getWidth() * heightmap->getGroundScale(),
+			 23.f,
+			 0.1f * heightmap->getWidth() * heightmap->getGroundScale())
 	);
 	fluid->setSkybox(&skybox);
 	
@@ -123,7 +129,7 @@ void Scene::setup()
 //	const vec3 housePos(100.f, heightmap->heightAt(100,100) + 10, 100.f);
 //	objects.push_back(new House(housePos, sf::Color(0, 255, 0), stone, 10, 20, 10));
 
-	objects.push_back(new Blimp(vec3(120, 50, 80), 10));
+	objects.push_back(new Blimp(vec3(120, 150, 80), 10));
 
 	ModelObject* house = new ModelObject(vec3(15, heightmap->heightAt(15, 20) + 3.5, 20), "./Resources/models/house/house.obj", *heightmap, 7.f);
 	objects.push_back(house);
@@ -195,17 +201,31 @@ void Scene::setup()
 	particleMgr.add(system3);
 
 	ParticleSystem *system4 = new ParticleSystem();
-	system4->add(new TestEmitter(*heightmap, vec3(64.f, 0.f, 64.f)));
-	system4->add(new TestEmitter(*heightmap, vec3(128.f, 0.f, 128.f)));
+	const float heightmapMax = heightmap->getHeight() * heightmap->getGroundScale();
+	const vec3 p1(linearRand(5.f, heightmapMax), 0.f, linearRand(5.f, heightmapMax));
+	const vec3 p2(linearRand(5.f, heightmapMax), 0.f, linearRand(5.f, heightmapMax));
+	const vec3 p3(linearRand(5.f, heightmapMax), 0.f, linearRand(5.f, heightmapMax));
+	TestEmitter *followEmitter = new TestEmitter(*heightmap, p1);
+	system4->add(followEmitter);
+	system4->add(new TestEmitter(*heightmap, p2));
+	system4->add(new TestEmitter(*heightmap, p3));
 	system4->start();
 	particleMgr.add(system4);
+	
+	// set followee for camera
+	followee = followEmitter;
 
 	// create and position cameras -------------------------------
 	// TODO: add more cameras and be able to switch between them
 	cameras.push_back(Camera( *heightmap 
-							, vec3(-2.5, 25.0, -2.5)    // position
+							, vec3(10.0, 20.0, 10.0)    // position
 							, vec3(40.0, 135.0, 0.0) ));// rotation
+	cameras.push_back(Camera( *heightmap
+							, vec3(0,50,0)
+							, vec3(40.f, 0.f, 0.f)) );
 	camera = &cameras[0];
+
+	Camera* cam = &cameras[1];
 
 	// setup lighting --------------------------------------------
 	setupLights();
@@ -240,31 +260,11 @@ void Scene::setupLights()
 	light1->ambient(vec4(1.f, 1.f, 1.f, 1.f));
 	light1->diffuse(vec4(1.f, 1.f, 1.f, 1.f));
 	light1->enable();
-/*
-	Light *light2 = new Light(
-		vec4(50.f, 40.f, 100.f, 1.f),      // position
-		vec4(0.1f, 0.1f, 0.1f, 1.f),  // ambient
-		vec4(0.f, 1.f, 0.3f, 1.f),    // diffuse
-		vec4(0.f, 1.f, 0.f, 1.f)      // specular 
-	);
-	light2->disable();
-//	light2->enable();
-*/
+
 	lights.push_back(light0);
 	lights.push_back(light1);
-//	lights.push_back(light2);
 
-	// setup and enable materials
 	vec4 ambient(0.2f, 0.2f, 0.2f, 1.f);
-//	vec4 diffuse(1.f, 1.f, 1.f, 1.f);
-//	vec4 specular(0.f, 0.f, 1.f, 1.f);
-//	float shininess[1] = { 50.f };
-
-//	glMaterialfv(GL_FRONT, GL_AMBIENT, value_ptr(ambient));
-//	glMaterialfv(GL_FRONT, GL_DIFFUSE, value_ptr(diffuse));
-//	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(specular));
-//	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
-
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(ambient));
 
 	glEnable(GL_LIGHTING);
@@ -280,6 +280,16 @@ void Scene::update( const Clock& clock, const Input& input )
 		, [&](Camera& cam){ cam.update(clock, input); }
 	);
 
+	// Update following camera
+	// TODO: clean this up and make it spin around the followee
+	HeightMap *h = reinterpret_cast<HeightMap*>(meshes.front());
+	static const vec3 up(0,1,0);
+	const vec3 followPos = followee->getPos();
+	const vec3 offsetPos = followPos + vec3(-30, 8, -30);
+	const float y = h->heightAt(offsetPos.x, offsetPos.z);
+	cameras[1].position(offsetPos.x, y + 10.f, offsetPos.z);
+	cameras[1].lookAt(cameras[1].position(), followPos, up); 
+
 	// update scene objects
 	for each(auto object in objects)
 		object->update(clock, input);
@@ -289,9 +299,23 @@ void Scene::update( const Clock& clock, const Input& input )
 
 	// update other things
 	updateLights();
-	fluid->evaluate();
 	particleMgr.update(clock.GetElapsedTime());
 
+	// randomly displace fluid every 'limit' seconds
+	static const float limit = 2.f; // in seconds
+	static float accum = 0.f;
+	accum += timer.GetElapsedTime();
+	if( accum > limit )
+	{
+		fluid->displace( linearRand(0.f, (float)fluid->getWidth())
+                       , linearRand(0.f, (float)fluid->getHeight())
+					   , 1.f, linearRand(0.2f, 2.2f));
+		accum = 0.f;
+	}
+	fluid->evaluate();
+
+//	std::cout << "timer: " << std::setw(10) << timer.GetElapsedTime() << "   "
+//		      << "clock: " << std::setw(10) << clock.GetElapsedTime() << std::endl; 
 	timer.Reset();
 }
 
@@ -303,29 +327,15 @@ void Scene::render( const Clock& clock )
 
 	skybox.render(*camera);
 
-//	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.0f, 0.0f, 0.0f, 1.f)));
-//	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.1f, 0.4f, 0.1f, 1.f)));
-//	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.1f, 0.4f, 0.1f, 1.f)));
-//	glMaterialf (GL_FRONT, GL_SHININESS, 0.f);
 	for each(auto mesh in meshes)
 		mesh->render();
 
-//	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.1f, 0.1f, 0.1f, 1.f)));
-//	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.6f, 0.6f, 0.6f, 1.f)));
-//	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.6f, 0.6f, 0.6f, 1.f)));
-//	glMaterialf (GL_FRONT, GL_SHININESS, 1.f);
 	meshOverlay->render();
 
 	for each(auto object in objects)
 		object->draw(*camera);
 
-//	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.2f, 0.2f, 0.2f, 1.f)));
-//	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.1f, 0.8f, 1.0f, 0.7f)));
-//	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.1f, 0.8f, 1.0f, 1.f)));
-//	glMaterialf (GL_FRONT, GL_SHININESS, 60.f);
-	glDisable(GL_COLOR_MATERIAL);
 	fluid->render(*camera);
-	glEnable(GL_COLOR_MATERIAL);
 
 	glDisable(GL_LIGHTING);
 	for each(auto object in alphaObjects)
@@ -337,14 +347,10 @@ void Scene::render( const Clock& clock )
 	for each(auto light in lights)
 		light->render();
 
-//	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.1f, 0.1f, 0.1f, 1.f)));
-//	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(1.0f, 1.0f, 1.0f, 1.f)));
-//	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(1.0f, 1.0f, 1.0f, 1.f)));
-//	glMaterialf (GL_FRONT, GL_SHININESS, 0.f);
 	Render::basis();
 
-	//for each(auto bound in bounds)
-	//	bound->draw();
+//	for each(auto bound in bounds)
+//		bound->draw();
 }
 
 void Scene::handle(const Event& event)
@@ -373,11 +379,11 @@ void Scene::handle(const Event& event)
 		// Mouse look toggle
 		if( event.Key.Code == Key::RControl )
 			camera->toggleMouseLook();
-		// Skybox toggle
+		// Switch cameras
 		if( event.Key.Code == Key::N)
-			skybox.setNight();
+			camera = &cameras[0];
 		if( event.Key.Code == Key::M)
-			skybox.setDay();
+			camera = &cameras[1];
 		break;
 	case Event::KeyReleased:
 		break;
@@ -414,6 +420,10 @@ void Scene::cleanup()
 	Log("\n[Cleaning up scene...]");
 
 	delete meshOverlay;
+
+	for each(auto bound in bounds)
+		delete bound;
+	bounds.clear();
 
 	for each(auto obj in alphaObjects)
 		delete obj;
@@ -456,41 +466,22 @@ void Scene::sortTransparentObjects()
 
 void Scene::updateLights()
 {
-	// Hacky sort of stuff to change ambient light level 
-	// based on time of day
-	static const float timeLimit = 60.f; // in seconds
-	static float delta = 0.f;
-	static bool toggle = true;
-	if( toggle )
-	{
-		delta += timer.GetElapsedTime();
-		if( delta > timeLimit )
-		{
-			toggle = !toggle;
-			delta  = timeLimit;
-		}
-	}
-	else
-	{
-		delta -= timer.GetElapsedTime();
-		if( delta < 0.f )
-		{
-			toggle = !toggle;
-			delta  = 0.f;
-		}
-	}
-
-	static const float step = 0.1f;
-
-	float ds = step * delta;
-	if( ds < 0.5f  ) ds = 0.5f; // keep it from pitch black
-	if( ds > 1.f ) ds = 1.f; // keep it from full bright
-	vec4 ambient(ds, ds, ds, 1.f);
+	float delta = skybox.getDayNightCycleDelta();
+	if( delta < 0.3f ) delta = 0.3f; // keep it from pitch black
+	if( delta > 0.9f ) delta = 0.9f; // keep it from full bright
+	vec4 ambient(delta, delta, delta, 1.f);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, value_ptr(ambient));
 
 	// move lights around 
-	const vec4& pos0 = lights[0]->position();
-	const vec4& pos1 = lights[1]->position();
-	lights[0]->position(pos0 + 0.5f * vec4(cos(delta), 0.f, sin(delta), 0.f));
-	lights[1]->position(pos1 + 0.1f * vec4(cos(delta), 0.f, sin(delta), 0.f));
+	static float limit = constants::two_pi;
+	static float accum = 0.f;
+	if( accum += timer.GetElapsedTime() > limit )
+	{
+		accum = 0.f;
+
+		const vec4& pos0 = lights[0]->position();
+		const vec4& pos1 = lights[1]->position();
+		lights[0]->position(pos0 + 0.5f * vec4(cos(accum), 0.f, sin(accum), 0.f));
+		lights[1]->position(pos1 + 0.1f * vec4(cos(accum), 0.f, sin(accum), 0.f));
+	}
 }

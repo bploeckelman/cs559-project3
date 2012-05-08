@@ -1,16 +1,15 @@
+#pragma once
 /************************************************************************/
 /* BoundingBox
 /* ------
 /* Box that specifies where the edges of an object are.
 /************************************************************************/
-#include <glm\glm.hpp>
-#include "../Scene/SceneObject.h"
-#include "../Scene/Objects.h"
 #include "Mesh.h"
+#include "../Scene/Objects.h"
+#include "../Scene/SceneObject.h"
 #include "../Scene/MeshOverlay.h"
 
-
-
+#include <glm\glm.hpp>
 
 
 class BoundingBox : public SceneObject
