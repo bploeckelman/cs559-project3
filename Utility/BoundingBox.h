@@ -30,6 +30,7 @@ public:
 	
 	const glm::mat2x3& getEdges();
 	const bool inBox(glm::vec3 vec);
+	void draw();
 };
 
 inline const glm::mat2x3& BoundingBox::getEdges() { return edges;}
@@ -37,7 +38,9 @@ inline const glm::mat2x3& BoundingBox::getEdges() { return edges;}
 inline const bool BoundingBox::inBox(glm::vec3 vec)
 {
 	if(	vec.x >= edges[0].x && vec.x <= edges[1].x &&
-		vec.z >= edges[0].z && vec.z <= edges[1].z)		return true;
-
+		vec.z >= edges[0].z && vec.z <= edges[1].z)
+	{
+		return true;
+	}
 	return false;
 }

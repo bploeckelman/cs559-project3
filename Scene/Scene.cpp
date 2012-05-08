@@ -135,9 +135,9 @@ void Scene::setup()
 	//objects.push_back(new FishingRod(vec3(120, heightmap->heightAt(120, 75), 75), *heightmap, 4.f));
 	Windmill* windmill = new Windmill(vec3(120, heightmap->heightAt(120, 75), 75), *heightmap, 50.f);
 	objects.push_back(windmill);
-	bounds.push_back(new BoundingBox(*windmill, vec3(120 - 50, heightmap->heightAt(120, 75) - 50, 75 - 50), vec3(120 + 50, heightmap->heightAt(120, 75) + 50, 75 + 50)));
+	bounds.push_back(new BoundingBox(*windmill, vec3(120 - 10, heightmap->heightAt(120, 75) - 10, 75 - 10), vec3(120 + 10, heightmap->heightAt(120, 75) + 60, 75 + 10)));
 
-	objects.push_back(new Fish(vec3(70, 3.5f, 75), sf::Color(255, 127, 0), *heightmap, *fluid));
+	//objects.push_back(new Fish(vec3(70, 3.5f, 75), sf::Color(255, 127, 0), *heightmap, *fluid));
 
 	const vec3 firePosition(40.f, heightmap->heightAt(40, 30) + 1.f, 30.f);
 	const vec3 smokePosition(firePosition + vec3(0,1.f,0));
@@ -152,12 +152,13 @@ void Scene::setup()
 	FountainEmitter *fountain = new FountainEmitter(fountainPosition, 20);
 	Fountain* foun = new Fountain(fountainPosition - vec3(0,1.f,0), 10, *fountain, &skybox);
 	objects.push_back(foun);
-	bounds.push_back(new BoundingBox(*foun, glm::vec3(fountainPosition.x - 10, fountainPosition.y - 10, fountainPosition.z - 10) , glm::vec3(fountainPosition.x + 10, fountainPosition.y + 10, fountainPosition.z + 10)));
+	bounds.push_back(new BoundingBox(*foun, glm::vec3(fountainPosition.x - 10, fountainPosition.y - 10, fountainPosition.z - 11) , glm::vec3(fountainPosition.x + 10, fountainPosition.y + 10, fountainPosition.z + 11)));
 
 	// add transparent scene objects -----------------------------
 	const unsigned int numBushes = 50;
 	for(unsigned int i = 0; i < numBushes; ++i)
 	{
+		bool boolBound = false;
 		// TODO: don't add where objects already are
 		const float x = linearRand(5.f, 512.f);
 		const float z = linearRand(5.f, 512.f);
@@ -167,9 +168,11 @@ void Scene::setup()
 			if(bound->inBox(pos))		//TODO: fix the super crappy way I wrote this
 			{
 				i--;
-				continue;
+				boolBound = true;
+				break;
 			}
 		}
+		if(boolBound) continue;
 		alphaObjects.push_back(new Plant(pos)); 
 	}
 
@@ -338,6 +341,9 @@ void Scene::render( const Clock& clock )
 //	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(1.0f, 1.0f, 1.0f, 1.f)));
 //	glMaterialf (GL_FRONT, GL_SHININESS, 0.f);
 	Render::basis();
+
+	//for each(auto bound in bounds)
+	//	bound->draw();
 }
 
 void Scene::handle(const Event& event)

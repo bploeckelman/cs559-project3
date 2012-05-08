@@ -31,22 +31,11 @@ BoundingBox::BoundingBox(MeshOverlay& mesh)//, glm::vec3 lesser, glm::vec3 great
 			for(int k = 0; k < 3; ++k)
 			{
 				edges[0][k] = edges[0][k] < mesh.vertexAt(i , j)[k] ? edges[0][k] : mesh.vertexAt(i , j)[k];
-				edges[1][k] = edges[1][k] > mesh.vertexAt(i , j)[k] ? edges[0][k] : mesh.vertexAt(i , j)[k];
+				edges[1][k] = edges[1][k] > mesh.vertexAt(i , j)[k] ? edges[1][k] : mesh.vertexAt(i , j)[k];
 			}
 		}
 	}	
 
-	//make local coords
-	edges[0][0] -= mesh.getOffset().x;
-	edges[1][0] -= mesh.getOffset().x;
-	edges[0][2] -= mesh.getOffset().y;
-	edges[1][2] -= mesh.getOffset().y;
-	std::cout << edges[0][0] << std::endl;
-	std::cout << edges[0][1] << std::endl;
-	std::cout << edges[0][2] << std::endl;
-	std::cout << edges[1][0] << std::endl;
-	std::cout << edges[1][1] << std::endl;
-	std::cout << edges[1][2] << std::endl;
 }
 
 BoundingBox::BoundingBox(ModelObject& obj, glm::vec3 lesser, glm::vec3 greater)
@@ -69,3 +58,49 @@ BoundingBox::BoundingBox(SceneObject& obj, glm::vec3 lesser, glm::vec3 greater)
 
 BoundingBox::~BoundingBox()
 {}
+
+void BoundingBox::draw()
+{
+	glColor3f(0, 0, 0);
+	glBegin(GL_QUADS);
+		glVertex3f(this->getEdges()[0].x, this->getEdges()[0].y, this->getEdges()[0].z);
+		glVertex3f(this->getEdges()[0].x, this->getEdges()[0].y, this->getEdges()[1].z);
+		glVertex3f(this->getEdges()[0].x, this->getEdges()[1].y, this->getEdges()[1].z);
+		glVertex3f(this->getEdges()[0].x, this->getEdges()[1].y, this->getEdges()[0].z);
+	glEnd();
+
+	glBegin(GL_QUADS);
+		glVertex3f(this->getEdges()[1].x, this->getEdges()[0].y, this->getEdges()[1].z);
+		glVertex3f(this->getEdges()[1].x, this->getEdges()[0].y, this->getEdges()[0].z);
+		glVertex3f(this->getEdges()[1].x, this->getEdges()[1].y, this->getEdges()[0].z);
+		glVertex3f(this->getEdges()[1].x, this->getEdges()[1].y, this->getEdges()[1].z);
+	glEnd();
+
+	glBegin(GL_QUADS);
+		glVertex3f(this->getEdges()[0].x, this->getEdges()[0].y, this->getEdges()[1].z);
+		glVertex3f(this->getEdges()[1].x, this->getEdges()[0].y, this->getEdges()[1].z);
+		glVertex3f(this->getEdges()[1].x, this->getEdges()[1].y, this->getEdges()[1].z);
+		glVertex3f(this->getEdges()[0].x, this->getEdges()[1].y, this->getEdges()[1].z);
+	glEnd();
+
+	glBegin(GL_QUADS);
+		glVertex3f(this->getEdges()[1].x, this->getEdges()[0].y, this->getEdges()[0].z);
+		glVertex3f(this->getEdges()[0].x, this->getEdges()[0].y, this->getEdges()[0].z);
+		glVertex3f(this->getEdges()[0].x, this->getEdges()[1].y, this->getEdges()[0].z);
+		glVertex3f(this->getEdges()[1].x, this->getEdges()[1].y, this->getEdges()[0].z);
+	glEnd();
+
+	glBegin(GL_QUADS);
+		glVertex3f(this->getEdges()[0].x, this->getEdges()[1].y, this->getEdges()[0].z);
+		glVertex3f(this->getEdges()[0].x, this->getEdges()[1].y, this->getEdges()[1].z);
+		glVertex3f(this->getEdges()[1].x, this->getEdges()[1].y, this->getEdges()[1].z);
+		glVertex3f(this->getEdges()[1].x, this->getEdges()[1].y, this->getEdges()[0].z);
+	glEnd();
+
+	glBegin(GL_QUADS);
+		glVertex3f(this->getEdges()[1].x, this->getEdges()[0].y, this->getEdges()[1].z);
+		glVertex3f(this->getEdges()[1].x, this->getEdges()[0].y, this->getEdges()[0].z);
+		glVertex3f(this->getEdges()[0].x, this->getEdges()[0].y, this->getEdges()[0].z);
+		glVertex3f(this->getEdges()[0].x, this->getEdges()[0].y, this->getEdges()[1].z);
+	glEnd();
+}
