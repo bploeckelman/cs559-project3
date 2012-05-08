@@ -111,7 +111,7 @@ void Scene::setup()
 		0.03f, // time step for evaluation
 		10.0f,  // wave velocity
 		0.1f,  // fluid viscosity
-		vec3(80.f, 30.f, 80.f)
+		vec3(80.f, 0.f, 80.f)
 	);
 	fluid->setSkybox(&skybox);
 	
@@ -169,6 +169,7 @@ void Scene::setup()
 
 	ParticleSystem *system4 = new ParticleSystem();
 	system4->add(new TestEmitter(*heightmap, vec3(64.f, 0.f, 64.f)));
+	system4->add(new TestEmitter(*heightmap, vec3(128.f, 0.f, 128.f)));
 	system4->start();
 	particleMgr.add(system4);
 

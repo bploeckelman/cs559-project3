@@ -214,13 +214,13 @@ TestEmitter::TestEmitter( HeightMap& heightmap
 	: ParticleEmitter(maxParticles, lifetime)
 {
 	add(new FadeOutAffector(this, 0.f, 40.f));
-	add(new ScaleUpAffector(this, 40.f, 30.f));
+	add(new ScaleUpAffector(this, 50.f, 150.f));
 	add(new HeightMapWalkAffector(this, heightmap, position));
 
 	setBlendMode(ALPHA);
 	setPosition(position);
 	setOneTimeEmission(false);
-	setTexture(&GetImage("particle-sphere.png"));
+	setTexture(&GetImage("particle-smoke.png"));
 
 	setEmissionRate(10000.f);
 }
@@ -239,9 +239,9 @@ void TestEmitter::initParticle(Particle& p)
                    , linearRand(20.f, 40.f)
                    , linearRand(-2.f, 2.f) );
 
-	pp.color = vec4(linearRand(0.2f, 1.f)
-                  , linearRand(0.2f, 1.f)
-                  , linearRand(0.2f, 1.f)
+	pp.color = vec4(linearRand(0.4f, 0.45f)
+                  , linearRand(0.25f, 0.3f)
+                  , linearRand(0.1f, 0.15f)
                   , linearRand(0.5f, 0.9f));
 
 	pp.lifespan = 1.f;
