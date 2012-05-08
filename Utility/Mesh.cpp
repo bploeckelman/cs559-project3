@@ -368,7 +368,12 @@ void Mesh::setRenderStates() const
 
 				// Generate mipmaps
 //				glGenerateMipmap(GL_TEXTURE_2D);
-				glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+				static bool once = false;
+				if( !once )
+				{
+					glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+					once = true;
+				}
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 

@@ -196,11 +196,6 @@ void Fountain::draw(const Camera& camera)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-//	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.1f, 0.1f, 0.1f, 1.f)));
-//	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.8f, 0.7f, 0.9f, 1.f)));
-//	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.8f, 0.7f, 0.9f, 1.f)));
-//	glMaterialf (GL_FRONT, GL_SHININESS, 40.f);
-
 	glColor3f(1.0, 1.0, 1.0);
 	glPushMatrix();
 		glMultMatrixf(value_ptr(transform));
@@ -306,13 +301,7 @@ void Fountain::draw(const Camera& camera)
 
 	glPopMatrix();
 
-	glDisable(GL_COLOR_MATERIAL);
-	glMaterialfv(GL_FRONT, GL_AMBIENT,  value_ptr(vec4(0.2f, 0.2f, 0.2f, 1.f)));
-	glMaterialfv(GL_FRONT, GL_DIFFUSE,  value_ptr(vec4(0.1f, 0.8f, 1.0f, 0.7f)));
-	glMaterialfv(GL_FRONT, GL_SPECULAR, value_ptr(vec4(0.1f, 0.8f, 1.0f, 1.f)));
-	glMaterialf (GL_FRONT, GL_SHININESS, 20.f);
 	fluid->render(camera);
-	glEnable(GL_COLOR_MATERIAL);
 }
 
 
@@ -639,7 +628,7 @@ ModelObject::ModelObject( glm::vec3 pos, const std::string& filename, HeightMap&
 	transform[2][2] = size;
 	if( model != nullptr )
 	{
-		model->setRenderMode(GLM_SMOOTH | GLM_TEXTURE | GLM_MATERIAL);
+		model->setRenderMode(GLM_SMOOTH | GLM_TEXTURE);// | GLM_MATERIAL);
 	}
 }
 
@@ -842,8 +831,8 @@ void Windmill::draw(const Camera& camera)
 
 	base.Bind();
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);//GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);//GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -915,8 +904,6 @@ void Windmill::draw(const Camera& camera)
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
-
-	glEnable(GL_COLOR_MATERIAL);
 }
 	
 void Windmill::update(const sf::Clock &clock, const sf::Input& input)
