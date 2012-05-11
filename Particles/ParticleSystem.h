@@ -46,5 +46,5 @@ public:
 	void setVisible(const bool v);
 };
 
-inline bool ParticleSystem::isVisible() const { return visible; }
-inline void ParticleSystem::setVisible(const bool v) { visible = v; }
+bool ParticleSystem::isVisible() const { return visible; }
+void ParticleSystem::setVisible(const bool v) { visible = v; }

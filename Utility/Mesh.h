@@ -149,16 +149,16 @@ protected:
 };
 
 
-inline void Mesh::toggleBlending()  { blend      = !blend; }
-inline void Mesh::toggleLighting()  { light      = !light; }
-inline void Mesh::toggleWireframe() { fill       = !fill; }
-inline void Mesh::toggleNormalsVis(){ normalsVis = !normalsVis; }
-inline void Mesh::toggleTexturing() { texture    = !texture; }
-inline void Mesh::toggleMultiTexturing() { multiTexture = !multiTexture; }
+void Mesh::toggleBlending()  { blend      = !blend; }
+void Mesh::toggleLighting()  { light      = !light; }
+void Mesh::toggleWireframe() { fill       = !fill; }
+void Mesh::toggleNormalsVis(){ normalsVis = !normalsVis; }
+void Mesh::toggleTexturing() { texture    = !texture; }
+void Mesh::toggleMultiTexturing() { multiTexture = !multiTexture; }
 
-inline float Mesh::getSpread()              const { return spread; }
-inline unsigned int Mesh::getWidth()        const { return width; }
-inline unsigned int Mesh::getHeight()       const { return height; }
-inline unsigned int Mesh::getNumIndices()   const { return numIndices; }
-inline unsigned int Mesh::getNumVertices()  const { return numVertices; }
-inline unsigned int Mesh::getNumTriangles() const { return numTriangles; }
+float Mesh::getSpread()              const { return spread; }
+unsigned int Mesh::getWidth()        const { return width; }
+unsigned int Mesh::getHeight()       const { return height; }
+unsigned int Mesh::getNumIndices()   const { return numIndices; }
+unsigned int Mesh::getNumVertices()  const { return numVertices; }
+unsigned int Mesh::getNumTriangles() const { return numTriangles; }
