@@ -74,5 +74,5 @@ private:
 };
 
 
-inline float HeightMap::getHeightScale() const {return heightScale;}
-inline float HeightMap::getGroundScale() const {return groundScale;}
+float HeightMap::getHeightScale() const {return heightScale;}
+float HeightMap::getGroundScale() const {return groundScale;}

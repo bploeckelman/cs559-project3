@@ -98,20 +98,20 @@ private:
 };
 
 
-inline glm::vec3 ParticleEmitter::getPos() const { return position;}
-inline Particles& ParticleEmitter::getParticles() { return particles;}
-inline unsigned int ParticleEmitter::getMaxParticles() const { return maxParticles; }
+glm::vec3 ParticleEmitter::getPos() const { return position;}
+Particles& ParticleEmitter::getParticles() { return particles;}
+unsigned int ParticleEmitter::getMaxParticles() const { return maxParticles; }
 
-inline void ParticleEmitter::start() { emitting = true; }
-inline void ParticleEmitter::stop()  { emitting = false; }
+void ParticleEmitter::start() { emitting = true; }
+void ParticleEmitter::stop()  { emitting = false; }
 
-inline bool ParticleEmitter::isAlive() const { return alive; }
-inline bool ParticleEmitter::isEmitting() const { return emitting; }
+bool ParticleEmitter::isAlive() const { return alive; }
+bool ParticleEmitter::isEmitting() const { return emitting; }
 
-inline void ParticleEmitter::setPosition(const glm::vec3& p) { position = p; }
-inline void ParticleEmitter::setLifetime(const float l) { lifetime = l; }
-inline void ParticleEmitter::setOneTimeEmission(const bool o) { oneTimeEmission = o; }
-inline void ParticleEmitter::setOneTimeNumParticles(const unsigned int n) { oneTimeNumParticles = n; }
-inline void ParticleEmitter::setEmissionRate(const float r) { emissionRate = r; }
-inline void ParticleEmitter::setBlendMode(const BlendMode& m) { blendMode = m; }
-inline void ParticleEmitter::setTexture(sf::Image* t) { texture = t; }// texture->SetSmooth(false); }
+void ParticleEmitter::setPosition(const glm::vec3& p) { position = p; }
+void ParticleEmitter::setLifetime(const float l) { lifetime = l; }
+void ParticleEmitter::setOneTimeEmission(const bool o) { oneTimeEmission = o; }
+void ParticleEmitter::setOneTimeNumParticles(const unsigned int n) { oneTimeNumParticles = n; }
+void ParticleEmitter::setEmissionRate(const float r) { emissionRate = r; }
+void ParticleEmitter::setBlendMode(const BlendMode& m) { blendMode = m; }
+void ParticleEmitter::setTexture(sf::Image* t) { texture = t; }// texture->SetSmooth(false); }

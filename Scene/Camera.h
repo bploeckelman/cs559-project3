@@ -79,26 +79,26 @@ public:
 };
 
 
-inline glm::vec3 Camera::getViewDir() const { return glm::vec3(-_view[0][2], -_view[1][2], -_view[2][2]);}
+glm::vec3 Camera::getViewDir() const { return glm::vec3(-_view[0][2], -_view[1][2], -_view[2][2]);}
 
-inline void Camera::toggleDebug() { debug = !debug; }
-inline void Camera::toggleMouseLook() { mouseLook = !mouseLook; }
-inline bool Camera::isMouseLook() const { return mouseLook; }
+void Camera::toggleDebug() { debug = !debug; }
+void Camera::toggleMouseLook() { mouseLook = !mouseLook; }
+bool Camera::isMouseLook() const { return mouseLook; }
 
-inline void Camera::position(const glm::vec3& p) { _position = p; }
-inline void Camera::position(const float x, const float y, const float z) { _position = glm::vec3(x,y,z); }
-inline const glm::vec3& Camera::position() const { return _position; }
+void Camera::position(const glm::vec3& p) { _position = p; }
+void Camera::position(const float x, const float y, const float z) { _position = glm::vec3(x,y,z); }
+const glm::vec3& Camera::position() const { return _position; }
 
-inline void Camera::rotation(const glm::vec3& r) { _rotation = r; }
-inline void Camera::rotation(const float x, const float y, const float z) { _rotation = glm::vec3(x,y,z); }
-inline const glm::vec3& Camera::rotation() const { return _rotation; }
+void Camera::rotation(const glm::vec3& r) { _rotation = r; }
+void Camera::rotation(const float x, const float y, const float z) { _rotation = glm::vec3(x,y,z); }
+const glm::vec3& Camera::rotation() const { return _rotation; }
 
-inline void Camera::rotationSpeed(const glm::vec3& r) { _rotationSpeed = r; }
-inline void Camera::rotationSpeed(const float x, const float y, const float z) { _rotationSpeed = glm::vec3(x,y,z); }
-inline const glm::vec3& Camera::rotationSpeed() const { return _rotationSpeed; }
+void Camera::rotationSpeed(const glm::vec3& r) { _rotationSpeed = r; }
+void Camera::rotationSpeed(const float x, const float y, const float z) { _rotationSpeed = glm::vec3(x,y,z); }
+const glm::vec3& Camera::rotationSpeed() const { return _rotationSpeed; }
 
-inline void Camera::view(const glm::mat4& v) { _view = v; }
-inline const glm::mat4& Camera::view() const { return _view; }
+void Camera::view(const glm::mat4& v) { _view = v; }
+const glm::mat4& Camera::view() const { return _view; }
 
-inline void Camera::projection(const glm::mat4& p) { _projection = p; }
-inline const glm::mat4& Camera::projection() const { return _projection; }
+void Camera::projection(const glm::mat4& p) { _projection = p; }
+const glm::mat4& Camera::projection() const { return _projection; }

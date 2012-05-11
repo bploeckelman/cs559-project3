@@ -79,6 +79,6 @@ public:
 	void setSkybox(Skybox *box);
 };
 
-inline float Fluid::getDist() const { return dist; } 
-inline const long Fluid::getHeight() const { return height;}
-inline const long Fluid::getWidth() const { return width;}
+float Fluid::getDist() const { return dist; } 
+const long Fluid::getHeight() const { return height;}
+const long Fluid::getWidth() const { return width;}
