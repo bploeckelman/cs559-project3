@@ -30,13 +30,13 @@ public:
 	glm::vec3 getPos() const;
 };
 
-inline void SceneObject::setPos(const glm::vec3& pos) 
+void SceneObject::setPos(const glm::vec3& pos) 
 {
 	transform = glm::translate(transform, -getPos());
 	transform = glm::translate(transform, pos);
 }
 
-inline glm::vec3 SceneObject::getPos() const
+glm::vec3 SceneObject::getPos() const
 { 
 	return glm::vec3(transform[3][0], transform[3][1], transform[3][2]);
 }

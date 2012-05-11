@@ -34,9 +34,9 @@ public:
 	void draw();
 };
 
-inline const glm::mat2x3& BoundingBox::getEdges() { return edges;}
+const glm::mat2x3& BoundingBox::getEdges() { return edges;}
 
-inline const bool BoundingBox::inBox(glm::vec3 vec)
+const bool BoundingBox::inBox(glm::vec3 vec)
 {
 	if(	vec.x >= edges[0].x && vec.x <= edges[1].x &&
 		vec.y >= edges[0].y && vec.y <= edges[1].y &&
@@ -47,7 +47,7 @@ inline const bool BoundingBox::inBox(glm::vec3 vec)
 	return false;
 }
 
-inline const bool BoundingBox::intersect(BoundingBox* box)
+const bool BoundingBox::intersect(BoundingBox* box)
 {
 	//only uses corners, so its super imprecise and fairly inaccurate
 	float step = 50;

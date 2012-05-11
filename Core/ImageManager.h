@@ -53,7 +53,7 @@ private:
 	ImageManager& operator=(const ImageManager& other);
 };
 
-inline sf::Image& GetImage(const std::string& filename)
+sf::Image& GetImage(const std::string& filename)
 {
 	return ImageManager::get().getImage(filename);
 }

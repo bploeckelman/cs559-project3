@@ -33,5 +33,5 @@ private:
 	std::ofstream filestream;
 };
 
-inline void Log(const std::string& text)		{ Logger::get().log(text); }
-inline void Log(const std::stringstream& text)  { Logger::get().log(text); }
+void Log(const std::string& text)		{ Logger::get().log(text); }
+void Log(const std::stringstream& text)  { Logger::get().log(text); }
