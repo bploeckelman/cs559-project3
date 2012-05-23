@@ -34,9 +34,9 @@ public:
 	void draw();
 };
 
-const glm::mat2x3& BoundingBox::getEdges() { return edges;}
+inline const glm::mat2x3& BoundingBox::getEdges() { return edges;}
 
-const bool BoundingBox::inBox(glm::vec3 vec)
+inline const bool BoundingBox::inBox(glm::vec3 vec)
 {
 	if(	vec.x >= edges[0].x && vec.x <= edges[1].x &&
 		vec.y >= edges[0].y && vec.y <= edges[1].y &&
@@ -44,60 +44,5 @@ const bool BoundingBox::inBox(glm::vec3 vec)
 	{
 		return true;
 	}
-	return false;
-}
-
-const bool BoundingBox::intersect(BoundingBox* box)
-{
-	//only uses corners, so its super imprecise and fairly inaccurate
-	float step = 50;
-	for(int i = 0; i < 2; ++i)
-	for(int j = 0; j < 2; ++j)
-	for(int k = 0; k < step; ++k)
-	if(this->inBox(glm::vec3(box->getEdges()[i].x, box->getEdges()[j].y, box->getEdges()[0].z) + 
-		(glm::length((glm::vec3(box->getEdges()[i].x, box->getEdges()[j].y, box->getEdges()[1].z) - glm::vec3(box->getEdges()[i].x, box->getEdges()[j].y, box->getEdges()[0].z))) / step) * k))
-		return true;
-
-	for(int i = 0; i < 2; ++i)
-	for(int j = 0; j < 2; ++j)
-	for(int k = 0; k < step; ++k)
-	if(this->inBox(glm::vec3(box->getEdges()[0].x, box->getEdges()[j].y, box->getEdges()[i].z) + 
-		(glm::length((glm::vec3(box->getEdges()[1].x, box->getEdges()[j].y, box->getEdges()[i].z) - glm::vec3(box->getEdges()[0].x, box->getEdges()[j].y, box->getEdges()[i].z))) / step) * k))
-		return true;
-
-	for(int i = 0; i < 2; ++i)
-	for(int j = 0; j < 2; ++j)
-	for(int k = 0; k < step; ++k)
-	if(this->inBox(glm::vec3(box->getEdges()[i].x, box->getEdges()[0].y, box->getEdges()[j].z) + 
-		(glm::length((glm::vec3(box->getEdges()[i].x, box->getEdges()[1].y, box->getEdges()[j].z) - glm::vec3(box->getEdges()[i].x, box->getEdges()[0].y, box->getEdges()[j].z))) / step) * k))
-		return true;
-
-	for(int i = 0; i < 2; ++i)
-	for(int j = 0; j < 2; ++j)
-	for(int k = 0; k < step; ++k)
-	if(box->inBox(glm::vec3(this->getEdges()[i].x, this->getEdges()[j].y, this->getEdges()[0].z) + 
-		(glm::length((glm::vec3(this->getEdges()[i].x, this->getEdges()[j].y, this->getEdges()[1].z) - glm::vec3(this->getEdges()[i].x, this->getEdges()[j].y, this->getEdges()[0].z))) / step) * k))
-		return true;
-
-	for(int i = 0; i < 2; ++i)
-	for(int j = 0; j < 2; ++j)
-	for(int k = 0; k < step; ++k)
-	if(box->inBox(glm::vec3(this->getEdges()[0].x, this->getEdges()[j].y, this->getEdges()[i].z) + 
-		(glm::length((glm::vec3(this->getEdges()[1].x, this->getEdges()[j].y, this->getEdges()[i].z) - glm::vec3(this->getEdges()[0].x, this->getEdges()[j].y, this->getEdges()[i].z))) / step) * k))
-		return true;
-
-	for(int i = 0; i < 2; ++i)
-	for(int j = 0; j < 2; ++j)
-	for(int k = 0; k < step; ++k)
-	if(box->inBox(glm::vec3(this->getEdges()[i].x, this->getEdges()[0].y, this->getEdges()[0].z) + 
-		(glm::length((glm::vec3(this->getEdges()[i].x, this->getEdges()[1].y, this->getEdges()[1].z) - glm::vec3(this->getEdges()[i].x, this->getEdges()[0].y, this->getEdges()[0].z))) / step) * k))
-		return true;
-
-	/*for(int i = 0; i < 2; ++i)
-	for(int j = 0; j < 2; ++j)
-	for(int k = 0; k < 2; ++k)
-	if(box->inBox(glm::vec3(this->getEdges()[i].x, this->getEdges()[j].y, this->getEdges()[k].z)))
-		return true;*/
-
 	return false;
 }

@@ -40,4 +40,4 @@ public:
 	const ParticleSystems& getSystems();
 };
 
-const ParticleSystems& ParticleManager::getSystems()	{return systems;}
+inline const ParticleSystems& ParticleManager::getSystems()	{return systems;}

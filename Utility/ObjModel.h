@@ -27,12 +27,12 @@ public:
 };
 
 
-void ObjModel::render()
+inline void ObjModel::render()
 {
 	if( model != nullptr )	glmDraw(model, mode);
 }
 
-void ObjModel::setRenderMode(unsigned int renderMode)
+inline void ObjModel::setRenderMode(unsigned int renderMode)
 {
 	mode = renderMode;
 }
