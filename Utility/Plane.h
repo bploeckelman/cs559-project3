@@ -40,34 +40,34 @@ public:
 };
 
 
-Plane::Plane(const glm::vec3& point
+inline Plane::Plane(const glm::vec3& point
 				  , const glm::vec3& normal)
 	: _point(point)
 	, _normal(glm::normalize(normal))
 { }
 
-Plane::Plane(const glm::vec3& p0
+inline Plane::Plane(const glm::vec3& p0
 				  , const glm::vec3& p1
 				  , const glm::vec3& p2)
 	: _point(p0)
 	, _normal(glm::normalize(glm::cross(p2 - p0, p1 - p0)))
 { }
 
-const float Plane::distance()    const { return glm::dot(_normal, _point); }
-const glm::vec3& Plane::point()  const { return _point; }
-const glm::vec3& Plane::normal() const { return _normal; }
+inline const float Plane::distance()    const { return glm::dot(_normal, _point); }
+inline const glm::vec3& Plane::point()  const { return _point; }
+inline const glm::vec3& Plane::normal() const { return _normal; }
 
-bool Plane::isPointOn(const glm::vec3& point)
+inline bool Plane::isPointOn(const glm::vec3& point)
 {
 	return (glm::dot(_normal, point - _point) == 0.f);
 }
 
-bool Plane::isPointAbove(const glm::vec3& point)
+inline bool Plane::isPointAbove(const glm::vec3& point)
 {
 	return (glm::dot(_normal, point - _point) > 0.f);
 }
 
-bool Plane::isPointBelow(const glm::vec3& point)
+inline bool Plane::isPointBelow(const glm::vec3& point)
 {
 	return (glm::dot(_normal, point - _point) < 0.f);
 }

@@ -69,13 +69,13 @@ private:
 };
 
 
-void Skybox::setDay() 
+inline void Skybox::setDay() 
 {
 	toggleDayNight = true;
 	textures = &dayTextures;
 }
 
-void Skybox::setNight()
+inline void Skybox::setNight()
 {
 	toggleDayNight = false;
 	textures = &nightTextures;

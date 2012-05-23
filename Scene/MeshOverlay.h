@@ -29,4 +29,4 @@ public:
 };
 
 
-const glm::vec2 MeshOverlay::getOffset() const {return glm::vec2(offsetw, offseth);}
+inline const glm::vec2 MeshOverlay::getOffset() const {return glm::vec2(offsetw, offseth);}

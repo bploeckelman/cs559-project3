@@ -75,7 +75,7 @@ public:
 	unsigned int getGLId() const;
 };
 
-void Light::reset()
+inline void Light::reset()
 {
 	position(_position);
 	if( useAmbient )  ambient(_ambient);
@@ -83,57 +83,57 @@ void Light::reset()
 	if( useSpecular ) specular(_specular);
 }
 
-unsigned int Light::getGLId() const { return glId; }
+inline unsigned int Light::getGLId() const { return glId; }
 
-void Light::enable()
+inline void Light::enable()
 {
 	glEnable(GL_LIGHT0 + glId);
 	enabled = true; 
 }
 
-void Light::disable()
+inline void Light::disable()
 { 
 	glDisable(GL_LIGHT0 + glId);
 	enabled = false; 
 }
 
-void Light::enableAmbient()   { useAmbient  = true;  }
-void Light::disableAmbient()  { useAmbient  = false; }
-void Light::enableDiffuse()   { useDiffuse  = true;  }
-void Light::disableDiffuse()  { useDiffuse  = false; }
-void Light::enableSpecular()  { useSpecular = true;  }
-void Light::disableSpecular() { useSpecular = false; }
+inline void Light::enableAmbient()   { useAmbient  = true;  }
+inline void Light::disableAmbient()  { useAmbient  = false; }
+inline void Light::enableDiffuse()   { useDiffuse  = true;  }
+inline void Light::disableDiffuse()  { useDiffuse  = false; }
+inline void Light::enableSpecular()  { useSpecular = true;  }
+inline void Light::disableSpecular() { useSpecular = false; }
 
-void Light::position(const glm::vec4& p) 
+inline void Light::position(const glm::vec4& p) 
 { 
 	_position = p; 
 	glLightfv(GL_LIGHT0 + glId, GL_POSITION, glm::value_ptr(_position));
 }
 
-void Light::ambient(const glm::vec4& a)
+inline void Light::ambient(const glm::vec4& a)
 { 
 	_ambient  = a; 
 	if( useAmbient )
 		glLightfv(GL_LIGHT0 + glId, GL_AMBIENT, glm::value_ptr(_ambient));
 }
 
-void Light::diffuse(const glm::vec4& d)
+inline void Light::diffuse(const glm::vec4& d)
 { 
 	_diffuse  = d; 
 	if( useDiffuse )
 		glLightfv(GL_LIGHT0 + glId, GL_DIFFUSE, glm::value_ptr(_diffuse));
 }
 
-void Light::specular(const glm::vec4& s)
+inline void Light::specular(const glm::vec4& s)
 { 
 	_specular = s;
 	if( useSpecular )
 		glLightfv(GL_LIGHT0 + glId, GL_SPECULAR, glm::value_ptr(_specular));
 }
 
-bool Light::isEnabled() const { return enabled; }
+inline bool Light::isEnabled() const { return enabled; }
 
-glm::vec4 Light::position() const { return _position; }
-glm::vec4 Light::ambient()  const { return _ambient; }
-glm::vec4 Light::diffuse()  const { return _diffuse; }
-glm::vec4 Light::specular() const { return _specular; }
+inline glm::vec4 Light::position() const { return _position; }
+inline glm::vec4 Light::ambient()  const { return _ambient; }
+inline glm::vec4 Light::diffuse()  const { return _diffuse; }
+inline glm::vec4 Light::specular() const { return _specular; }
