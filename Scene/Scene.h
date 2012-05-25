@@ -91,5 +91,5 @@ private:
 	void cleanup();
 };
 
-bool Scene::isMouseLook() const { return camera->isMouseLook(); }
-const glm::vec3& Scene::cameraPosition() const { return camera->position(); }
+inline bool Scene::isMouseLook() const { return camera->isMouseLook(); }
+inline const glm::vec3& Scene::cameraPosition() const { return camera->position(); }

@@ -51,7 +51,7 @@ public:
 };
 
 
-void Particle::update(const float delta)
+inline void Particle::update(const float delta)
 {
 	if( !active ) return;
 
